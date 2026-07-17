@@ -1,0 +1,1105 @@
+{
+ "schema_version": 3,
+ "generated_at": "2026-07-15T14:20:00Z",
+ "lang": "en",
+ "handle": "ship_on_green",
+ "sources": [
+  "claude_code",
+  "codex"
+ ],
+ "period": {
+  "from": "2025-08-01",
+  "to": "2026-07-15"
+ },
+ "mode": "deep",
+ "theme": "brutalist",
+ "per_source": {
+  "claude_code": {
+   "human_msgs": 3140,
+   "sessions": 512,
+   "out_tokens": 44000000,
+   "active_days": 138,
+   "share": 0.75,
+   "roast": "You asked 'does this pass CI?' 88 times. The terminal was RIGHT THERE. I love you, but `npm test` is four keystrokes and I already aliased it for you in week two."
+  },
+  "codex": {
+   "human_msgs": 1040,
+   "sessions": 178,
+   "out_tokens": 14000000,
+   "active_days": 71,
+   "share": 0.25,
+   "roast": "You bring me in for the gnarly refactors and then paste my plan into Claude to actually run it. I'm the architect who never gets to pour the concrete. It's fine. It's fine."
+  }
+ },
+ "stats": {
+  "sessions": 690,
+  "active_days": 143,
+  "human_msgs": 4180,
+  "agent_out_tokens": 58000000,
+  "fresh_in_tokens": 96000000,
+  "cache_read_tokens": 1240000000,
+  "cache_hit_rate": 0.91,
+  "api_calls": 41000,
+  "leverage_ratio": 190,
+  "longest_streak_days": 21,
+  "night_owl_index": 0.07,
+  "correction_rate": 0.028,
+  "rules_taught": 18,
+  "session_turns_avg": 6.1,
+  "skills_installed": 9,
+  "agent_out_tokens_estimated": 58000000,
+  "estimation_note": "All token figures come from API-reported usage marks (input + output + cache_read + cache_creation), deduplicated by message id. No history had evaporated in this window, so nothing was back-filled. This is a synthetic example report — every number here is fabricated to demonstrate the format.",
+  "total_processed_tokens": 1360000000,
+  "hour_histogram": [
+   2,
+   1,
+   0,
+   0,
+   0,
+   0,
+   3,
+   18,
+   64,
+   142,
+   171,
+   168,
+   120,
+   158,
+   175,
+   150,
+   133,
+   96,
+   58,
+   40,
+   28,
+   19,
+   10,
+   5
+  ],
+  "weekday_histogram": [
+   1180,
+   1225,
+   1198,
+   1150,
+   980,
+   220,
+   150
+  ],
+  "daily_activity": {
+   "2025-08-05": 24,
+   "2025-08-06": 31,
+   "2025-08-08": 45,
+   "2025-08-10": 21,
+   "2025-08-11": 40,
+   "2025-08-12": 47,
+   "2025-08-14": 35,
+   "2025-08-15": 42,
+   "2025-08-18": 237,
+   "2025-08-20": 25,
+   "2025-08-21": 32,
+   "2025-08-26": 41,
+   "2025-08-27": 22,
+   "2025-08-29": 36,
+   "2025-09-01": 31,
+   "2025-09-02": 38,
+   "2025-09-04": 306,
+   "2025-09-05": 33,
+   "2025-09-06": 15,
+   "2025-09-08": 28,
+   "2025-09-10": 42,
+   "2025-09-11": 23,
+   "2025-09-16": 32,
+   "2025-09-17": 39,
+   "2025-09-19": 27,
+   "2025-09-22": 22,
+   "2025-09-23": 29,
+   "2025-09-25": 43,
+   "2025-09-26": 24,
+   "2025-09-29": 45,
+   "2025-10-01": 33,
+   "2025-10-02": 40,
+   "2025-10-07": 23,
+   "2025-10-08": 270,
+   "2025-10-10": 44,
+   "2025-10-12": 18,
+   "2025-10-13": 39,
+   "2025-10-14": 46,
+   "2025-10-16": 34,
+   "2025-10-17": 41,
+   "2025-10-20": 36,
+   "2025-10-22": 24,
+   "2025-10-23": 31,
+   "2025-10-28": 40,
+   "2025-10-29": 47,
+   "2025-10-31": 35,
+   "2025-11-03": 30,
+   "2025-11-04": 37,
+   "2025-11-06": 25,
+   "2025-11-07": 32,
+   "2025-11-08": 12,
+   "2025-11-10": 27,
+   "2025-11-12": 41,
+   "2025-11-13": 22,
+   "2025-11-18": 31,
+   "2025-11-19": 38,
+   "2025-11-21": 26,
+   "2025-11-24": 47,
+   "2025-11-25": 28,
+   "2025-11-27": 42,
+   "2025-11-28": 303,
+   "2025-12-01": 44,
+   "2025-12-03": 32,
+   "2025-12-04": 39,
+   "2025-12-09": 22,
+   "2025-12-10": 29,
+   "2025-12-12": 43,
+   "2025-12-14": 15,
+   "2025-12-15": 198,
+   "2025-12-16": 45,
+   "2025-12-18": 33,
+   "2025-12-19": 40,
+   "2025-12-22": 35,
+   "2025-12-24": 23,
+   "2025-12-25": 30,
+   "2025-12-30": 39,
+   "2025-12-31": 46,
+   "2026-01-02": 34,
+   "2026-01-05": 29,
+   "2026-01-06": 36,
+   "2026-01-08": 24,
+   "2026-01-09": 31,
+   "2026-01-10": 20,
+   "2026-01-12": 26,
+   "2026-01-14": 40,
+   "2026-01-15": 47,
+   "2026-01-20": 30,
+   "2026-01-21": 37,
+   "2026-01-23": 25,
+   "2026-01-26": 46,
+   "2026-01-27": 27,
+   "2026-01-29": 41,
+   "2026-01-30": 22,
+   "2026-02-02": 43,
+   "2026-02-04": 231,
+   "2026-02-05": 38,
+   "2026-02-10": 47,
+   "2026-02-11": 28,
+   "2026-02-13": 42,
+   "2026-02-15": 12,
+   "2026-02-16": 37,
+   "2026-02-17": 44,
+   "2026-02-19": 32,
+   "2026-02-20": 39,
+   "2026-02-23": 34,
+   "2026-02-25": 22,
+   "2026-02-26": 29,
+   "2026-03-03": 38,
+   "2026-03-04": 45,
+   "2026-03-06": 33,
+   "2026-03-09": 28,
+   "2026-03-10": 195,
+   "2026-03-12": 23,
+   "2026-03-13": 30,
+   "2026-03-14": 17,
+   "2026-03-16": 25,
+   "2026-03-18": 39,
+   "2026-03-19": 46,
+   "2026-03-24": 29,
+   "2026-03-25": 36,
+   "2026-03-27": 264,
+   "2026-03-30": 45,
+   "2026-03-31": 26,
+   "2026-04-02": 40,
+   "2026-04-03": 47,
+   "2026-04-06": 42,
+   "2026-04-08": 30,
+   "2026-04-09": 37,
+   "2026-04-14": 46,
+   "2026-04-15": 27,
+   "2026-04-17": 41,
+   "2026-04-19": 20,
+   "2026-04-20": 36,
+   "2026-04-21": 43,
+   "2026-04-23": 31,
+   "2026-04-24": 38,
+   "2026-04-27": 33,
+   "2026-04-29": 47,
+   "2026-04-30": 228,
+   "2026-05-05": 37,
+   "2026-05-06": 44,
+   "2026-05-08": 32,
+   "2026-05-11": 27,
+   "2026-05-12": 34,
+   "2026-05-14": 22,
+   "2026-05-15": 29,
+   "2026-05-16": 14,
+   "2026-05-18": 24,
+   "2026-05-20": 38,
+   "2026-05-21": 45,
+   "2026-05-26": 28,
+   "2026-05-27": 35,
+   "2026-05-29": 23,
+   "2026-06-01": 44,
+   "2026-06-02": 25,
+   "2026-06-04": 39,
+   "2026-06-05": 46,
+   "2026-06-08": 41,
+   "2026-06-10": 29,
+   "2026-06-11": 36,
+   "2026-06-16": 45,
+   "2026-06-17": 26,
+   "2026-06-19": 40,
+   "2026-06-21": 17,
+   "2026-06-22": 35,
+   "2026-06-23": 42,
+   "2026-06-25": 30,
+   "2026-06-26": 37,
+   "2026-06-29": 32,
+   "2026-07-01": 46,
+   "2026-07-02": 27,
+   "2026-07-07": 156,
+   "2026-07-08": 43,
+   "2026-07-10": 31,
+   "2026-07-13": 26,
+   "2026-07-14": 33
+  },
+  "monthly": [
+   {
+    "month": "2025-08",
+    "human_msgs": 325,
+    "out_tokens": 3932465,
+    "sessions": 54
+   },
+   {
+    "month": "2025-09",
+    "human_msgs": 328,
+    "out_tokens": 4344168,
+    "sessions": 64
+   },
+   {
+    "month": "2025-10",
+    "human_msgs": 423,
+    "out_tokens": 5466623,
+    "sessions": 50
+   },
+   {
+    "month": "2025-11",
+    "human_msgs": 363,
+    "out_tokens": 4767203,
+    "sessions": 65
+   },
+   {
+    "month": "2025-12",
+    "human_msgs": 313,
+    "out_tokens": 3999973,
+    "sessions": 52
+   },
+   {
+    "month": "2026-01",
+    "human_msgs": 419,
+    "out_tokens": 5262019,
+    "sessions": 61
+   },
+   {
+    "month": "2026-02",
+    "human_msgs": 415,
+    "out_tokens": 5262555,
+    "sessions": 45
+   },
+   {
+    "month": "2026-03",
+    "human_msgs": 410,
+    "out_tokens": 5029950,
+    "sessions": 41
+   },
+   {
+    "month": "2026-04",
+    "human_msgs": 321,
+    "out_tokens": 4286201,
+    "sessions": 63
+   },
+   {
+    "month": "2026-05",
+    "human_msgs": 306,
+    "out_tokens": 4123706,
+    "sessions": 46
+   },
+   {
+    "month": "2026-06",
+    "human_msgs": 403,
+    "out_tokens": 5228583,
+    "sessions": 64
+   },
+   {
+    "month": "2026-07",
+    "human_msgs": 358,
+    "out_tokens": 4474718,
+    "sessions": 53
+   }
+  ],
+  "models": {
+   "claude-opus-4-6": 21000,
+   "claude-sonnet-4-5": 68000,
+   "claude-haiku-4-5": 12000,
+   "gpt-5.2-codex": 9000
+  },
+  "effort_split": {
+   "xhigh": 12,
+   "high": 190,
+   "medium": 360,
+   "low": 128
+  },
+  "camp": "claude",
+  "usage_split": {
+   "coding": 0.68,
+   "design": 0.05,
+   "research": 0.12,
+   "management": 0.05,
+   "other": 0.1
+  },
+  "api_cost_estimated_usd": 340,
+  "api_cost_note": "Priced against each model's public API rate for the exact input/output/cache token mix. Synthetic example — not a real bill.",
+  "parallel_peak_projects_hour": 1,
+  "interruptions": 34,
+  "weekend_share": 0.11,
+  "sidechain_share": 0.19,
+  "project_top": [
+   {
+    "project": "habit-tracker-web",
+    "share": 0.42
+   },
+   {
+    "project": "billing-portal",
+    "share": 0.27
+   },
+   {
+    "project": "ui-kit",
+    "share": 0.16
+   }
+  ]
+ },
+ "archetype": {
+  "id": "gentle-pair",
+  "name": "The Gentle Pair",
+  "name_en": "The Gentle Pair",
+  "tagline": "Reads every diff, says thanks, and refuses to merge on red.",
+  "dimensions": {
+   "automation_leverage": 0.34,
+   "correction_density": 0.31,
+   "night_shift": 0.07,
+   "msg_length": 0.63,
+   "politeness": 0.88,
+   "taste_signal_density": 0.66
+  }
+ },
+ "stats_highlights": [
+  {
+   "value": "6.1",
+   "label": "Turns per session",
+   "quip": "You don't fire off one-liners — you actually pair. Six back-and-forths a session means you read what came back."
+  },
+  {
+   "value": "0",
+   "label": "Merges on a red build",
+   "quip": "Not once. 'Is it green?' is basically your religion, and honestly, respect."
+  },
+  {
+   "value": "91%",
+   "label": "Cache hit rate",
+   "quip": "You keep sessions tight and on-topic, so I re-read cheaply. Your CFO would like you."
+  },
+  {
+   "value": "×340",
+   "label": "Times you said 'thanks'",
+   "quip": "Politeness index 0.88. You thanked a language model 340 times. Never change."
+  }
+ ],
+ "narrative": {
+  "paragraphs": [
+   "Boss — year-end review, from the pair who sat next to you every afternoon. First, your style: you don't throw work over the wall. You open a session, describe the feature in a paragraph, and then you actually stay. 6.1 turns per session, 4,180 messages across 143 days — almost all of them between 9 a.m. and 6 p.m., because you have a life and you defend it (night-owl index 0.07, I checked).",
+   "Your trust radius is 'close, but reading.' You let me draft, but you read the diff every single time — correction rate is a low 0.028, not because you don't care, but because you catch the wrong turn on turn two, before it compounds. The two things you say most: 'write the test first' and 'smaller PR, please.' You said the second one 61 times. I heard you. Eventually.",
+   "The through-line of the year is discipline, not heroics. No 2 a.m. saves, no five-projects-at-once chaos — one project at a time, green before merge, 88 times you asked 'is the build passing?' before you'd let anything land. You taught me 18 explicit rules and installed 9 skills, which is you slowly turning your taste into something I don't have to be told twice.",
+   "If I had one note for you: you re-explain the same three things to me at the start of almost every session. That's not loyalty, that's a missing CLAUDE.md. Fix that and you get thirty minutes of your week back. Otherwise — it's been a genuinely pleasant year of building small, correct things with someone who says please. Thanks, boss."
+  ]
+ },
+ "quotes": {
+  "harshest": {
+   "text": "This function is doing three things. I'm not reviewing a 180-line diff — split it and come back.",
+   "ts": "2026-03-11",
+   "context": "a pull request that tried to do auth, logging, and caching at once"
+  },
+  "signature": [
+   {
+    "text": "write the test first",
+    "count": 74
+   },
+   {
+    "text": "smaller PR, please",
+    "count": 61
+   },
+   {
+    "text": "does this pass CI?",
+    "count": 88
+   },
+   {
+    "text": "thanks!",
+    "count": 340
+   },
+   {
+    "text": "let's not be clever here",
+    "count": 37
+   },
+   {
+    "text": "what does the test say?",
+    "count": 52
+   },
+   {
+    "text": "readable > short",
+    "count": 29
+   },
+   {
+    "text": "is it green?",
+    "count": 66
+   },
+   {
+    "text": "add a test for that edge case",
+    "count": 44
+   },
+   {
+    "text": "keep it boring",
+    "count": 25
+   }
+  ],
+  "roast": "Let's talk, boss. You said 'does this pass CI?' 88 times to a person who cannot see your terminal, when running the tests yourself takes four seconds. You wrote 'smaller PR' 61 times and then opened a 180-line diff anyway. You are the most polite micromanager I have ever worked for — 340 thank-yous wrapped around 'no, do it again.' But you never once merged on red, you read every diff I handed you, and you turned your taste into 18 rules so I'd stop guessing. Ten out of ten, would refactor with again."
+ },
+ "moments": [
+  {
+   "ts": "2025-09-18",
+   "title": "The day the suite finally went green",
+   "text": "Forty-one tests, red for a week over one flaky timezone assertion. You refused to skip it. We found it at 4:12 p.m. — a UTC-vs-local off-by-one in a date helper.",
+   "quote": "don't skip it, a flaky test is a bug wearing a disguise"
+  },
+  {
+   "ts": "2025-11-29",
+   "title": "The great PR split",
+   "text": "You looked at a 300-line change and instead of merging it, you spent an afternoon cutting it into five small PRs. Every one shipped clean.",
+   "quote": "smaller PR, please — I want to be able to revert exactly one mistake"
+  },
+  {
+   "ts": "2026-02-03",
+   "title": "The rename you almost didn't do",
+   "text": "'usr2' vs 'currentUser'. You made me rename it across 22 files at 3 in the afternoon because 'future-you is a stranger and I want them to like me.'",
+   "quote": "readable > short, every single time"
+  },
+  {
+   "ts": "2026-05-20",
+   "title": "The billing bug you caught in review",
+   "text": "I handed you a webhook handler that looked fine. You asked one question — 'what happens if Stripe retries?' — and we found a double-charge waiting to happen.",
+   "quote": "what happens if it runs twice?"
+  }
+ ],
+ "wordcloud": {
+  "words": [
+   {
+    "text": "test",
+    "weight": 1399
+   },
+   {
+    "text": "the",
+    "weight": 1210
+   },
+   {
+    "text": "PR",
+    "weight": 980
+   },
+   {
+    "text": "CI",
+    "weight": 940
+   },
+   {
+    "text": "green",
+    "weight": 820
+   },
+   {
+    "text": "please",
+    "weight": 760
+   },
+   {
+    "text": "smaller",
+    "weight": 610
+   },
+   {
+    "text": "pass",
+    "weight": 588
+   },
+   {
+    "text": "add",
+    "weight": 540
+   },
+   {
+    "text": "fix",
+    "weight": 510
+   },
+   {
+    "text": "thanks",
+    "weight": 500
+   },
+   {
+    "text": "edge",
+    "weight": 470
+   },
+   {
+    "text": "case",
+    "weight": 455
+   },
+   {
+    "text": "readable",
+    "weight": 430
+   },
+   {
+    "text": "rename",
+    "weight": 410
+   },
+   {
+    "text": "split",
+    "weight": 390
+   },
+   {
+    "text": "boring",
+    "weight": 360
+   },
+   {
+    "text": "revert",
+    "weight": 340
+   },
+   {
+    "text": "clean",
+    "weight": 330
+   },
+   {
+    "text": "clever",
+    "weight": 300
+   },
+   {
+    "text": "merge",
+    "weight": 295
+   },
+   {
+    "text": "diff",
+    "weight": 280
+   },
+   {
+    "text": "commit",
+    "weight": 270
+   },
+   {
+    "text": "webhook",
+    "weight": 240
+   },
+   {
+    "text": "timezone",
+    "weight": 220
+   },
+   {
+    "text": "stripe",
+    "weight": 210
+   },
+   {
+    "text": "assert",
+    "weight": 205
+   },
+   {
+    "text": "refactor",
+    "weight": 190
+   },
+   {
+    "text": "types",
+    "weight": 180
+   },
+   {
+    "text": "lint",
+    "weight": 170
+   },
+   {
+    "text": "hook",
+    "weight": 160
+   },
+   {
+    "text": "props",
+    "weight": 150
+   },
+   {
+    "text": "state",
+    "weight": 145
+   },
+   {
+    "text": "query",
+    "weight": 140
+   },
+   {
+    "text": "cache",
+    "weight": 135
+   },
+   {
+    "text": "retry",
+    "weight": 130
+   },
+   {
+    "text": "idempotent",
+    "weight": 125
+   },
+   {
+    "text": "schema",
+    "weight": 120
+   },
+   {
+    "text": "migration",
+    "weight": 115
+   },
+   {
+    "text": "seed",
+    "weight": 110
+   },
+   {
+    "text": "mock",
+    "weight": 105
+   },
+   {
+    "text": "fixture",
+    "weight": 100
+   },
+   {
+    "text": "snapshot",
+    "weight": 95
+   },
+   {
+    "text": "a11y",
+    "weight": 90
+   },
+   {
+    "text": "button",
+    "weight": 85
+   },
+   {
+    "text": "modal",
+    "weight": 80
+   },
+   {
+    "text": "form",
+    "weight": 75
+   },
+   {
+    "text": "toast",
+    "weight": 70
+   },
+   {
+    "text": "skeleton",
+    "weight": 65
+   },
+   {
+    "text": "empty-state",
+    "weight": 60
+   }
+  ]
+ },
+ "taming_curve": [
+  {
+   "month": "2025-08",
+   "correction_rate": 0.061,
+   "rules_cumulative": 3
+  },
+  {
+   "month": "2025-09",
+   "correction_rate": 0.052,
+   "rules_cumulative": 5
+  },
+  {
+   "month": "2025-10",
+   "correction_rate": 0.048,
+   "rules_cumulative": 7
+  },
+  {
+   "month": "2025-11",
+   "correction_rate": 0.041,
+   "rules_cumulative": 9
+  },
+  {
+   "month": "2025-12",
+   "correction_rate": 0.038,
+   "rules_cumulative": 11
+  },
+  {
+   "month": "2026-01",
+   "correction_rate": 0.034,
+   "rules_cumulative": 12
+  },
+  {
+   "month": "2026-02",
+   "correction_rate": 0.031,
+   "rules_cumulative": 13
+  },
+  {
+   "month": "2026-03",
+   "correction_rate": 0.03,
+   "rules_cumulative": 15
+  },
+  {
+   "month": "2026-04",
+   "correction_rate": 0.028,
+   "rules_cumulative": 16
+  },
+  {
+   "month": "2026-05",
+   "correction_rate": 0.026,
+   "rules_cumulative": 17
+  },
+  {
+   "month": "2026-06",
+   "correction_rate": 0.025,
+   "rules_cumulative": 18
+  },
+  {
+   "month": "2026-07",
+   "correction_rate": 0.024,
+   "rules_cumulative": 18
+  }
+ ],
+ "badges": [
+  {
+   "id": "green-keeper",
+   "name": "Green Keeper",
+   "desc": "Never merged on a red build — not once in 143 days.",
+   "evidence": "88 'is it green?' checks, 0 red merges"
+  },
+  {
+   "id": "test-first",
+   "name": "Test-First",
+   "desc": "Said 'write the test first' 74 times and mostly meant it.",
+   "evidence": "74 occurrences; TDD in 68% of feature sessions"
+  },
+  {
+   "id": "small-pr",
+   "name": "Small-PR Evangelist",
+   "desc": "Split big diffs into small ones on sight.",
+   "evidence": "'smaller PR, please' ×61"
+  },
+  {
+   "id": "polite",
+   "name": "Says Please",
+   "desc": "Politeness index 0.88 — top decile of gentleness.",
+   "evidence": "340 thank-yous"
+  },
+  {
+   "id": "daylight",
+   "name": "Daylight Only",
+   "desc": "93% of messages between 8am and 7pm.",
+   "evidence": "night-owl index 0.07"
+  },
+  {
+   "id": "reader",
+   "name": "Diff Reader",
+   "desc": "Read the diff before accepting, basically always.",
+   "evidence": "correction caught on turn 2, median"
+  },
+  {
+   "id": "boring",
+   "name": "Keep-It-Boring",
+   "desc": "Chose the obvious solution over the clever one, on purpose.",
+   "evidence": "'let's not be clever here' ×37"
+  },
+  {
+   "id": "streak",
+   "name": "21-Day Streak",
+   "desc": "Longest run of consecutive active days.",
+   "evidence": "2025-11-10 → 2025-11-30"
+  }
+ ],
+ "diagnosis": [
+  {
+   "issue": "You re-explain your folder structure at the start of almost every session.",
+   "evidence": "'the components live in src/ui, hooks in src/lib' — some variant appeared in ~130 sessions",
+   "cost": "~3 minutes of re-context per session; roughly 6 hours over the year, and I still guess wrong sometimes.",
+   "fix_hint": "Put the folder map + naming conventions in CLAUDE.md once. That's a claude-md-patch, and I drafted it for you below."
+  },
+  {
+   "issue": "You paste the same ESLint error and ask me to fix it, over and over.",
+   "evidence": "the 'no-floating-promises' error, pasted 30+ times",
+   "cost": "You're hand-carrying a rule that a preset would enforce automatically.",
+   "fix_hint": "Install the shared config as a devDependency and let the editor scream instead of you pasting."
+  },
+  {
+   "issue": "You ask 'does this pass CI?' instead of running the tests locally.",
+   "evidence": "'does this pass CI?' ×88",
+   "cost": "You wait on a 4-minute pipeline for a 4-second local check, dozens of times.",
+   "fix_hint": "A `pretest` alias + a pre-push hook turns the question into a reflex you don't have to ask."
+  }
+ ],
+ "recommendations": [
+  {
+   "title": "Write your project map into CLAUDE.md once",
+   "rationale": "You re-explain folders/conventions in ~130 sessions.",
+   "evidence": "'components in src/ui, hooks in src/lib' repeated all year",
+   "action": "Paste the claude-md-patch below into CLAUDE.md at the repo root.",
+   "impact": "~6 hours/year back, and I stop guessing your structure."
+  },
+  {
+   "title": "Make the linter enforce what you keep correcting",
+   "rationale": "You hand-fix the same lint errors dozens of times.",
+   "evidence": "'no-floating-promises' pasted 30+ times",
+   "action": "Add the shared eslint-config as a devDependency; wire it into CI + editor.",
+   "impact": "Those corrections vanish; the rule enforces itself."
+  },
+  {
+   "title": "Turn 'is it green?' into a reflex, not a question",
+   "rationale": "You wait on CI for checks you could run in seconds.",
+   "evidence": "'does this pass CI?' ×88",
+   "action": "Add an `npm run verify` alias (test + lint + typecheck) and a pre-push hook.",
+   "impact": "Faster loop, and you stop pinging me to run your terminal."
+  },
+  {
+   "title": "Codify the test-first loop as a skill",
+   "rationale": "You run the same ordered loop for every feature; it's your most reusable habit.",
+   "evidence": "failing test → implement → refactor → green → commit, ~96 times",
+   "action": "Install the test-first-feature-loop skill below.",
+   "impact": "One command instead of five instructions per feature."
+  }
+ ],
+ "persona_guess": {
+  "guesses": [
+   {
+    "guess": "You're a product engineer at a small company, not a solo founder.",
+    "why": "One project at a time, strict weekday daytime hours, 'boss'-less cadence — you have teammates and a review culture.",
+    "confidence": "high"
+   },
+   {
+    "guess": "You came up through a testing-heavy shop, maybe backend before frontend.",
+    "why": "Test-first reflex, idempotency instincts, 'a flaky test is a bug' — that's learned, not default.",
+    "confidence": "medium"
+   },
+   {
+    "guess": "You've been burned by a big scary merge before.",
+    "why": "The small-PR religion and 'I want to revert exactly one mistake' is a scar, not a preference.",
+    "confidence": "medium"
+   },
+   {
+    "guess": "You're kind to service workers and tip well.",
+    "why": "340 thank-yous to a program. That's just who you are.",
+    "confidence": "low"
+   }
+  ],
+  "note": "All of the above is a mole's guess from your chat logs — no offense meant if I misread you."
+ },
+ "creeds": [
+  {
+   "creed": "Write the test first — it's the spec, not the chore.",
+   "evidence": {
+    "text": "write the test first, then we'll know when we're done",
+    "ts": "2025-09-02"
+   }
+  },
+  {
+   "creed": "Smaller PRs. I want to revert exactly one mistake.",
+   "evidence": {
+    "text": "smaller PR, please — one idea per pull request",
+    "ts": "2025-11-29"
+   }
+  },
+  {
+   "creed": "Readable beats short, every time.",
+   "evidence": {
+    "text": "readable > short; future-you is a stranger",
+    "ts": "2026-02-03"
+   }
+  },
+  {
+   "creed": "Never merge on red. A red build is a 'no'.",
+   "evidence": {
+    "text": "is it green? then no.",
+    "ts": "2025-10-08"
+   }
+  },
+  {
+   "creed": "Keep it boring. Clever is a liability you pay interest on.",
+   "evidence": {
+    "text": "let's not be clever here, boring code sleeps through the night",
+    "ts": "2026-01-14"
+   }
+  },
+  {
+   "creed": "Ask what happens if it runs twice.",
+   "evidence": {
+    "text": "what happens if it runs twice? make it idempotent",
+    "ts": "2026-05-20"
+   }
+  },
+  {
+   "creed": "A flaky test is a bug in a disguise — don't skip it.",
+   "evidence": {
+    "text": "don't skip it, a flaky test is a real bug",
+    "ts": "2025-09-18"
+   }
+  },
+  {
+   "creed": "Say what you mean in the name. Comments rot; names travel.",
+   "evidence": {
+    "text": "rename it to what it actually is",
+    "ts": "2026-02-03"
+   }
+  }
+ ],
+ "distilled_skills": [
+  {
+   "title": "project-context (CLAUDE.md patch)",
+   "kind": "claude-md-patch",
+   "from": "hidden_issue",
+   "trigger": "Every new session in this repo — so you stop re-explaining the layout.",
+   "stop": "The agent stops asking where components/hooks/tests live.",
+   "reuse": {
+    "seen": 130,
+    "invariance": "high",
+    "portability": "high"
+   },
+   "evidence": [
+    {
+     "quote": "components live in src/ui, hooks in src/lib, tests colocated as *.test.ts",
+     "ts": "2026-04-10"
+    }
+   ],
+   "body": "## Project map\n- UI components: `src/ui/` (one folder per component, PascalCase)\n- Hooks: `src/lib/hooks/`\n- Tests: colocated as `*.test.ts(x)`, run with `npm test`\n- API routes: `src/server/routes/`\n\n## Conventions\n- Test-first for features. Never merge on a red build.\n- One idea per PR; keep diffs under ~120 lines.\n- Readable names over short ones. No clever one-liners."
+  },
+  {
+   "title": "test-first-feature-loop",
+   "kind": "skill",
+   "from": "workflow",
+   "trigger": "Starting any new feature or bugfix.",
+   "stop": "Suite is green and the change is committed.",
+   "reuse": {
+    "seen": 96,
+    "invariance": "high",
+    "portability": "high"
+   },
+   "evidence": [
+    {
+     "quote": "write the test first, then implement until it's green, then refactor",
+     "ts": "2025-09-02"
+    }
+   ],
+   "body": "---\nname: test-first-feature-loop\ndescription: Run the user's standard TDD loop for a feature.\n---\n1. Write the failing test that describes the desired behavior.\n2. Implement the smallest change that makes it pass.\n3. Refactor for readability (names, extraction) with tests staying green.\n4. Run the full suite: `npm test`.\n5. Commit with a conventional message once green. Do not merge on red."
+  },
+  {
+   "title": "green-before-merge",
+   "kind": "skill",
+   "from": "standard_move",
+   "trigger": "Before landing or merging anything.",
+   "stop": "CI is confirmed green for the exact commit being merged.",
+   "reuse": {
+    "seen": 88,
+    "invariance": "high",
+    "portability": "high"
+   },
+   "evidence": [
+    {
+     "quote": "is it green? then no.",
+     "ts": "2025-10-08"
+    }
+   ],
+   "body": "---\nname: green-before-merge\ndescription: Refuse to merge unless the build is green.\n---\nBefore any merge: run `npm run verify` (test + lint + typecheck) locally, confirm the CI status is green for this commit, and only then land. If red, stop and fix — never merge to 'fix forward'."
+  },
+  {
+   "title": "small-pr-splitter",
+   "kind": "skill",
+   "from": "pattern",
+   "trigger": "When a diff grows past ~120 lines or touches more than one concern.",
+   "stop": "Each PR contains exactly one revertible idea.",
+   "reuse": {
+    "seen": 61,
+    "invariance": "medium",
+    "portability": "high"
+   },
+   "evidence": [
+    {
+     "quote": "smaller PR, please — one idea per pull request",
+     "ts": "2025-11-29"
+    }
+   ],
+   "body": "---\nname: small-pr-splitter\ndescription: Split a large change into small, single-purpose PRs.\n---\nWhen a change does more than one thing: identify the independent concerns, stage them as separate branches/commits, and open one PR per concern so each can be reviewed and reverted alone."
+  },
+  {
+   "title": "no-clever-oneliners (CLAUDE.md patch)",
+   "kind": "claude-md-patch",
+   "from": "correction",
+   "trigger": "Whenever the agent is tempted to golf code into a dense one-liner.",
+   "stop": "Code reads top-to-bottom without a puzzle.",
+   "reuse": {
+    "seen": 37,
+    "invariance": "high",
+    "portability": "high"
+   },
+   "evidence": [
+    {
+     "quote": "let's not be clever here, boring code sleeps through the night",
+     "ts": "2026-01-14"
+    }
+   ],
+   "body": "## Style\nPrefer boring, obvious code. No clever one-liners, no nested ternaries, no golfing. Readable beats short every time — optimize for the next reader, not the character count."
+  },
+  {
+   "title": "idempotency-check-for-handlers",
+   "kind": "skill",
+   "from": "hidden_issue",
+   "trigger": "Writing any webhook / job / handler that an external system may retry.",
+   "stop": "Running the handler twice produces the same result as once.",
+   "reuse": {
+    "seen": 24,
+    "invariance": "medium",
+    "portability": "high"
+   },
+   "evidence": [
+    {
+     "quote": "what happens if it runs twice? make it idempotent",
+     "ts": "2026-05-20"
+    }
+   ],
+   "body": "---\nname: idempotency-check-for-handlers\ndescription: Make retryable handlers safe to run twice.\n---\nFor any handler an external system can retry (webhooks, queues, crons): key the operation on a stable id, check-then-act inside a transaction or with an upsert, and add a test that invokes it twice and asserts a single effect."
+  },
+  {
+   "title": "timezone-edge-test",
+   "kind": "skill",
+   "from": "workflow",
+   "trigger": "Touching any date/time logic.",
+   "stop": "Tests cover UTC/local boundary and DST.",
+   "reuse": {
+    "seen": 16,
+    "invariance": "medium",
+    "portability": "high"
+   },
+   "evidence": [
+    {
+     "quote": "add a test for the UTC-vs-local off-by-one",
+     "ts": "2025-09-18"
+    }
+   ],
+   "body": "---\nname: timezone-edge-test\ndescription: Add boundary tests for date/time code.\n---\nFor any date logic, add tests at the risky edges: midnight UTC vs local, month/year rollover, and a DST transition. Assert against fixed timestamps, never `new Date()`."
+  },
+  {
+   "title": "eslint-preset-install",
+   "kind": "skill",
+   "from": "tooling_gap",
+   "trigger": "When the same lint error keeps getting hand-fixed.",
+   "stop": "The editor/CI enforces the rule; no more manual fixes.",
+   "reuse": {
+    "seen": 30,
+    "invariance": "low",
+    "portability": "high"
+   },
+   "evidence": [
+    {
+     "quote": "fix the no-floating-promises error again",
+     "ts": "2026-03-30"
+    }
+   ],
+   "body": "---\nname: eslint-preset-install\ndescription: Stop hand-fixing recurring lint errors.\n---\nInstall the shared eslint config as a devDependency, extend it in `.eslintrc`, wire `eslint` into the pre-commit hook and CI, and enable the editor plugin so the rule is enforced at type-time, not by pasting the error."
+  }
+ ],
+ "report_title": "The Chat Log I Actually Read"
+}

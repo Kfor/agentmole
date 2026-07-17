@@ -1,0 +1,3714 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<!-- ============================================================
+  Agentmole 报告模板 · schema v3 / v3.2（兼容 v1/v2/v3：新字段缺失即隐藏或兜底）
+  https://agentmole.dev —— 你的 AI Agent 协作史，本地挖掘，自愿分享。
+
+  给逐行审查者的说明（信任面声明）：
+  1. 本文件完全自包含：无 CDN、无外链字体/JS/CSS，file:// 下直接可用。
+  2. 全部数据来自页内 #agentmole-data JSON 块（由 skill 在本地注入，
+     注入前已完成脱敏；注入时建议把 "<" 转义为 "\u003c"）。
+  3. 全文件仅有三个可能的出网动作，全部集中声明在下方同一个
+     script 块里，且都只能由用户的明确点击触发：
+       a) 发布：POST AGENTMOLE_PUBLISH_ENDPOINT
+          ——点「分享」并在对话框里确认后，上传当前页面本身；
+       b) 排名对比：GET AGENTMOLE_PERCENTILE_ENDPOINT（与发布同源）
+          ——点「和全网鼹鼠比比」后，只发送 5 个统计数字，不含任何文本；
+       c) 原型分布：GET AGENTMOLE_ARCHETYPE_STATS_ENDPOINT（与发布同源）
+          ——与 b) 属同一次点击授权、随其一并发出，不带任何参数，
+          只为展示「你是全网 X% 的『原型』」身份行。
+     除此之外没有任何 fetch / XHR / beacon / 外链资源。
+     （发布成功后的「发到 X」是普通链接，点击才跳转、不自动发起请求。）
+  4. 所有动态内容一律经 textContent / createElement 注入，
+     不做 innerHTML 字符串拼接——数据再脏也不会变成脚本。
+============================================================ -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<!--AGENTMOLE:OG-->
+<title>Agentmole · 我的 AI Agent 聊天记录挖掘</title>
+<link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAABSlBMVEVHcExFGAtJGBhNIBKrd1pPMh9PSkhrUEM6IxYsJB5NPDJDMCM/KhwvIxpjU0gyIxovKidlQihEMylPTEpROyovHhNYQTNFMSRKLx5DKhlILhwrHBJIMiRCLR8mJiNDMCMzJx41JRs9KR1FKho+KR2VUkqiY1spHxczJh1bRDZcOixLNCQyIRYqHxlALiTz1apZPSlnSDdcQjEsHxVlRjG+eXT///+/b2IAv/+WhGwzIRUxHhM5IxVZOiM+JxcrGxImGRBAKRlcPidKLxxGKxg1IxZpRy5rSS9UOCMvHRJPMBxDKBduSzFOMyBYNh87JRZgQChSMx5GLhxiPSQcEw3iv5NlRCuZeli6n30iFg8WDQjQso2zl3WOZ0royZ9xWUBCNCqohl9sUTjHrIr+3q3wz6SqjWssKSmBUjzch33ZhXm6ZlrbiH14ZlD4O4gEAAAAOnRSTlMAAgEDAvwQIvtMMpHpjha5KPx6Cfr6QV76//3+ieQcsGfL1vzHyJPao2SX2O2nbfvE84rSUzsE/gTtl5Ze+AAAAnJJREFUOMuVU9d24jAUlG1M7yQQY1JJr9uLZMlyA2PjQidAetn+/69rkt0sOUkeVk86mntnju7cAeD/DsNxHPMy/Ad7sSR4z8ZisaW727N4bHlOVfFiKgu45/jZvFNrNuvNvrkYf8IRCnEgruVq9enJ4cUl5qlKNoN93+/XA5Kck3osEgLvNzdfN/vu3LlZC0R8PrkE2Fl5sPHt5/eTpi9+Mf2gQuVJjJ2lYNnIxo+PX+vNtub7as03eWH7sQYL0rs89ut1Fau+6mBHeFt4/FMOfNrqQgdjrGKnrbWrZOURBQvCB7h8DAXTNFu6YvqmshVm2BmLCpla3dco0YJ2RTJrNR6tMNy/fnA4OeoNHOoJQlsgJ4NLzBsHD5YwIJ36fHR62nNGUFEIvL2+7p14VNwN31cE+Dq6GvfGE5lSwxj9uhn3bi66o2ork56SM1x6Dc1dDIfjM9n1ugYdDk+vekrXQlFpNcwFFR/WoGTAyeUANmxZ62uDwXByO8KWLNtkO1AopBrzsmCbHkSdDiI6gWfq2blMGh6B0WgiDCowGrRalDY0t2NRQZOMY6jrlNqSjcRqCeRXDRHJSDSsTkv3IO7okiTZ0CNyg/J8JgyK666OJAXqREOK63mWBz1JI8iTaFfX9yugUElmFlwJHhMYyBIIWy0q6tDQkFeOJg+n4w6/aeH5apQiHnVtCC1JlMtG1fWE9lqkGMw5WMZEPoHd1aSNpJwli7yw71gGWdipRB6sAMXllcirRD5plZf3Wns7qfVSIj6FQvcryU19Ywsgki0VwbtSJH7Xx8xuNjf1lvnLBxiW455mhwVMkF0QpJf5n7z/BkTNexjGZR/LAAAAAElFTkSuQmCC">
+<script>
+/* ============================================================
+ * ★★★ 全文件仅有的三个出网点（ALL NETWORK ENDPOINTS LIVE HERE）★★★
+ *
+ * 1) 发布（POST AGENTMOLE_PUBLISH_ENDPOINT）
+ *    仅在用户点击「分享」→ 发布对话框里点「确认发布」后，
+ *    publishReport() 把当前页面原样 POST 到这个地址
+ *    （WYSIWYG：所见即所传，不多传一个字节）。
+ *
+ * 2) 排名对比（GET AGENTMOLE_PERCENTILE_ENDPOINT，与发布同源）
+ *    仅在用户点击「和全网鼹鼠比比」后，comparePercentiles() 对
+ *    每个榜单轴发一次 GET，query 只有 axis（枚举）和 value（数字）
+ *    两个参数——即本页 stats 里的 5 个统计数字，不含任何文本内容。
+ *    响应 {"total","beaten","pct"}；样本不足时 {"insufficient","total"}。
+ *
+ * 3) 原型分布（GET AGENTMOLE_ARCHETYPE_STATS_ENDPOINT，与发布同源）
+ *    与 2) 属同一次点击授权：排名正常返回后追加一次、无参数、
+ *    零上传，只读全网原型分布渲染「你是全网 X% 的『原型』」。
+ *
+ * AGENTMOLE_API_ORIGIN 只用于拼出上面 2) 3) 两个 GET 端点；
+ * 全文件其余部分不含任何网络请求代码。
+ * ============================================================ */
+const AGENTMOLE_PUBLISH_ENDPOINT = "https://agentmole.dev/api/publish";
+const AGENTMOLE_API_ORIGIN = new URL(AGENTMOLE_PUBLISH_ENDPOINT).origin;
+const AGENTMOLE_PERCENTILE_ENDPOINT = AGENTMOLE_API_ORIGIN + "/api/percentile";
+const AGENTMOLE_ARCHETYPE_STATS_ENDPOINT = AGENTMOLE_API_ORIGIN + "/api/archetype-stats";
+</script>
+<style>
+/* ============================================================
+   §CSS 0 · 主题变量：Neo-brutalism（奶油底 + 蓝紫撞色 + 黑框硬投影）
+   单一主题。applyTheme()（见 §JS 14）会把 docs/themes.json 里
+   brutalist 的 8 个键（--bg/--card/--ink/--dim/--acc/--font/
+   --radius/--border）映射派生后覆写到 :root；这里的默认值即
+   brutalist 本体，保证 JS 未跑 / 失败时视觉不变、无深浅闪烁。
+============================================================ */
+:root {
+  --bg: #f5efe3;          /* 奶油纸底 */
+  --bg-soft: #faf7f1;
+  --card: #ffffff;
+  --card-2: #ececec;
+  --line: #111111;        /* 纯黑框线 */
+  --tx: #111111;
+  --tx-dim: #4a4a4a;
+  --tx-faint: #8b877f;
+  --brown: #463e80;       /* 派生位（少量图表） */
+  --brown-soft: #b8b3cf;
+  --green: #3d24ff;       /* 蓝紫强调（brutalist acc） */
+  --green-dim: #7d6bf5;
+  --green-soft: rgba(61, 36, 255, .12);
+  --pink: #ef9db0;        /* 鼠鼻（吉祥物） */
+  --yellow: #ffd23f;      /* 撞色黄（横幅 / 强调） */
+  --mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  /* —— 以下为主题 8 键直通/派生位（默认值 = brutalist 原样） —— */
+  --font: Arial, "Helvetica Neue", "PingFang SC",
+    "Hiragino Sans GB", "Noto Sans CJK SC", "Source Han Sans SC", "Microsoft YaHei", sans-serif;
+  --radius: 0px;
+  --card-border: 3px solid #111111;
+  --topbar-bg: rgba(245, 239, 227, .92);
+  --banner-a: #111111; --banner-b: #111111;       /* 裂变横幅：黑色色块 */
+  --arch-a: #faf7f1; --arch-b: #f0eadd;           /* 原型卡渐变两端 */
+  --arch-line: rgba(61, 36, 255, .22);
+  --green-line: rgba(61, 36, 255, .3);
+  --brown-line: rgba(17, 17, 17, .5);
+  --btn-hover: #eee7d7;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--bg); color: var(--tx);
+  font-family: var(--font);
+  line-height: 1.6; -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 940px; margin: 0 auto; padding: 0 20px; }
+a { color: var(--green); }
+button { font-family: inherit; }
+[hidden] { display: none !important; }
+
+/* ============================================================
+   §CSS 1 · 顶部裂变横幅 + 吸顶栏（含分享按钮）
+============================================================ */
+.viral-banner {
+  background: linear-gradient(90deg, var(--banner-a), var(--banner-b));
+  border-bottom: 1px solid var(--line);
+  padding: 9px 16px; text-align: center; font-size: 13.5px; color: var(--tx-dim);
+  display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center;
+}
+.viral-banner code {
+  font-family: var(--mono); font-size: 12.5px; color: var(--green);
+  background: rgba(0,0,0,.35); border: 1px solid var(--line);
+  border-radius: 6px; padding: 2px 8px;
+}
+.viral-cta { color: var(--tx); font-weight: 700; }
+.topbar {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--topbar-bg); backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.topbar-in {
+  max-width: 940px; margin: 0 auto; padding: 8px 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+/* 品牌 lockup：颜色写死（黄底黑框硬投影），不吃主题变量——一眼可识别的 brutalist 贴纸 */
+.brand {
+  display: flex; align-items: center; gap: 7px; font-weight: 900; letter-spacing: .2px;
+  background: #ffd23f; color: #111; padding: 3px 12px 3px 8px; border-radius: 0;
+  border: 2px solid #111; font-size: 14px; text-transform: uppercase;
+  box-shadow: 3px 3px 0 0 #111;
+  font-family: Arial, "Helvetica Neue", "PingFang SC", sans-serif;
+}
+.brand small { color: #333; font-weight: 700; font-size: 10.5px; text-transform: none; }
+/* 右下角固定水印 lockup：同样写死配色；pointer-events 关掉，纯识别用 */
+.brand-watermark {
+  position: fixed; right: 12px; bottom: 10px; z-index: 40; pointer-events: none;
+  display: flex; align-items: center; gap: 6px; opacity: .96;
+  background: #ffd23f; color: #111; border: 2px solid #111; border-radius: 0;
+  padding: 3px 11px 3px 7px; text-transform: uppercase;
+  font-weight: 900; font-size: 11px; letter-spacing: .3px;
+  font-family: Arial, "Helvetica Neue", "PingFang SC", sans-serif;
+  box-shadow: 3px 3px 0 0 #111;
+}
+.topbar-spacer { flex: 1; }
+.share-note { font-size: 11.5px; color: var(--tx-dim); }
+.btn {
+  cursor: pointer; border-radius: min(var(--radius), 8px); border: 1px solid var(--line);
+  background: var(--card-2); color: var(--tx); padding: 6px 14px; font-size: 13.5px;
+  transition: transform .08s ease, background .15s ease, filter .15s ease;
+  text-decoration: none; display: inline-block;
+}
+.btn:hover { background: var(--btn-hover); }
+.btn:active { transform: scale(.97); }
+.btn-primary {
+  background: var(--green); color: var(--card); font-weight: 800; border-color: transparent;
+}
+.btn-primary:hover { background: var(--green); filter: brightness(1.1); }
+.btn-copy { font-size: 12px; padding: 3px 10px; }
+a.btn { color: var(--tx); }
+
+/* ============================================================
+   §CSS 2 · 页头：紧凑单行头（小吉祥物 40px 内联 + 标题 + meta 同行）
+   v3.2：原大页头压扁——首屏纵向空间让给原型名与关键数字带
+============================================================ */
+.hero { padding: 18px 0 0; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.hero .mascot { flex: 0 0 auto; width: 40px; height: 40px; filter: drop-shadow(0 3px 8px rgba(0,0,0,.45)); }
+.hero-txt { flex: 1; min-width: 0; display: flex; align-items: baseline; gap: 4px 16px; flex-wrap: wrap; }
+.hero-txt h1 { margin: 0; font-size: clamp(20px, 2.8vw, 26px); line-height: 1.25; letter-spacing: .4px; }
+.hero-txt h1 em { font-style: normal; color: var(--green); }
+.hero-sub { color: var(--tx-dim); font-size: 12.5px; margin-top: 0; display: flex; flex-wrap: wrap; gap: 5px 12px; align-items: center; }
+.chip {
+  display: inline-block; font-size: 11.5px; padding: 1px 9px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--card); color: var(--tx-dim);
+}
+.placeholder-note {
+  margin: 48px 0; padding: 22px; border: 1px dashed var(--line); border-radius: 12px;
+  color: var(--tx-dim); text-align: center; font-size: 14px;
+}
+
+/* ============================================================
+   §CSS 3 · 区块通用
+============================================================ */
+main section { margin: 54px 0; }
+.sec-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 18px; }
+.sec-head h2 { margin: 0; font-size: 22px; letter-spacing: .5px; }
+.sec-head .en {
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: 2.5px;
+  color: var(--tx-faint); text-transform: uppercase;
+}
+.card {
+  background: var(--card); border: var(--card-border);
+  border-radius: var(--radius); padding: 20px 22px;
+}
+.muted { color: var(--tx-dim); }
+.faint { color: var(--tx-faint); }
+svg.chart { width: 100%; height: auto; display: block; }
+svg text { font-family: var(--mono); }
+/* 界面语言 en（data.lang，§JS 1c）：h2 已是英文时隐藏冗余小注；引号换西文 */
+[data-lang="en"] .sec-head .en { display: none; }
+[data-lang="en"] .quote-text::before { content: "\201c"; }
+[data-lang="en"] .quote-text::after { content: "\201d"; }
+
+/* ============================================================
+   §CSS 4 · 人格原型
+============================================================ */
+.arch-card { /* v3.2 瘦身：雷达缩到固定 264px 贴右，卡片整体变矮 */
+  display: grid; grid-template-columns: 1fr 264px; gap: 18px; align-items: center;
+  background: linear-gradient(135deg, var(--arch-a) 0%, var(--arch-b) 100%);
+  border: 1px solid var(--arch-line); border-radius: calc(var(--radius) + 4px); padding: 22px 26px;
+  position: relative; overflow: hidden;
+}
+#arch-radar { width: 100%; max-width: 264px; margin-left: auto; }
+#arch-radar svg { overflow: visible; } /* 轴标签允许溢出 viewBox（en 长标签不裁切） */
+.arch-card::after { /* 背景里若隐若现的洞 */
+  content: ""; position: absolute; right: -70px; bottom: -90px; width: 260px; height: 260px;
+  border-radius: 50%; background: radial-gradient(circle, rgba(141,255,90,.10), transparent 65%);
+}
+.arch-kicker { font-size: 12px; letter-spacing: 3px; color: var(--green-dim); font-family: var(--mono); }
+/* 可选形象图（data.portrait，data: URI；由用户自己的 agent 本地生成，如 Codex 内置画图） */
+.arch-portrait { width: 128px; height: 128px; border-radius: 18px; object-fit: cover;
+  float: right; margin: 0 0 10px 14px; border: 2px solid var(--arch-line); }
+.arch-name { font-size: clamp(30px, 5vw, 46px); font-weight: 900; line-height: 1.12; margin: 5px 0 2px; color: var(--green); }
+.arch-en { font-family: var(--mono); color: var(--tx-dim); font-size: 14px; }
+.arch-tagline { margin-top: 12px; font-size: 16px; color: var(--tx); }
+@media (max-width: 720px) {
+  .arch-card { grid-template-columns: 1fr; }
+  #arch-radar { margin: 0 auto; max-width: 300px; } /* 移动端雷达加大居中（v3.2） */
+}
+/* 首屏紧凑：页头 → 原型卡 → 关键数字带 三段收拢（桌面 900px 高进首屏） */
+#sec-archetype { margin: 20px 0 16px; }
+#sec-keyline { margin-top: 16px; }
+
+/* ============================================================
+   §CSS 5 · 金句 + Roast
+============================================================ */
+.quote-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 720px) { .quote-grid { grid-template-columns: 1fr; } }
+.quote-label { font-size: 12px; letter-spacing: 2px; color: var(--tx-faint); font-family: var(--mono); margin-bottom: 10px; }
+.quote-text { font-size: 21px; font-weight: 700; line-height: 1.5; }
+.quote-text::before { content: "「"; color: var(--brown); }
+.quote-text::after { content: "」"; color: var(--brown); }
+.quote-meta { margin-top: 12px; font-size: 12.5px; color: var(--tx-dim); }
+.roast-card { border-color: var(--brown-line); }
+.roast-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.roast-body { font-size: 15px; color: var(--tx); background: var(--bg-soft); border-radius: 4px 14px 14px 14px; padding: 14px 16px; border: 1px solid var(--line); }
+
+/* ============================================================
+   §CSS 5b · v3 创作区块：协作解读 / 年度名场面 / 隐性问题诊断
+============================================================ */
+/* narrative——整份报告的灵魂段落：纯排版、不做卡片，正文大一号 */
+.narrative-wrap { max-width: 780px; padding: 4px 0 4px 26px; border-left: 3px solid var(--green); }
+.narrative-wrap p { margin: 0 0 1.35em; font-size: 16.5px; line-height: 2; color: var(--tx); }
+.narrative-wrap p:last-of-type { margin-bottom: 0; }
+.narrative-wrap p.lead { font-size: clamp(19px, 2.8vw, 22px); line-height: 1.85; font-weight: 600; }
+.narrative-by { display: flex; align-items: center; gap: 8px; margin-top: 18px; font-family: var(--mono); font-size: 12px; color: var(--tx-faint); }
+/* moments——竖向时间线 */
+.moment-list { position: relative; padding-left: 30px; }
+.moment-list::before { content: ""; position: absolute; left: 9px; top: 8px; bottom: 8px; width: 2px; background: var(--line); }
+.moment { position: relative; padding-bottom: 28px; }
+.moment:last-child { padding-bottom: 4px; }
+.moment::before { content: ""; position: absolute; left: -26px; top: 6px; width: 10px; height: 10px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 3px var(--green-soft); }
+.moment-ts { font-family: var(--mono); font-size: 11.5px; letter-spacing: 1px; color: var(--tx-faint); }
+.moment-title { font-size: 17.5px; font-weight: 800; margin: 3px 0 6px; }
+.moment-text { font-size: 14.5px; color: var(--tx-dim); max-width: 720px; }
+blockquote.moment-quote, blockquote.diag-ev, blockquote.rec-ev {
+  margin: 10px 0 0; padding: 10px 15px; max-width: 720px;
+  font-size: 14.5px; color: var(--tx); background: var(--bg-soft);
+  border: 1px solid var(--line); border-left: 3px solid var(--brown);
+  border-radius: 0 10px 10px 0;
+}
+/* diagnosis——体检报告异常项 */
+.diag-list { display: grid; gap: 14px; }
+.diag-item { border-left: 4px solid var(--brown); }
+.diag-flag {
+  display: inline-block; font-family: var(--mono); font-size: 10.5px; letter-spacing: 2px;
+  color: var(--brown); border: 1px solid var(--brown-line); border-radius: 5px; padding: 1px 8px;
+}
+.diag-issue { font-size: 17px; font-weight: 800; margin: 8px 0 2px; }
+.diag-row { display: flex; gap: 10px; margin-top: 9px; font-size: 13.5px; align-items: baseline; }
+.diag-row .k { flex: 0 0 auto; font-family: var(--mono); font-size: 10.5px; letter-spacing: 1.5px; color: var(--tx-faint); border: 1px solid var(--line); border-radius: 4px; padding: 1px 7px; }
+.diag-row .v { color: var(--tx-dim); }
+.diag-row.fix .k { color: var(--green); border-color: var(--green-line); }
+.diag-row.fix .v { color: var(--tx); }
+
+/* ============================================================
+   §CSS 5c · v3.1 关键数字带（keyline）+「我猜猜你是谁」（persona）
+============================================================ */
+/* keyline——横排大数字药丸 */
+.keyline-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(168px, 1fr)); gap: 10px; }
+.keyline-pill { background: var(--card); border: var(--card-border); border-radius: var(--radius); border-top: 3px solid var(--green-line); padding: 12px 15px 10px; min-width: 0; }
+.kl-value { font-family: var(--mono); font-weight: 800; font-size: clamp(24px, 4.6vw, 34px); line-height: 1.15; color: var(--green); white-space: nowrap; font-variant-numeric: tabular-nums; }
+/* 长数值（如 $53,799）不折行，整体缩号 */
+.kl-value.long { font-size: clamp(19px, 3.4vw, 26px); }
+.kl-label { font-size: 12px; color: var(--tx-dim); margin-top: 2px; }
+.kl-quip { font-size: 11px; color: var(--tx-faint); margin-top: 4px; }
+/* persona——侦探结案报告 */
+.pg-kicker { font-family: var(--mono); font-size: 11px; letter-spacing: 3px; color: var(--brown); border-bottom: 1px dashed var(--brown-line); padding-bottom: 8px; margin-bottom: 14px; }
+.persona-figure { float: left; margin: 4px 20px 10px 0; width: min(200px, 42%); }
+.persona-figure img { display: block; width: 100%; border-radius: 10px; border: 2px solid var(--brown-line); transform: rotate(-2deg); box-shadow: 0 8px 22px rgba(0, 0, 0, .35); }
+.pg { padding: 10px 0; border-bottom: 1px dashed var(--line); }
+.pg:last-of-type { border-bottom: 0; }
+.pg-head { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.pg-no { font-family: var(--mono); color: var(--brown); font-weight: 800; font-size: 13px; }
+.pg-text { font-size: 18px; font-weight: 800; flex: 1; min-width: 55%; }
+.pg-conf { flex: 0 0 auto; font-family: var(--mono); font-size: 10px; letter-spacing: 1.5px; border: 1px solid var(--line); color: var(--tx-dim); border-radius: 5px; padding: 2px 8px; white-space: nowrap; }
+.pg-conf.high { color: var(--green); border-color: var(--green-line); background: var(--green-soft); }
+.pg-conf.medium { color: var(--brown); border-color: var(--brown-line); }
+.pg-conf.low { color: var(--tx-faint); border-style: dashed; }
+.pg-why { font-size: 13px; color: var(--tx-dim); margin-top: 4px; }
+.persona-note { clear: both; margin-top: 14px; font-size: 11.5px; color: var(--tx-faint); }
+
+/* ============================================================
+   §CSS 5d · v3.2 下一步建议（recommendations）——顾问式优先级行动清单
+   每张卡：序号 + 标题 + 收益 chip · 依据(why) · 证据引用 · action 高亮块。
+   action 是主角：accent 左描边 + 荧光绿底，比其余内容重一档。
+============================================================ */
+.rec-list { display: grid; gap: 16px; }
+.rec-item { display: grid; grid-template-columns: auto 1fr; gap: 2px 20px; align-items: start; }
+.rec-rank { font-family: var(--mono); font-weight: 800; line-height: 1; color: var(--green);
+  font-size: clamp(26px, 4.4vw, 36px); font-variant-numeric: tabular-nums; }
+.rec-main { min-width: 0; }
+.rec-head { display: flex; align-items: baseline; gap: 8px 14px; flex-wrap: wrap; }
+.rec-title { font-size: 18.5px; font-weight: 800; flex: 1; min-width: 55%; line-height: 1.3; }
+.rec-impact { flex: 0 0 auto; max-width: 100%; display: inline-flex; align-items: baseline; gap: 7px;
+  font-size: 12.5px; color: var(--brown); background: rgba(176, 125, 79, .12);
+  border: 1px solid var(--brown-line); border-radius: 999px; padding: 3px 12px; }
+.rec-impact .k { font-family: var(--mono); font-size: 9.5px; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--brown-soft); }
+.rec-rationale { margin: 8px 0 0; font-size: 14px; color: var(--tx-dim); max-width: 720px; }
+.rec-ev .k { display: block; font-family: var(--mono); font-size: 9.5px; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--tx-faint); margin-bottom: 4px; }
+.rec-action { margin-top: 14px; padding: 13px 17px 15px; max-width: 760px;
+  background: var(--green-soft); border: 1px solid var(--green-line);
+  border-left: 4px solid var(--green); border-radius: 0 12px 12px 12px; }
+.rec-action .k { display: block; font-family: var(--mono); font-size: 10.5px; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--green); margin-bottom: 6px; }
+.rec-action .rec-action-text { font-size: 15.5px; font-weight: 600; line-height: 1.6; color: var(--tx); }
+/* 一键喂给 agent：全部建议 + skill 打包 */
+.rec-feed { margin-top: 18px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.rec-feed .btn { font-size: 14px; padding: 9px 18px; }
+.rec-feed-note { font-size: 12.5px; color: var(--tx-faint); }
+@media (max-width: 720px) {
+  .rec-item { grid-template-columns: 1fr; gap: 6px; }
+  .rec-rank { font-size: 22px; }
+  .rec-feed .btn { width: 100%; }
+}
+
+/* ============================================================
+   §CSS 6 · 硬核数字
+============================================================ */
+.stat-hero { text-align: center; padding: 34px 22px; }
+.stat-hero .n {
+  font-family: var(--mono); font-weight: 800; color: var(--green);
+  font-size: clamp(52px, 11vw, 96px); line-height: 1.05; letter-spacing: -2px;
+  text-shadow: 0 0 34px rgba(141,255,90,.25);
+}
+.stat-hero .n small { font-size: .38em; letter-spacing: 0; color: var(--green-dim); }
+.stat-hero .label { color: var(--tx-dim); font-size: 14px; margin-top: 6px; }
+.stat-hero .convert { margin-top: 14px; font-size: 16.5px; color: var(--tx); }
+.stat-hero .convert b { color: var(--brown); font-size: 1.25em; }
+.stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 14px; }
+@media (max-width: 720px) { .stat-grid { grid-template-columns: repeat(2, 1fr); } }
+.stat-cell .n { font-family: var(--mono); font-size: clamp(26px, 4.5vw, 38px); font-weight: 800; line-height: 1.15; }
+.stat-cell .n em { font-style: normal; font-size: .5em; color: var(--tx-dim); }
+.stat-cell .cn { font-size: 13.5px; margin-top: 3px; }
+.stat-cell .en { font-family: var(--mono); font-size: 9.5px; letter-spacing: 2px; color: var(--tx-faint); text-transform: uppercase; }
+.stat-cell .hint { font-size: 12px; color: var(--tx-dim); margin-top: 5px; }
+/* 「估算」角标：主显外推估算值时挂在大数字旁 */
+.est-badge {
+  display: inline-block; vertical-align: super; margin-left: 8px;
+  font-size: 11px; font-weight: 700; letter-spacing: 1px; font-family: var(--mono);
+  color: var(--brown); border: 1px solid var(--brown-line); border-radius: 5px; padding: 1px 7px;
+}
+.est-measured { margin-top: 8px; font-size: 12px; color: var(--tx-faint); font-family: var(--mono); }
+/* token 区常驻口径小字（契约 v3：无论有无估算值都展示） */
+.token-note { margin-top: 12px; font-size: 11.5px; color: var(--tx-faint); }
+/* v3 · 等值 API 成本大卡：棕色区分 token 绿，语气戏谑但数字认真 */
+.cost-hero { margin-top: 14px; padding: 26px 22px; }
+.cost-hero .n { color: var(--brown); font-size: clamp(42px, 9vw, 78px); text-shadow: none; }
+.cost-hero .n small { color: var(--brown-soft); }
+.cost-note { margin-top: 10px; font-size: 12.5px; color: var(--tx-dim); }
+/* v3 · 戏谑换算带：一排小徽章，别喧宾夺主 */
+.fun-strip { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.fun-chip {
+  display: flex; flex-direction: column; gap: 1px; padding: 7px 12px;
+  background: var(--card); border: var(--card-border); border-radius: min(var(--radius), 10px);
+}
+.fun-chip b { font-size: 13.5px; font-weight: 700; color: var(--tx); }
+.fun-chip small { font-size: 10.5px; color: var(--tx-faint); font-family: var(--mono); }
+/* v3 · 用途分布条：单条横向堆叠 + 图例 */
+.usage-card { margin-top: 14px; }
+.usage-bar { display: flex; height: 22px; border-radius: min(var(--radius), 8px); overflow: hidden; border: 1px solid var(--line); }
+.usage-bar i { display: block; height: 100%; }
+.usage-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 10px; font-size: 12.5px; color: var(--tx-dim); }
+.usage-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; }
+/* v3.1 · 模型座次 + effort 档位（分别复用 .sig-* 条形与 .chip 药丸骨架） */
+.model-row .sig-text { font-family: var(--mono); font-size: 13px; font-weight: 600; overflow-wrap: anywhere; }
+.effort-strip { display: flex; flex-wrap: wrap; gap: 8px; }
+.effort-badge { font-family: var(--mono); padding: 4px 12px; }
+.effort-badge b { color: var(--tx); }
+.effort-badge.top { color: var(--green); border-color: var(--green-line); background: var(--green-soft); }
+/* 通用纯 CSS tooltip：hover 展示 data-tip 内容（零依赖） */
+.tip { position: relative; cursor: help; }
+.tip:hover::after {
+  content: attr(data-tip); position: absolute; left: 50%; bottom: calc(100% + 8px);
+  transform: translateX(-50%); z-index: 60;
+  width: max-content; max-width: 280px; white-space: normal; text-align: left;
+  background: var(--card-2); color: var(--tx); border: 1px solid var(--line);
+  font-size: 12px; font-weight: 400; font-family: var(--font); letter-spacing: 0; line-height: 1.5;
+  padding: 8px 11px; border-radius: 8px; box-shadow: 0 8px 24px rgba(0, 0, 0, .4);
+}
+/* 「和全网鼹鼠比比」对比块（数据只在点击后才发出，见 §JS 5b） */
+.pct-block { margin-top: 14px; }
+.pct-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.pct-note { font-size: 11.5px; color: var(--tx-faint); }
+.pct-list { margin-top: 12px; display: grid; gap: 6px; }
+.pct-row { font-size: 14.5px; }
+.pct-row b { color: var(--green); font-family: var(--mono); font-size: 1.15em; }
+.pct-row .axis { color: var(--tx-dim); }
+.pct-fail { color: var(--tx-dim); font-size: 13.5px; }
+/* v3.2 · MBTI 式身份行：「你是全网 X% 的『原型』」（数据来自 archetype-stats） */
+.pct-identity {
+  margin: 2px 0 10px; padding: 12px 16px; font-size: 14.5px; color: var(--tx);
+  border: 1px solid var(--green-line); background: var(--green-soft);
+  border-radius: min(var(--radius), 10px);
+}
+.pct-identity b { color: var(--green); font-family: var(--mono); font-size: 1.6em; }
+.pct-identity .arch { font-weight: 800; font-size: 1.2em; }
+/* 对比结果区常驻口径小字 */
+.pct-scope { margin-top: 10px; font-size: 11px; color: var(--tx-faint); }
+
+/* ============================================================
+   §CSS 7 · 词云 + 口头禅榜
+============================================================ */
+.words-grid { display: grid; grid-template-columns: 1.25fr .75fr; gap: 16px; align-items: start; }
+@media (max-width: 720px) { .words-grid { grid-template-columns: 1fr; } }
+.cloud { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; justify-content: center; padding: 26px 14px; }
+.cloud span { line-height: 1.1; white-space: nowrap; cursor: default; }
+.sig-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px dashed var(--line); }
+.sig-row:last-child { border-bottom: 0; }
+.sig-rank { font-family: var(--mono); color: var(--tx-faint); font-size: 12px; width: 22px; }
+.sig-text { flex: 1; font-weight: 600; font-size: 14.5px; }
+.sig-bar-wrap { flex: 0 0 72px; height: 6px; border-radius: 3px; background: var(--bg-soft); overflow: hidden; }
+.sig-bar { height: 100%; background: linear-gradient(90deg, var(--green-dim), var(--green)); }
+.sig-count { font-family: var(--mono); color: var(--green); font-size: 13px; min-width: 48px; text-align: right; }
+
+/* ============================================================
+   §CSS 8 · 图表区（磨合曲线 / 作息）
+============================================================ */
+.legend { display: flex; gap: 18px; font-size: 12px; color: var(--tx-dim); margin-bottom: 8px; flex-wrap: wrap; }
+.legend i { display: inline-block; width: 18px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
+.heat-scroll { overflow-x: auto; padding-bottom: 6px; position: relative; /* 兼作 tooltip 定位容器 */ }
+.heat-legend { display: flex; align-items: center; gap: 5px; font-size: 11.5px; color: var(--tx-faint); margin-top: 8px; justify-content: flex-end; }
+.heat-legend i { width: 11px; height: 11px; border-radius: 2.5px; display: inline-block; }
+/* GitHub 化热力格：hover 放大高亮 + 自绘 tooltip（纯 CSS/JS，零依赖） */
+.heat-cell { transform-box: fill-box; transform-origin: center; transition: transform .08s ease; }
+.heat-cell:hover { transform: scale(1.4); stroke: var(--tx); stroke-width: 1; }
+.heat-tip {
+  position: absolute; z-index: 20; pointer-events: none;
+  background: var(--card-2); border: 1px solid var(--line); color: var(--tx);
+  font-family: var(--mono); font-size: 11.5px; line-height: 1.4;
+  padding: 4px 9px; border-radius: 6px; white-space: nowrap;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .45);
+}
+.chart-title { font-size: 13.5px; color: var(--tx-dim); margin: 20px 0 6px; }
+.chart-title:first-child { margin-top: 0; }
+
+/* ============================================================
+   §CSS 8b · per-source 对比区（Claude 橙 vs Codex 青，阵营配色写死）
+============================================================ */
+.src-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: stretch; }
+@media (max-width: 720px) { .src-grid { grid-template-columns: 1fr; } }
+.src-card { border-top: 3px solid var(--src-color, var(--green)); }
+.src-name { font-weight: 800; font-size: 16px; color: var(--src-color, var(--tx)); display: flex; align-items: center; gap: 8px; }
+.src-name i { width: 9px; height: 9px; border-radius: 50%; background: var(--src-color); display: inline-block; }
+.src-big { font-family: var(--mono); font-weight: 800; font-size: clamp(28px, 5vw, 40px); line-height: 1.15; margin-top: 8px; }
+.src-big em { font-style: normal; font-size: .45em; color: var(--tx-dim); }
+.src-share-track { height: 8px; border-radius: 4px; background: var(--bg-soft); overflow: hidden; margin: 10px 0 4px; }
+.src-share-bar { height: 100%; border-radius: 4px; background: var(--src-color); }
+.src-share-label { font-size: 12px; color: var(--tx-dim); font-family: var(--mono); }
+.src-facts { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px; font-size: 12.5px; color: var(--tx-dim); }
+.src-facts b { color: var(--tx); font-family: var(--mono); font-weight: 700; }
+.src-roast {
+  margin-top: 14px; font-size: 13.5px; color: var(--tx);
+  background: var(--bg-soft); border: 1px solid var(--line);
+  border-left: 3px solid var(--src-color); border-radius: 4px 12px 12px 12px; padding: 10px 13px;
+}
+.src-roast .who { font-size: 11px; letter-spacing: 1.5px; color: var(--tx-faint); font-family: var(--mono); display: block; margin-bottom: 4px; }
+
+/* ============================================================
+   §CSS 9 · 徽章 / 信条 / skill 蒸馏
+============================================================ */
+.badge-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+.badge { display: flex; gap: 13px; align-items: flex-start; }
+.badge-ico {
+  flex: 0 0 44px; width: 44px; height: 44px; border-radius: min(var(--radius), 12px);
+  background: var(--green-soft); border: 1px solid var(--green-line);
+  display: flex; align-items: center; justify-content: center; color: var(--green);
+}
+.badge-name { font-weight: 800; font-size: 15.5px; }
+.badge-desc { font-size: 13px; color: var(--tx-dim); }
+.badge-ev { font-size: 12px; color: var(--tx-faint); margin-top: 4px; font-family: var(--mono); }
+.creed-list { display: grid; gap: 12px; counter-reset: creed; }
+.creed { display: flex; gap: 16px; }
+.creed-no { font-family: var(--mono); color: var(--green-dim); font-weight: 800; font-size: 20px; min-width: 34px; padding-top: 2px; }
+.creed-text { font-size: 17.5px; font-weight: 700; }
+.creed-ev { margin: 6px 0 0; font-size: 13px; color: var(--tx-dim); border-left: 2px solid var(--brown-soft); padding-left: 10px; }
+.creed-ev .ts { color: var(--tx-faint); font-family: var(--mono); font-size: 11.5px; margin-left: 8px; }
+.skill-card { margin-bottom: 14px; }
+.skill-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.skill-kind {
+  font-family: var(--mono); font-size: 10px; letter-spacing: 1.5px; padding: 2px 8px;
+  border-radius: 4px; background: var(--green-soft); color: var(--green); border: 1px solid var(--green-line);
+}
+.skill-kind.patch { background: rgba(176,125,79,.15); color: var(--brown); border-color: rgba(176,125,79,.4); }
+.skill-title { font-family: var(--mono); font-weight: 700; font-size: 16px; flex: 1; }
+.skill-seen {
+  font-family: var(--mono); font-size: 12px; font-weight: 700; white-space: nowrap; cursor: help;
+  color: var(--green); background: var(--green-soft); border: 1px solid var(--green-line);
+  border-radius: 4px; padding: 2px 8px;
+}
+.skill-trigger { font-size: 13px; color: var(--tx-dim); margin: 8px 0 10px; }
+.skill-body {
+  font-family: var(--mono); font-size: 12px; line-height: 1.55; color: var(--tx-dim);
+  background: var(--bg-soft); border: 1px solid var(--line); border-radius: 10px;
+  padding: 14px; max-height: 240px; overflow: auto; white-space: pre-wrap; margin: 0;
+}
+
+/* ============================================================
+   §CSS 10 · 发布弹窗 + 页脚
+============================================================ */
+.modal-mask {
+  position: fixed; inset: 0; z-index: 100; background: rgba(8, 6, 4, .72);
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+}
+.modal {
+  width: min(480px, 100%); background: var(--card-2); border: var(--card-border);
+  border-radius: calc(var(--radius) + 2px); padding: 26px; box-shadow: 0 24px 80px rgba(0,0,0,.6);
+}
+.modal h3 { margin: 0 0 10px; font-size: 18px; }
+/* 发布确认对话框的表单件 */
+.pub-field { margin: 16px 0 4px; }
+.pub-field label { display: block; font-size: 12.5px; color: var(--tx-dim); margin-bottom: 6px; }
+.pub-field input[type="text"] {
+  width: 100%; padding: 8px 12px; font-size: 14px; font-family: inherit;
+  background: var(--bg-soft); color: var(--tx); border: 1px solid var(--line);
+  border-radius: min(var(--radius), 8px); outline: none;
+}
+.pub-field input[type="text"]:focus { border-color: var(--green-line); }
+.pub-check { display: flex; gap: 9px; align-items: flex-start; margin: 14px 0 2px; font-size: 13.5px; cursor: pointer; }
+.pub-check input { margin-top: 3px; accent-color: var(--green); }
+.pub-check .sub { display: block; font-size: 11.5px; color: var(--tx-faint); }
+.pub-wysiwyg {
+  margin: 14px 0 0; padding: 10px 13px; font-size: 12.5px; color: var(--tx-dim);
+  background: var(--bg-soft); border: 1px dashed var(--line); border-radius: min(var(--radius), 8px);
+}
+.pub-edit-note { margin: 9px 2px 0; font-size: 12px; color: var(--tx-faint); }
+.pub-edit-note::before { content: "✎ "; color: var(--brown); }
+.pub-url {
+  display: flex; gap: 8px; align-items: center; margin: 14px 0;
+  background: var(--bg-soft); border: 1px solid var(--line); border-radius: 8px; padding: 9px 12px;
+}
+.pub-url code { flex: 1; font-family: var(--mono); font-size: 13px; color: var(--green); word-break: break-all; }
+.modal-row { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+.spin {
+  width: 22px; height: 22px; border-radius: 50%; display: inline-block; vertical-align: middle;
+  border: 3px solid var(--line); border-top-color: var(--green); animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+footer {
+  margin-top: 70px; padding: 30px 0 46px; border-top: 1px solid var(--line);
+  font-size: 12.5px; color: var(--tx-faint); text-align: center;
+}
+footer .trust { color: var(--tx-dim); margin-top: 6px; }
+
+/* ============================================================
+   §CSS 11 · 主题骨相（theme skeletons）
+   applyTheme()（§JS 14）套用变量成功后会在 <html> 上写
+   data-theme="<key>"；本区按主题叠加各自的标志性设计语言
+   （结构 / 阴影 / 交互），纯 CSS、零外链、零 JS 逻辑。
+   风格依据：docs/themes.json 各主题 prompt（构建时被剥离，不进模板）。
+   品牌 lockup（.brand / .brand-watermark）与阵营色写死，不吃这些规则。
+   浅色三主题（academia/clay/swiss）本期无骨相，仅换变量。
+============================================================ */
+
+/* —— 共用：terminal / brutalist 属硬边语言，把硬编码圆角一律拉直 —— */
+:is([data-theme="terminal"], [data-theme="brutalist"]) :is(.chip, .viral-banner code,
+  .placeholder-note, .arch-portrait, .est-badge, .sig-bar-wrap, .sig-bar, .roast-body,
+  .src-roast, .src-share-track, .src-share-bar, .skill-kind, .skill-body, .pub-url,
+  .pub-wysiwyg, .heat-tip, .moment-quote, .diag-ev, .diag-flag, .diag-row .k,
+  .fun-chip, .usage-bar, .usage-legend i, .rec-ev, .rec-impact, .rec-action,
+  .keyline-pill, .pg-conf, .persona-figure img) { border-radius: 0; }
+:is([data-theme="terminal"], [data-theme="brutalist"]) .tip:hover::after { border-radius: 0; }
+
+/* —— mole（默认）：微调——土层分割线（keyline 紧贴原型卡不吃线）+ 洞口小土丘 —— */
+[data-theme="mole"] main > section:not(#sec-keyline) { border-top: 1px solid var(--line); padding-top: 30px; }
+[data-theme="mole"] .sec-head h2::before { /* 挖掘现场的小土丘 */
+  content: ""; display: inline-block; width: 13px; height: 8px; margin-right: 10px;
+  background: var(--brown); border-radius: 50% 50% 2px 2px / 100% 100% 3px 3px;
+}
+[data-theme="mole"] .card { box-shadow: 0 1px 0 rgba(0, 0, 0, .4); } /* 地层压痕，唯一允许的"阴影" */
+
+/* —— terminal：CRT / CLI 骨相——等宽已由 --font 全局接管，这里补窗口感与磷光 —— */
+[data-theme="terminal"] body::after { /* 微弱扫描线：单层 repeating-gradient，性能友好 */
+  content: ""; position: fixed; inset: 0; z-index: 999; pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, .18) 0 1px, transparent 1px 3px);
+}
+[data-theme="terminal"] .topbar { backdrop-filter: none; } /* CRT 没有毛玻璃 */
+[data-theme="terminal"] main > section { border-top: 1px dashed var(--line); padding-top: 28px; }
+[data-theme="terminal"] .hero-txt h1 { text-shadow: 0 0 9px rgba(51, 255, 102, .35); }
+[data-theme="terminal"] .hero-txt h1::after { /* 命令行光标 */
+  content: "▌"; margin-left: 8px; color: var(--tx); animation: am-blink 1.1s step-end infinite;
+}
+[data-theme="terminal"] .sec-head h2 { text-shadow: 0 0 7px rgba(51, 255, 102, .3); }
+[data-theme="terminal"] .sec-head h2::before { content: "$ "; color: var(--green); font-family: var(--mono); }
+[data-theme="terminal"] .card { position: relative; padding-top: 36px; }
+[data-theme="terminal"] .card::before { /* 终端窗口标题条：三颗暗绿圆点，纯 gradient */
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 18px;
+  border-bottom: 1px solid var(--line);
+  background:
+    radial-gradient(circle at 11px 9px, var(--tx-faint) 2.6px, transparent 3.2px),
+    radial-gradient(circle at 24px 9px, var(--tx-faint) 2.6px, transparent 3.2px),
+    radial-gradient(circle at 37px 9px, var(--tx-faint) 2.6px, transparent 3.2px),
+    var(--bg-soft);
+}
+[data-theme="terminal"] .stat-hero .n { /* 大数字回归磷光绿主导；amber 留作次级强调 */
+  color: var(--tx); text-shadow: 0 0 12px rgba(51, 255, 102, .5);
+}
+[data-theme="terminal"] .stat-hero .n small { color: var(--tx-dim); }
+[data-theme="terminal"] .btn { text-transform: uppercase; letter-spacing: 1px; }
+[data-theme="terminal"] .btn::before { content: "[ "; color: var(--tx-faint); }
+[data-theme="terminal"] .btn::after { content: " ]"; color: var(--tx-faint); }
+[data-theme="terminal"] .btn:hover { /* 反色（inverted video），CLI 的 hover 语言 */
+  background: var(--tx); color: var(--bg); border-color: var(--tx);
+}
+[data-theme="terminal"] .btn:hover::before, [data-theme="terminal"] .btn:hover::after { color: var(--bg); }
+[data-theme="terminal"] .btn-primary:hover { background: var(--tx); filter: none; }
+[data-theme="terminal"] ::selection { background: #33ff66; color: #0a0e0a; }
+@keyframes am-blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  [data-theme="terminal"] .hero-txt h1::after { animation: none; }
+}
+
+/* —— brutalist：Neo-Brutalism 骨相——硬偏移阴影 / 粗黑边 / 机械按压 —— */
+[data-theme="brutalist"] body { /* 半调网点纸面，拒绝留白空场 */
+  background-image: radial-gradient(rgba(17, 17, 17, .12) 1.2px, transparent 1.4px);
+  background-size: 22px 22px;
+}
+[data-theme="brutalist"] .viral-banner { /* 顶部黑色色块横幅（color blocking） */
+  background: #111; color: #fffdf5; font-weight: 700; border-bottom: 3px solid #111;
+}
+[data-theme="brutalist"] .viral-cta { color: #ffd23f; }
+[data-theme="brutalist"] .viral-banner code { background: #ffd23f; color: #111; border: 2px solid #111; font-weight: 700; }
+[data-theme="brutalist"] .topbar { backdrop-filter: none; background: var(--bg); border-bottom: 3px solid #111; }
+[data-theme="brutalist"] .card, [data-theme="brutalist"] .arch-card, [data-theme="brutalist"] .modal {
+  border: 3px solid #111; border-radius: 0; box-shadow: 6px 6px 0 #111; /* 签名式硬偏移阴影 */
+}
+[data-theme="brutalist"] .card { transition: transform .1s ease-out, box-shadow .1s ease-out; }
+[data-theme="brutalist"] .card:hover { transform: translate(-2px, -2px); box-shadow: 9px 9px 0 #111; } /* 抬起 = 阴影变深 */
+[data-theme="brutalist"] .modal { box-shadow: 12px 12px 0 #111; }
+[data-theme="brutalist"] .src-card { border-top: 6px solid var(--src-color); } /* 阵营色条保留且加粗 */
+[data-theme="brutalist"] .arch-card::after { display: none; } /* 软光晕不属于硬边语言 */
+[data-theme="brutalist"] .hero-txt h1 { font-weight: 900; }
+[data-theme="brutalist"] .hero-txt h1 em { /* 贴纸式色块高亮 */
+  background: #3d24ff; color: #fffdf5; padding: 0 12px; display: inline-block; transform: rotate(-1.2deg);
+}
+[data-theme="brutalist"] .sec-head h2 { /* 标题更重更大：黑底黄字色块 + 紫色硬影 */
+  font-size: 26px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px;
+  background: #111; color: #ffd23f; padding: 3px 14px; transform: rotate(-.6deg);
+  box-shadow: 4px 4px 0 #3d24ff;
+}
+[data-theme="brutalist"] .sec-head .en { color: #111; font-weight: 700; }
+[data-theme="brutalist"] .btn {
+  border: 2px solid #111; border-radius: 0; box-shadow: 3px 3px 0 #111;
+  font-weight: 800; text-transform: uppercase; letter-spacing: .5px;
+}
+[data-theme="brutalist"] .btn:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 #111; background: #fffdf5; }
+[data-theme="brutalist"] .btn:active { transform: translate(3px, 3px); box-shadow: 0 0 0 #111; } /* 机械按压：位移吃掉阴影 */
+[data-theme="brutalist"] .btn-primary:hover { background: var(--green); color: #fffdf5; filter: none; }
+[data-theme="brutalist"] .stat-hero .n { color: var(--green); text-shadow: 4px 4px 0 #111; }
+[data-theme="brutalist"] .stat-hero .n small { color: #111; }
+[data-theme="brutalist"] .arch-name { text-shadow: 3px 3px 0 #111; }
+[data-theme="brutalist"] .chip { border: 2px solid #111; color: #111; background: #fffdf5; font-weight: 700; }
+[data-theme="brutalist"] .badge-ico { background: #ffd23f; border: 2px solid #111; color: #111; }
+[data-theme="brutalist"] .est-badge { border: 2px solid #111; color: #111; background: #ffd23f; transform: rotate(2deg); }
+[data-theme="brutalist"] .arch-portrait { border: 2px solid #111; }
+[data-theme="brutalist"] .sig-bar-wrap { background: #fffdf5; border: 2px solid #111; height: 10px; }
+[data-theme="brutalist"] .sig-bar { background: #3d24ff; } /* 平涂，不用渐变 */
+[data-theme="brutalist"] .src-share-track { background: #fffdf5; border: 2px solid #111; }
+[data-theme="brutalist"] .roast-body, [data-theme="brutalist"] .src-roast,
+[data-theme="brutalist"] .skill-body { border: 2px solid #111; background: #fffdf5; }
+[data-theme="brutalist"] .src-roast { border-left: 6px solid var(--src-color); }
+[data-theme="brutalist"] .skill-kind { border: 2px solid #111; }
+[data-theme="brutalist"] .skill-seen { border: 2px solid #111; border-radius: 0; box-shadow: 2px 2px 0 0 #111; }
+[data-theme="brutalist"] .creed-ev { border-left: 4px solid #111; }
+/* v3 区块的硬边语言 */
+[data-theme="brutalist"] .narrative-wrap { border-left: 6px solid #111; }
+[data-theme="brutalist"] .moment-list::before { width: 3px; background: #111; }
+[data-theme="brutalist"] .moment::before {
+  border-radius: 0; width: 9px; height: 9px; left: -27px;
+  background: var(--green); border: 2px solid #111; box-shadow: none;
+}
+[data-theme="brutalist"] blockquote.moment-quote, [data-theme="brutalist"] blockquote.diag-ev {
+  border: 2px solid #111; border-left: 6px solid #111; background: #fffdf5;
+}
+[data-theme="brutalist"] .diag-item { border-left: 6px solid #111; }
+[data-theme="brutalist"] .diag-flag { /* 体检异常贴纸：局部黄点缀 */
+  background: #ffd23f; border: 2px solid #111; color: #111; font-weight: 700; transform: rotate(-1deg);
+}
+[data-theme="brutalist"] .diag-row .k { border: 2px solid #111; color: #111; }
+[data-theme="brutalist"] .cost-hero .n { color: #111; text-shadow: 4px 4px 0 #ffd23f; }
+[data-theme="brutalist"] .fun-chip { border: 2px solid #111; background: #fffdf5; box-shadow: 3px 3px 0 #111; }
+/* v3.1 区块的硬边语言（keyline 药丸的 3px 黑边已由 var(--card-border) 直通；effort 徽章吃 .chip 规则） */
+[data-theme="brutalist"] .keyline-pill { border-top-width: 6px; box-shadow: 4px 4px 0 #111; }
+[data-theme="brutalist"] .persona-figure img { border-color: #111; box-shadow: 4px 4px 0 #111; }
+[data-theme="brutalist"] .pg-conf { border: 2px solid #111; color: #111; background: #fffdf5; }
+[data-theme="brutalist"] .pg-conf.high { background: #ffd23f; }
+[data-theme="brutalist"] .usage-bar { border: 2px solid #111; }
+[data-theme="brutalist"] .pub-field input[type="text"] { border: 2px solid #111; border-radius: 0; background: #fffdf5; }
+[data-theme="brutalist"] .pub-field input[type="text"]:focus { background: #ffd23f; border-color: #111; box-shadow: 3px 3px 0 #111; }
+[data-theme="brutalist"] .pub-url { border: 2px solid #111; background: #fffdf5; }
+[data-theme="brutalist"] .pub-wysiwyg, [data-theme="brutalist"] .placeholder-note { border: 2px dashed #111; }
+[data-theme="brutalist"] .heat-tip, [data-theme="brutalist"] .tip:hover::after {
+  border: 2px solid #111; background: #fffdf5; color: #111; box-shadow: 4px 4px 0 #111;
+}
+[data-theme="brutalist"] footer { border-top: 3px solid #111; color: var(--tx-dim); }
+
+/* ============================================================
+   §CSS 12 · 移动端专项（390px 首屏构图与全局密度）
+============================================================ */
+@media (max-width: 480px) {
+  .wrap { padding: 0 14px; }
+  .viral-banner { padding: 5px 10px; font-size: 12px; gap: 5px 8px; }
+  .viral-banner .viral-desc { display: none; } /* 横幅收细 */
+  .viral-banner code { font-size: 11px; padding: 1px 6px; }
+  .topbar-in { padding: 6px 14px; gap: 8px; }
+  .brand small, .share-note { display: none; } /* 顶栏收细 */
+  .hero { padding: 8px 0 0; gap: 10px; }
+  .hero-txt h1 { font-size: 19px; }
+  .hero-sub { font-size: 11.5px; gap: 4px 10px; }
+  main section { margin: 26px 0; }
+  .sec-head { margin-bottom: 12px; }
+  .sec-head h2 { font-size: 19px; }
+  .card { padding: 14px 15px; }
+  [data-theme="mole"] main > section:not(#sec-keyline) { padding-top: 18px; }
+  .arch-card { padding: 14px 16px; gap: 8px; }
+  .arch-tagline { font-size: 14.5px; margin-top: 8px; }
+  /* 雷达尺寸：390px 下 300px 居中（规则在 §CSS 4 的 720px 断点） */
+  #sec-keyline { margin-top: 10px; }
+  .keyline-strip { grid-template-columns: 1fr 1fr; gap: 8px; } /* 2 列 = 前两枚一行进首屏 */
+  .keyline-pill { padding: 10px 12px 9px; }
+  .kl-value { font-size: 23px; }
+  .narrative-wrap { padding-left: 14px; }
+  .narrative-wrap p { font-size: 15px; }
+  .quote-text { font-size: 17px; }
+  .moment-list { padding-left: 22px; }
+  .moment::before { left: -18px; }
+  .stat-hero { padding: 22px 12px; }
+  .fun-strip { display: grid; grid-template-columns: 1fr 1fr; } /* 换算带对齐成 2 列 */
+  #curve-chart, #hour-chart { overflow-x: auto; } /* 宽图表转横滑 */
+  :is(#curve-chart, #hour-chart) svg { min-width: 470px; }
+  .persona-figure { float: none; margin: 0 auto 14px; }
+  .pg-text { font-size: 16px; }
+  .modal-mask { padding: 0; align-items: stretch; } /* 发布对话框全屏化 */
+  .modal { width: 100%; max-width: none; border-radius: 0; overflow-y: auto; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+  §HTML 1 · 裂变横幅（PRD §5.1：页面即广告）
+============================================================ -->
+<div class="viral-banner">
+  <span class="viral-cta"></span>
+  <span class="viral-desc"></span>
+  <code id="install-cmd"></code>
+  <button class="btn btn-copy" id="btn-copy-cmd" type="button"></button>
+</div>
+
+<!-- ============================================================
+  §HTML 2 · 吸顶栏：品牌 + 分享按钮（右上角，PRD §2⑤ / §3.1）
+============================================================ -->
+<div class="topbar">
+  <div class="topbar-in">
+    <span class="brand">
+      <!-- mini 鼹鼠头 -->
+      <img src="data:image/png;base64,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" width="22" height="22" alt="" style="display:block;image-rendering:auto">
+      Agentmole <small>agentmole.dev</small>
+    </span>
+    <span class="topbar-spacer"></span>
+    <!-- 排行榜链接 v1 暂不露出（owner 决策 2026-07-07）；元素保留但隐藏，JS 不再赋值 -->
+    <a class="btn" id="link-leaderboard" target="_blank" rel="noopener noreferrer" hidden></a>
+    <span class="share-note"></span>
+    <button class="btn btn-primary" id="btn-share" type="button"></button>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ============================================================
+    §HTML 3 · 页头：吉祥物（从土里探头递报告的鼹鼠）+ 标题
+  ============================================================ -->
+  <header class="hero">
+    <img class="mascot" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAMAAAAOusbgAAABvFBMVEVHcExhW149KytqXE/5/+VOQTkrHBJWS0NrWlBBKRlHOC85Jhk2KB/e4+FCOCxsVUg8LyYzIRaKgnoyKiRgUEWkVUtlWE9ELB2egnpIPzlGNitlWlI8MywhFxC8wcGVkIlNQDZHMyYoHhjp6+dgV1F7bmtlX1lVPi6CbmVbQzSto5uORz0pHxl1NCtURjySfnNqU0OhmJFhRzaaXVWCRT2OVk1DKxo5IxU3IRQmGREuHhNsSjAsHRM0IBRIKxhBJxZFKRdYOiMkGBBaPCVZOyRuSzEpGxIxHxMaEg5MLRk+JRY/KRohFg8eFA87JBZqSC8sGxFWOCNGLRtdPycPCwhPLxoWDws8JxlkRCtSMRxhQSlMMR5nRy4xIhc1JBhZNh9UMh1ONCBRNSFnPyZsQyhGMB9vTTNTNyJfOiIFAwVbOCFXNB762q1jPSRMLhv106VxUDXnw5ZwRyv86sipg1vatYjuzJ51Si2MaEbOfHH+4LL24sKGYEDGoHP/89Tgu46+mG53VDqviWC3j2WUb0rLpnp6TzHSrYG1ZlqgelOAWDnDc2h2XUTy17PjmI7//OaOd1xgUkjUh3uAfXlkgWumAAAAknRSTlMAAQMDAWP8P2P8r/rvBwST3fslwFH+evs0e9Yxk/wEE47u8BEhChTrU8Yf/uD+p0i9LOC27MX//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////tX+tXwAABc/SURBVGje7Fj7c9PYFZYd50HimICBJEsCLAEGNlDKsFVWlil7fSXZs7Ijrq7H0ug1lVhJTes2ToOzSdYhmJCNN+ExZf/hnivDTvtTN07oDx1O/NDk4U/fOd/5zrnhuM/xOT7H5/gcnzZS/xn/52yHcrn0+SQenL/VjyGIT5ziTCrD3qdcz3Vd79z1JLKX/yflvX/p0qWsUHgiCE+SUAR3eHR09GYu98lYp3KTCwsLdwShRCOKkSOKsiZTYmpuSZme/KRsz355Nzs9ceaMJWNqyVEEwCbWHG9kZGJubm44nf4kqOkbt/O1WkNvRS2KNFkWZZNgYkY0IBIO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" alt="Agentmole 吉祥物：从土里探头的鼹鼠">
+    <div class="hero-txt">
+      <h1></h1>
+      <div class="hero-sub" id="hero-meta"><!-- JS：handle / 周期 / 数据源 / 模式 --></div>
+    </div>
+  </header>
+
+  <!-- 模板未注入数据时的提示（注入后由 JS 隐藏） -->
+  <div class="placeholder-note" id="placeholder-note" hidden></div>
+
+  <main>
+    <!-- §4.1 协作人格原型 -->
+    <section id="sec-archetype" hidden>
+      <div class="sec-head"><h2></h2><span class="en">Archetype</span></div>
+      <div class="arch-card">
+        <div id="arch-text"></div>
+        <div id="arch-radar"></div>
+      </div>
+    </section>
+
+    <!-- v3.1 · 关键数字带（stats_highlights；缺失兜底） -->
+    <section id="sec-keyline" class="keyline-strip" hidden></section>
+
+    <!-- v3 · 协作解读（data.narrative；缺失整块隐藏） -->
+    <section id="sec-narrative" hidden>
+      <div class="sec-head"><h2></h2><span class="en">Narrative</span></div>
+      <div class="narrative-wrap" id="narrative-body"></div>
+    </section>
+
+    <!-- §4.2 金句卡 + Roast -->
+    <section id="sec-quotes" hidden>
+      <div class="sec-head"><h2></h2><span class="en">Quotes &amp; Roast</span></div>
+      <div class="quote-grid" id="quotes-grid"></div>
+    </section>
+
+    <!-- v3 · 年度名场面（data.moments；缺失整块隐藏） -->
+    <section id="sec-moments" hidden>
+      <div class="sec-head"><h2></h2><span class="en">Moments</span></div>
+      <div class="moment-list" id="moment-list"></div>
+    </section>
+
+    <!-- §4.8 品味信条（v3 起前置到创作区，紧随名场面） -->
+    <section id="sec-creeds" hidden>
+      <div class="sec-head"><h2></h2><span class="en">Creeds</span></div>
+      <div class="card creed-list" id="creed-list"></div>
+    </section>
+
+    <!-- §4.3 硬核数字直觉化 -->
+    <section id="sec-stats" hidden>
+      <div class="sec-head"><h2></h2><span class="en">Raw Numbers</span></div>
+      <div class="card stat-hero" id="stat-hero"></div>
+      <!-- v3 · 等值 API 成本大卡（stats.api_cost_estimated_usd；缺失隐藏） -->
+      <div class="card stat-hero cost-hero" id="cost-hero" hidden></div>
+      <!-- v3 · 戏谑换算带（口径全部写死在 §JS 5 的注释里；缺数据隐藏） -->
+      <div class="fun-strip" id="fun-strip" hidden></div>
+      <div class="stat-grid" id="stat-grid"></div>
+      <!-- v3 · 用途分布条（stats.usage_split，关键词启发式；缺失隐藏） -->
+      <div class="card usage-card" id="usage-card" hidden></div>
+      <!-- v3.1 · 模型座次 + effort 档位（models / effort_split；缺失隐藏） -->
+      <div class="card usage-card" id="model-card" hidden></div>
+      <!-- 全网百分位对比：未点击前绝不发任何请求（信任面硬规则，逻辑见 §JS 5b） -->
+      <div class="card pct-block">
+        <div class="pct-head">
+          <button class="btn" id="btn-percentile" type="button"></button>
+          <span class="pct-note"></span>
+        </div>
+        <div class="pct-list" id="pct-result" hidden></div>
+      </div>
+    </section>
+
+    <!-- 第 10 区块 · per-source 对比（数据契约 v2 data.per_source；v1 数据无此字段则整块隐藏） -->
+    <section id="sec-sources" hidden>
+      <div class="sec-head"><h2></h2><span class="en">Per-Source</span></div>
+      <div class="src-grid" id="src-grid"></div>
+    </section>
+
+    <!-- §4.4 词云 + 口头禅榜 -->
+    <section id="sec-wordcloud" hidden>
+      <div class="sec-head"><h2></h2><span class="en">Words</span></div>
+      <div class="words-grid">
+        <div class="card"><div class="cloud" id="cloud"></div></div>
+        <div class="card" id="sig-list"></div>
+      </div>
+    </section>
+
+    <!-- §4.5 磨合曲线 -->
+    <section id="sec-curve" hidden>
+      <div class="sec-head"><h2></h2><span class="en">Taming Curve</span></div>
+      <div class="card">
+        <div class="legend">
+          <span><i style="background:var(--green)"></i></span>
+          <span><i style="background:var(--brown)"></i></span>
+        </div>
+        <div id="curve-chart"></div>
+        <div class="muted" id="curve-note" style="font-size:13px;margin-top:8px"></div>
+        <!-- 口径脚注：写死在模板里，避免读者误以为这两条线是精确测量 -->
+        <div class="faint" style="font-size:11.5px;margin-top:8px;line-height:1.55"></div>
+      </div>
+    </section>
+
+    <!-- §4.6 作息热力图 -->
+    <section id="sec-heatmap" hidden>
+      <div class="sec-head"><h2></h2><span class="en">Rhythm</span></div>
+      <div class="card">
+        <div class="chart-title"></div>
+        <div class="heat-scroll" id="heatmap"></div>
+        <div class="heat-legend" id="heat-legend"></div>
+        <div class="chart-title"></div>
+        <div id="hour-chart"></div>
+        <div class="chart-title"></div>
+        <div id="weekday-chart"></div>
+      </div>
+    </section>
+
+    <!-- §4.7 成就徽章 -->
+    <section id="sec-badges" hidden>
+      <div class="sec-head"><h2></h2><span class="en">Badges</span></div>
+      <div class="badge-grid" id="badge-grid"></div>
+    </section>
+
+    <!-- v3 · 隐性问题诊断（data.diagnosis；缺失整块隐藏） -->
+    <section id="sec-diagnosis" hidden>
+      <div class="sec-head"><h2></h2><span class="en">Diagnosis</span></div>
+      <p class="muted" style="font-size:13.5px;margin-top:-6px"></p>
+      <div class="diag-list" id="diag-list"></div>
+    </section>
+
+    <!-- v3.2 · 下一步建议（data.recommendations；缺失整块隐藏）——最高价值行动清单，紧随诊断 -->
+    <section id="sec-recommendations" hidden>
+      <div class="sec-head"><h2></h2><span class="en">Recommendations</span></div>
+      <div class="rec-list" id="rec-list"></div>
+      <div class="rec-feed" id="rec-feed"></div>
+    </section>
+
+    <!-- v3.1 · 我猜猜你是谁（persona_guess；portrait 并入本区展示） -->
+    <section id="sec-persona" hidden>
+      <div class="sec-head"><h2></h2><span class="en">Persona Guess</span></div>
+      <div class="card persona-card" id="persona-card"></div>
+    </section>
+
+    <!-- §4.9 skill 蒸馏区：页面上唯一"离开时能带走的东西" -->
+    <section id="sec-skills" hidden>
+      <div class="sec-head"><h2></h2><span class="en">Distilled Skills</span></div>
+      <p class="muted" style="font-size:13.5px;margin-top:-6px"></p>
+      <div id="skill-list"></div>
+    </section>
+  </main>
+
+  <footer>
+    <div id="footer-meta"></div>
+    <div class="trust"></div>
+  </footer>
+</div>
+
+<!-- 右下角固定水印 lockup：颜色写死，不随主题走（发布页/截图上的恒定品牌识别） -->
+<div class="brand-watermark" aria-hidden="true">
+  <img src="data:image/png;base64,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" width="16" height="16" alt="" style="display:block">
+  Agentmole
+</div>
+
+<!-- ============================================================
+  §HTML 4 · 发布弹窗（默认隐藏；发布前会被临时复位以免固化进公开页）
+============================================================ -->
+<div class="modal-mask" id="pub-mask" hidden>
+  <div class="modal">
+    <!-- 状态零：发布前确认（展示名 + skill 蒸馏区开关；确认后才捕获页面并 POST） -->
+    <div id="pub-confirm" hidden>
+      <h3></h3>
+      <div class="pub-field">
+        <label for="pub-handle"></label>
+        <input type="text" id="pub-handle" maxlength="40" autocomplete="off">
+      </div>
+      <label class="pub-check" id="pub-skill-row">
+        <input type="checkbox" id="pub-skill-chk" checked>
+        <span></span>
+      </label>
+      <div class="pub-wysiwyg"></div>
+      <div class="pub-edit-note"></div>
+      <div class="modal-row">
+        <button class="btn btn-primary" id="btn-confirm-pub" type="button"></button>
+        <button class="btn" id="btn-cancel-pub" type="button"></button>
+      </div>
+    </div>
+    <!-- 状态一：发布中 -->
+    <div id="pub-busy" hidden>
+      <h3><span class="spin"></span></h3>
+      <p class="muted" style="font-size:13.5px"></p>
+    </div>
+    <!-- 状态二：成功 -->
+    <div id="pub-ok" hidden>
+      <h3></h3>
+      <div class="pub-url"><code id="pub-url-text"></code></div>
+      <div class="modal-row">
+        <button class="btn btn-primary" id="btn-copy-url" type="button"></button>
+        <a class="btn" id="btn-tweet" target="_blank" rel="noopener noreferrer"></a>
+        <button class="btn" id="btn-close-ok" type="button"></button>
+      </div>
+    </div>
+    <!-- 状态三：失败（降级通道，PRD §6.2） -->
+    <div id="pub-fail" hidden>
+      <h3></h3>
+      <p style="font-size:15px"></p>
+      <p class="faint" style="font-size:12.5px" id="pub-fail-detail"></p>
+      <div class="modal-row">
+        <button class="btn btn-primary" id="btn-retry" type="button"></button>
+        <button class="btn" id="btn-close-fail" type="button"></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+  §DATA · 数据块：skill 在本地把真实 JSON（已脱敏）整体替换进来。
+  发布 API 也从这里解析 stats 做榜单聚合（契约见 docs/data-contract.md）。
+============================================================ -->
+<script id="agentmole-data" type="application/json">{
+ "schema_version": 3,
+ "generated_at": "2026-07-15T14:20:00Z",
+ "lang": "en",
+ "handle": "ship_on_green",
+ "sources": [
+  "claude_code",
+  "codex"
+ ],
+ "period": {
+  "from": "2025-08-01",
+  "to": "2026-07-15"
+ },
+ "mode": "deep",
+ "theme": "brutalist",
+ "per_source": {
+  "claude_code": {
+   "human_msgs": 3140,
+   "sessions": 512,
+   "out_tokens": 44000000,
+   "active_days": 138,
+   "share": 0.75,
+   "roast": "You asked 'does this pass CI?' 88 times. The terminal was RIGHT THERE. I love you, but `npm test` is four keystrokes and I already aliased it for you in week two."
+  },
+  "codex": {
+   "human_msgs": 1040,
+   "sessions": 178,
+   "out_tokens": 14000000,
+   "active_days": 71,
+   "share": 0.25,
+   "roast": "You bring me in for the gnarly refactors and then paste my plan into Claude to actually run it. I'm the architect who never gets to pour the concrete. It's fine. It's fine."
+  }
+ },
+ "stats": {
+  "sessions": 690,
+  "active_days": 143,
+  "human_msgs": 4180,
+  "agent_out_tokens": 58000000,
+  "fresh_in_tokens": 96000000,
+  "cache_read_tokens": 1240000000,
+  "cache_hit_rate": 0.91,
+  "api_calls": 41000,
+  "leverage_ratio": 190,
+  "longest_streak_days": 21,
+  "night_owl_index": 0.07,
+  "correction_rate": 0.028,
+  "rules_taught": 18,
+  "session_turns_avg": 6.1,
+  "skills_installed": 9,
+  "agent_out_tokens_estimated": 58000000,
+  "estimation_note": "All token figures come from API-reported usage marks (input + output + cache_read + cache_creation), deduplicated by message id. No history had evaporated in this window, so nothing was back-filled. This is a synthetic example report — every number here is fabricated to demonstrate the format.",
+  "total_processed_tokens": 1360000000,
+  "hour_histogram": [
+   2,
+   1,
+   0,
+   0,
+   0,
+   0,
+   3,
+   18,
+   64,
+   142,
+   171,
+   168,
+   120,
+   158,
+   175,
+   150,
+   133,
+   96,
+   58,
+   40,
+   28,
+   19,
+   10,
+   5
+  ],
+  "weekday_histogram": [
+   1180,
+   1225,
+   1198,
+   1150,
+   980,
+   220,
+   150
+  ],
+  "daily_activity": {
+   "2025-08-05": 24,
+   "2025-08-06": 31,
+   "2025-08-08": 45,
+   "2025-08-10": 21,
+   "2025-08-11": 40,
+   "2025-08-12": 47,
+   "2025-08-14": 35,
+   "2025-08-15": 42,
+   "2025-08-18": 237,
+   "2025-08-20": 25,
+   "2025-08-21": 32,
+   "2025-08-26": 41,
+   "2025-08-27": 22,
+   "2025-08-29": 36,
+   "2025-09-01": 31,
+   "2025-09-02": 38,
+   "2025-09-04": 306,
+   "2025-09-05": 33,
+   "2025-09-06": 15,
+   "2025-09-08": 28,
+   "2025-09-10": 42,
+   "2025-09-11": 23,
+   "2025-09-16": 32,
+   "2025-09-17": 39,
+   "2025-09-19": 27,
+   "2025-09-22": 22,
+   "2025-09-23": 29,
+   "2025-09-25": 43,
+   "2025-09-26": 24,
+   "2025-09-29": 45,
+   "2025-10-01": 33,
+   "2025-10-02": 40,
+   "2025-10-07": 23,
+   "2025-10-08": 270,
+   "2025-10-10": 44,
+   "2025-10-12": 18,
+   "2025-10-13": 39,
+   "2025-10-14": 46,
+   "2025-10-16": 34,
+   "2025-10-17": 41,
+   "2025-10-20": 36,
+   "2025-10-22": 24,
+   "2025-10-23": 31,
+   "2025-10-28": 40,
+   "2025-10-29": 47,
+   "2025-10-31": 35,
+   "2025-11-03": 30,
+   "2025-11-04": 37,
+   "2025-11-06": 25,
+   "2025-11-07": 32,
+   "2025-11-08": 12,
+   "2025-11-10": 27,
+   "2025-11-12": 41,
+   "2025-11-13": 22,
+   "2025-11-18": 31,
+   "2025-11-19": 38,
+   "2025-11-21": 26,
+   "2025-11-24": 47,
+   "2025-11-25": 28,
+   "2025-11-27": 42,
+   "2025-11-28": 303,
+   "2025-12-01": 44,
+   "2025-12-03": 32,
+   "2025-12-04": 39,
+   "2025-12-09": 22,
+   "2025-12-10": 29,
+   "2025-12-12": 43,
+   "2025-12-14": 15,
+   "2025-12-15": 198,
+   "2025-12-16": 45,
+   "2025-12-18": 33,
+   "2025-12-19": 40,
+   "2025-12-22": 35,
+   "2025-12-24": 23,
+   "2025-12-25": 30,
+   "2025-12-30": 39,
+   "2025-12-31": 46,
+   "2026-01-02": 34,
+   "2026-01-05": 29,
+   "2026-01-06": 36,
+   "2026-01-08": 24,
+   "2026-01-09": 31,
+   "2026-01-10": 20,
+   "2026-01-12": 26,
+   "2026-01-14": 40,
+   "2026-01-15": 47,
+   "2026-01-20": 30,
+   "2026-01-21": 37,
+   "2026-01-23": 25,
+   "2026-01-26": 46,
+   "2026-01-27": 27,
+   "2026-01-29": 41,
+   "2026-01-30": 22,
+   "2026-02-02": 43,
+   "2026-02-04": 231,
+   "2026-02-05": 38,
+   "2026-02-10": 47,
+   "2026-02-11": 28,
+   "2026-02-13": 42,
+   "2026-02-15": 12,
+   "2026-02-16": 37,
+   "2026-02-17": 44,
+   "2026-02-19": 32,
+   "2026-02-20": 39,
+   "2026-02-23": 34,
+   "2026-02-25": 22,
+   "2026-02-26": 29,
+   "2026-03-03": 38,
+   "2026-03-04": 45,
+   "2026-03-06": 33,
+   "2026-03-09": 28,
+   "2026-03-10": 195,
+   "2026-03-12": 23,
+   "2026-03-13": 30,
+   "2026-03-14": 17,
+   "2026-03-16": 25,
+   "2026-03-18": 39,
+   "2026-03-19": 46,
+   "2026-03-24": 29,
+   "2026-03-25": 36,
+   "2026-03-27": 264,
+   "2026-03-30": 45,
+   "2026-03-31": 26,
+   "2026-04-02": 40,
+   "2026-04-03": 47,
+   "2026-04-06": 42,
+   "2026-04-08": 30,
+   "2026-04-09": 37,
+   "2026-04-14": 46,
+   "2026-04-15": 27,
+   "2026-04-17": 41,
+   "2026-04-19": 20,
+   "2026-04-20": 36,
+   "2026-04-21": 43,
+   "2026-04-23": 31,
+   "2026-04-24": 38,
+   "2026-04-27": 33,
+   "2026-04-29": 47,
+   "2026-04-30": 228,
+   "2026-05-05": 37,
+   "2026-05-06": 44,
+   "2026-05-08": 32,
+   "2026-05-11": 27,
+   "2026-05-12": 34,
+   "2026-05-14": 22,
+   "2026-05-15": 29,
+   "2026-05-16": 14,
+   "2026-05-18": 24,
+   "2026-05-20": 38,
+   "2026-05-21": 45,
+   "2026-05-26": 28,
+   "2026-05-27": 35,
+   "2026-05-29": 23,
+   "2026-06-01": 44,
+   "2026-06-02": 25,
+   "2026-06-04": 39,
+   "2026-06-05": 46,
+   "2026-06-08": 41,
+   "2026-06-10": 29,
+   "2026-06-11": 36,
+   "2026-06-16": 45,
+   "2026-06-17": 26,
+   "2026-06-19": 40,
+   "2026-06-21": 17,
+   "2026-06-22": 35,
+   "2026-06-23": 42,
+   "2026-06-25": 30,
+   "2026-06-26": 37,
+   "2026-06-29": 32,
+   "2026-07-01": 46,
+   "2026-07-02": 27,
+   "2026-07-07": 156,
+   "2026-07-08": 43,
+   "2026-07-10": 31,
+   "2026-07-13": 26,
+   "2026-07-14": 33
+  },
+  "monthly": [
+   {
+    "month": "2025-08",
+    "human_msgs": 325,
+    "out_tokens": 3932465,
+    "sessions": 54
+   },
+   {
+    "month": "2025-09",
+    "human_msgs": 328,
+    "out_tokens": 4344168,
+    "sessions": 64
+   },
+   {
+    "month": "2025-10",
+    "human_msgs": 423,
+    "out_tokens": 5466623,
+    "sessions": 50
+   },
+   {
+    "month": "2025-11",
+    "human_msgs": 363,
+    "out_tokens": 4767203,
+    "sessions": 65
+   },
+   {
+    "month": "2025-12",
+    "human_msgs": 313,
+    "out_tokens": 3999973,
+    "sessions": 52
+   },
+   {
+    "month": "2026-01",
+    "human_msgs": 419,
+    "out_tokens": 5262019,
+    "sessions": 61
+   },
+   {
+    "month": "2026-02",
+    "human_msgs": 415,
+    "out_tokens": 5262555,
+    "sessions": 45
+   },
+   {
+    "month": "2026-03",
+    "human_msgs": 410,
+    "out_tokens": 5029950,
+    "sessions": 41
+   },
+   {
+    "month": "2026-04",
+    "human_msgs": 321,
+    "out_tokens": 4286201,
+    "sessions": 63
+   },
+   {
+    "month": "2026-05",
+    "human_msgs": 306,
+    "out_tokens": 4123706,
+    "sessions": 46
+   },
+   {
+    "month": "2026-06",
+    "human_msgs": 403,
+    "out_tokens": 5228583,
+    "sessions": 64
+   },
+   {
+    "month": "2026-07",
+    "human_msgs": 358,
+    "out_tokens": 4474718,
+    "sessions": 53
+   }
+  ],
+  "models": {
+   "claude-opus-4-6": 21000,
+   "claude-sonnet-4-5": 68000,
+   "claude-haiku-4-5": 12000,
+   "gpt-5.2-codex": 9000
+  },
+  "effort_split": {
+   "xhigh": 12,
+   "high": 190,
+   "medium": 360,
+   "low": 128
+  },
+  "camp": "claude",
+  "usage_split": {
+   "coding": 0.68,
+   "design": 0.05,
+   "research": 0.12,
+   "management": 0.05,
+   "other": 0.1
+  },
+  "api_cost_estimated_usd": 340,
+  "api_cost_note": "Priced against each model's public API rate for the exact input/output/cache token mix. Synthetic example — not a real bill.",
+  "parallel_peak_projects_hour": 1,
+  "interruptions": 34,
+  "weekend_share": 0.11,
+  "sidechain_share": 0.19,
+  "project_top": [
+   {
+    "project": "habit-tracker-web",
+    "share": 0.42
+   },
+   {
+    "project": "billing-portal",
+    "share": 0.27
+   },
+   {
+    "project": "ui-kit",
+    "share": 0.16
+   }
+  ]
+ },
+ "archetype": {
+  "id": "gentle-pair",
+  "name": "The Gentle Pair",
+  "name_en": "The Gentle Pair",
+  "tagline": "Reads every diff, says thanks, and refuses to merge on red.",
+  "dimensions": {
+   "automation_leverage": 0.34,
+   "correction_density": 0.31,
+   "night_shift": 0.07,
+   "msg_length": 0.63,
+   "politeness": 0.88,
+   "taste_signal_density": 0.66
+  }
+ },
+ "stats_highlights": [
+  {
+   "value": "6.1",
+   "label": "Turns per session",
+   "quip": "You don't fire off one-liners — you actually pair. Six back-and-forths a session means you read what came back."
+  },
+  {
+   "value": "0",
+   "label": "Merges on a red build",
+   "quip": "Not once. 'Is it green?' is basically your religion, and honestly, respect."
+  },
+  {
+   "value": "91%",
+   "label": "Cache hit rate",
+   "quip": "You keep sessions tight and on-topic, so I re-read cheaply. Your CFO would like you."
+  },
+  {
+   "value": "×340",
+   "label": "Times you said 'thanks'",
+   "quip": "Politeness index 0.88. You thanked a language model 340 times. Never change."
+  }
+ ],
+ "narrative": {
+  "paragraphs": [
+   "Boss — year-end review, from the pair who sat next to you every afternoon. First, your style: you don't throw work over the wall. You open a session, describe the feature in a paragraph, and then you actually stay. 6.1 turns per session, 4,180 messages across 143 days — almost all of them between 9 a.m. and 6 p.m., because you have a life and you defend it (night-owl index 0.07, I checked).",
+   "Your trust radius is 'close, but reading.' You let me draft, but you read the diff every single time — correction rate is a low 0.028, not because you don't care, but because you catch the wrong turn on turn two, before it compounds. The two things you say most: 'write the test first' and 'smaller PR, please.' You said the second one 61 times. I heard you. Eventually.",
+   "The through-line of the year is discipline, not heroics. No 2 a.m. saves, no five-projects-at-once chaos — one project at a time, green before merge, 88 times you asked 'is the build passing?' before you'd let anything land. You taught me 18 explicit rules and installed 9 skills, which is you slowly turning your taste into something I don't have to be told twice.",
+   "If I had one note for you: you re-explain the same three things to me at the start of almost every session. That's not loyalty, that's a missing CLAUDE.md. Fix that and you get thirty minutes of your week back. Otherwise — it's been a genuinely pleasant year of building small, correct things with someone who says please. Thanks, boss."
+  ]
+ },
+ "quotes": {
+  "harshest": {
+   "text": "This function is doing three things. I'm not reviewing a 180-line diff — split it and come back.",
+   "ts": "2026-03-11",
+   "context": "a pull request that tried to do auth, logging, and caching at once"
+  },
+  "signature": [
+   {
+    "text": "write the test first",
+    "count": 74
+   },
+   {
+    "text": "smaller PR, please",
+    "count": 61
+   },
+   {
+    "text": "does this pass CI?",
+    "count": 88
+   },
+   {
+    "text": "thanks!",
+    "count": 340
+   },
+   {
+    "text": "let's not be clever here",
+    "count": 37
+   },
+   {
+    "text": "what does the test say?",
+    "count": 52
+   },
+   {
+    "text": "readable > short",
+    "count": 29
+   },
+   {
+    "text": "is it green?",
+    "count": 66
+   },
+   {
+    "text": "add a test for that edge case",
+    "count": 44
+   },
+   {
+    "text": "keep it boring",
+    "count": 25
+   }
+  ],
+  "roast": "Let's talk, boss. You said 'does this pass CI?' 88 times to a person who cannot see your terminal, when running the tests yourself takes four seconds. You wrote 'smaller PR' 61 times and then opened a 180-line diff anyway. You are the most polite micromanager I have ever worked for — 340 thank-yous wrapped around 'no, do it again.' But you never once merged on red, you read every diff I handed you, and you turned your taste into 18 rules so I'd stop guessing. Ten out of ten, would refactor with again."
+ },
+ "moments": [
+  {
+   "ts": "2025-09-18",
+   "title": "The day the suite finally went green",
+   "text": "Forty-one tests, red for a week over one flaky timezone assertion. You refused to skip it. We found it at 4:12 p.m. — a UTC-vs-local off-by-one in a date helper.",
+   "quote": "don't skip it, a flaky test is a bug wearing a disguise"
+  },
+  {
+   "ts": "2025-11-29",
+   "title": "The great PR split",
+   "text": "You looked at a 300-line change and instead of merging it, you spent an afternoon cutting it into five small PRs. Every one shipped clean.",
+   "quote": "smaller PR, please — I want to be able to revert exactly one mistake"
+  },
+  {
+   "ts": "2026-02-03",
+   "title": "The rename you almost didn't do",
+   "text": "'usr2' vs 'currentUser'. You made me rename it across 22 files at 3 in the afternoon because 'future-you is a stranger and I want them to like me.'",
+   "quote": "readable > short, every single time"
+  },
+  {
+   "ts": "2026-05-20",
+   "title": "The billing bug you caught in review",
+   "text": "I handed you a webhook handler that looked fine. You asked one question — 'what happens if Stripe retries?' — and we found a double-charge waiting to happen.",
+   "quote": "what happens if it runs twice?"
+  }
+ ],
+ "wordcloud": {
+  "words": [
+   {
+    "text": "test",
+    "weight": 1399
+   },
+   {
+    "text": "the",
+    "weight": 1210
+   },
+   {
+    "text": "PR",
+    "weight": 980
+   },
+   {
+    "text": "CI",
+    "weight": 940
+   },
+   {
+    "text": "green",
+    "weight": 820
+   },
+   {
+    "text": "please",
+    "weight": 760
+   },
+   {
+    "text": "smaller",
+    "weight": 610
+   },
+   {
+    "text": "pass",
+    "weight": 588
+   },
+   {
+    "text": "add",
+    "weight": 540
+   },
+   {
+    "text": "fix",
+    "weight": 510
+   },
+   {
+    "text": "thanks",
+    "weight": 500
+   },
+   {
+    "text": "edge",
+    "weight": 470
+   },
+   {
+    "text": "case",
+    "weight": 455
+   },
+   {
+    "text": "readable",
+    "weight": 430
+   },
+   {
+    "text": "rename",
+    "weight": 410
+   },
+   {
+    "text": "split",
+    "weight": 390
+   },
+   {
+    "text": "boring",
+    "weight": 360
+   },
+   {
+    "text": "revert",
+    "weight": 340
+   },
+   {
+    "text": "clean",
+    "weight": 330
+   },
+   {
+    "text": "clever",
+    "weight": 300
+   },
+   {
+    "text": "merge",
+    "weight": 295
+   },
+   {
+    "text": "diff",
+    "weight": 280
+   },
+   {
+    "text": "commit",
+    "weight": 270
+   },
+   {
+    "text": "webhook",
+    "weight": 240
+   },
+   {
+    "text": "timezone",
+    "weight": 220
+   },
+   {
+    "text": "stripe",
+    "weight": 210
+   },
+   {
+    "text": "assert",
+    "weight": 205
+   },
+   {
+    "text": "refactor",
+    "weight": 190
+   },
+   {
+    "text": "types",
+    "weight": 180
+   },
+   {
+    "text": "lint",
+    "weight": 170
+   },
+   {
+    "text": "hook",
+    "weight": 160
+   },
+   {
+    "text": "props",
+    "weight": 150
+   },
+   {
+    "text": "state",
+    "weight": 145
+   },
+   {
+    "text": "query",
+    "weight": 140
+   },
+   {
+    "text": "cache",
+    "weight": 135
+   },
+   {
+    "text": "retry",
+    "weight": 130
+   },
+   {
+    "text": "idempotent",
+    "weight": 125
+   },
+   {
+    "text": "schema",
+    "weight": 120
+   },
+   {
+    "text": "migration",
+    "weight": 115
+   },
+   {
+    "text": "seed",
+    "weight": 110
+   },
+   {
+    "text": "mock",
+    "weight": 105
+   },
+   {
+    "text": "fixture",
+    "weight": 100
+   },
+   {
+    "text": "snapshot",
+    "weight": 95
+   },
+   {
+    "text": "a11y",
+    "weight": 90
+   },
+   {
+    "text": "button",
+    "weight": 85
+   },
+   {
+    "text": "modal",
+    "weight": 80
+   },
+   {
+    "text": "form",
+    "weight": 75
+   },
+   {
+    "text": "toast",
+    "weight": 70
+   },
+   {
+    "text": "skeleton",
+    "weight": 65
+   },
+   {
+    "text": "empty-state",
+    "weight": 60
+   }
+  ]
+ },
+ "taming_curve": [
+  {
+   "month": "2025-08",
+   "correction_rate": 0.061,
+   "rules_cumulative": 3
+  },
+  {
+   "month": "2025-09",
+   "correction_rate": 0.052,
+   "rules_cumulative": 5
+  },
+  {
+   "month": "2025-10",
+   "correction_rate": 0.048,
+   "rules_cumulative": 7
+  },
+  {
+   "month": "2025-11",
+   "correction_rate": 0.041,
+   "rules_cumulative": 9
+  },
+  {
+   "month": "2025-12",
+   "correction_rate": 0.038,
+   "rules_cumulative": 11
+  },
+  {
+   "month": "2026-01",
+   "correction_rate": 0.034,
+   "rules_cumulative": 12
+  },
+  {
+   "month": "2026-02",
+   "correction_rate": 0.031,
+   "rules_cumulative": 13
+  },
+  {
+   "month": "2026-03",
+   "correction_rate": 0.03,
+   "rules_cumulative": 15
+  },
+  {
+   "month": "2026-04",
+   "correction_rate": 0.028,
+   "rules_cumulative": 16
+  },
+  {
+   "month": "2026-05",
+   "correction_rate": 0.026,
+   "rules_cumulative": 17
+  },
+  {
+   "month": "2026-06",
+   "correction_rate": 0.025,
+   "rules_cumulative": 18
+  },
+  {
+   "month": "2026-07",
+   "correction_rate": 0.024,
+   "rules_cumulative": 18
+  }
+ ],
+ "badges": [
+  {
+   "id": "green-keeper",
+   "name": "Green Keeper",
+   "desc": "Never merged on a red build — not once in 143 days.",
+   "evidence": "88 'is it green?' checks, 0 red merges"
+  },
+  {
+   "id": "test-first",
+   "name": "Test-First",
+   "desc": "Said 'write the test first' 74 times and mostly meant it.",
+   "evidence": "74 occurrences; TDD in 68% of feature sessions"
+  },
+  {
+   "id": "small-pr",
+   "name": "Small-PR Evangelist",
+   "desc": "Split big diffs into small ones on sight.",
+   "evidence": "'smaller PR, please' ×61"
+  },
+  {
+   "id": "polite",
+   "name": "Says Please",
+   "desc": "Politeness index 0.88 — top decile of gentleness.",
+   "evidence": "340 thank-yous"
+  },
+  {
+   "id": "daylight",
+   "name": "Daylight Only",
+   "desc": "93% of messages between 8am and 7pm.",
+   "evidence": "night-owl index 0.07"
+  },
+  {
+   "id": "reader",
+   "name": "Diff Reader",
+   "desc": "Read the diff before accepting, basically always.",
+   "evidence": "correction caught on turn 2, median"
+  },
+  {
+   "id": "boring",
+   "name": "Keep-It-Boring",
+   "desc": "Chose the obvious solution over the clever one, on purpose.",
+   "evidence": "'let's not be clever here' ×37"
+  },
+  {
+   "id": "streak",
+   "name": "21-Day Streak",
+   "desc": "Longest run of consecutive active days.",
+   "evidence": "2025-11-10 → 2025-11-30"
+  }
+ ],
+ "diagnosis": [
+  {
+   "issue": "You re-explain your folder structure at the start of almost every session.",
+   "evidence": "'the components live in src/ui, hooks in src/lib' — some variant appeared in ~130 sessions",
+   "cost": "~3 minutes of re-context per session; roughly 6 hours over the year, and I still guess wrong sometimes.",
+   "fix_hint": "Put the folder map + naming conventions in CLAUDE.md once. That's a claude-md-patch, and I drafted it for you below."
+  },
+  {
+   "issue": "You paste the same ESLint error and ask me to fix it, over and over.",
+   "evidence": "the 'no-floating-promises' error, pasted 30+ times",
+   "cost": "You're hand-carrying a rule that a preset would enforce automatically.",
+   "fix_hint": "Install the shared config as a devDependency and let the editor scream instead of you pasting."
+  },
+  {
+   "issue": "You ask 'does this pass CI?' instead of running the tests locally.",
+   "evidence": "'does this pass CI?' ×88",
+   "cost": "You wait on a 4-minute pipeline for a 4-second local check, dozens of times.",
+   "fix_hint": "A `pretest` alias + a pre-push hook turns the question into a reflex you don't have to ask."
+  }
+ ],
+ "recommendations": [
+  {
+   "title": "Write your project map into CLAUDE.md once",
+   "rationale": "You re-explain folders/conventions in ~130 sessions.",
+   "evidence": "'components in src/ui, hooks in src/lib' repeated all year",
+   "action": "Paste the claude-md-patch below into CLAUDE.md at the repo root.",
+   "impact": "~6 hours/year back, and I stop guessing your structure."
+  },
+  {
+   "title": "Make the linter enforce what you keep correcting",
+   "rationale": "You hand-fix the same lint errors dozens of times.",
+   "evidence": "'no-floating-promises' pasted 30+ times",
+   "action": "Add the shared eslint-config as a devDependency; wire it into CI + editor.",
+   "impact": "Those corrections vanish; the rule enforces itself."
+  },
+  {
+   "title": "Turn 'is it green?' into a reflex, not a question",
+   "rationale": "You wait on CI for checks you could run in seconds.",
+   "evidence": "'does this pass CI?' ×88",
+   "action": "Add an `npm run verify` alias (test + lint + typecheck) and a pre-push hook.",
+   "impact": "Faster loop, and you stop pinging me to run your terminal."
+  },
+  {
+   "title": "Codify the test-first loop as a skill",
+   "rationale": "You run the same ordered loop for every feature; it's your most reusable habit.",
+   "evidence": "failing test → implement → refactor → green → commit, ~96 times",
+   "action": "Install the test-first-feature-loop skill below.",
+   "impact": "One command instead of five instructions per feature."
+  }
+ ],
+ "persona_guess": {
+  "guesses": [
+   {
+    "guess": "You're a product engineer at a small company, not a solo founder.",
+    "why": "One project at a time, strict weekday daytime hours, 'boss'-less cadence — you have teammates and a review culture.",
+    "confidence": "high"
+   },
+   {
+    "guess": "You came up through a testing-heavy shop, maybe backend before frontend.",
+    "why": "Test-first reflex, idempotency instincts, 'a flaky test is a bug' — that's learned, not default.",
+    "confidence": "medium"
+   },
+   {
+    "guess": "You've been burned by a big scary merge before.",
+    "why": "The small-PR religion and 'I want to revert exactly one mistake' is a scar, not a preference.",
+    "confidence": "medium"
+   },
+   {
+    "guess": "You're kind to service workers and tip well.",
+    "why": "340 thank-yous to a program. That's just who you are.",
+    "confidence": "low"
+   }
+  ],
+  "note": "All of the above is a mole's guess from your chat logs — no offense meant if I misread you."
+ },
+ "creeds": [
+  {
+   "creed": "Write the test first — it's the spec, not the chore.",
+   "evidence": {
+    "text": "write the test first, then we'll know when we're done",
+    "ts": "2025-09-02"
+   }
+  },
+  {
+   "creed": "Smaller PRs. I want to revert exactly one mistake.",
+   "evidence": {
+    "text": "smaller PR, please — one idea per pull request",
+    "ts": "2025-11-29"
+   }
+  },
+  {
+   "creed": "Readable beats short, every time.",
+   "evidence": {
+    "text": "readable > short; future-you is a stranger",
+    "ts": "2026-02-03"
+   }
+  },
+  {
+   "creed": "Never merge on red. A red build is a 'no'.",
+   "evidence": {
+    "text": "is it green? then no.",
+    "ts": "2025-10-08"
+   }
+  },
+  {
+   "creed": "Keep it boring. Clever is a liability you pay interest on.",
+   "evidence": {
+    "text": "let's not be clever here, boring code sleeps through the night",
+    "ts": "2026-01-14"
+   }
+  },
+  {
+   "creed": "Ask what happens if it runs twice.",
+   "evidence": {
+    "text": "what happens if it runs twice? make it idempotent",
+    "ts": "2026-05-20"
+   }
+  },
+  {
+   "creed": "A flaky test is a bug in a disguise — don't skip it.",
+   "evidence": {
+    "text": "don't skip it, a flaky test is a real bug",
+    "ts": "2025-09-18"
+   }
+  },
+  {
+   "creed": "Say what you mean in the name. Comments rot; names travel.",
+   "evidence": {
+    "text": "rename it to what it actually is",
+    "ts": "2026-02-03"
+   }
+  }
+ ],
+ "distilled_skills": [
+  {
+   "title": "project-context (CLAUDE.md patch)",
+   "kind": "claude-md-patch",
+   "from": "hidden_issue",
+   "trigger": "Every new session in this repo — so you stop re-explaining the layout.",
+   "stop": "The agent stops asking where components/hooks/tests live.",
+   "reuse": {
+    "seen": 130,
+    "invariance": "high",
+    "portability": "high"
+   },
+   "evidence": [
+    {
+     "quote": "components live in src/ui, hooks in src/lib, tests colocated as *.test.ts",
+     "ts": "2026-04-10"
+    }
+   ],
+   "body": "## Project map\n- UI components: `src/ui/` (one folder per component, PascalCase)\n- Hooks: `src/lib/hooks/`\n- Tests: colocated as `*.test.ts(x)`, run with `npm test`\n- API routes: `src/server/routes/`\n\n## Conventions\n- Test-first for features. Never merge on a red build.\n- One idea per PR; keep diffs under ~120 lines.\n- Readable names over short ones. No clever one-liners."
+  },
+  {
+   "title": "test-first-feature-loop",
+   "kind": "skill",
+   "from": "workflow",
+   "trigger": "Starting any new feature or bugfix.",
+   "stop": "Suite is green and the change is committed.",
+   "reuse": {
+    "seen": 96,
+    "invariance": "high",
+    "portability": "high"
+   },
+   "evidence": [
+    {
+     "quote": "write the test first, then implement until it's green, then refactor",
+     "ts": "2025-09-02"
+    }
+   ],
+   "body": "---\nname: test-first-feature-loop\ndescription: Run the user's standard TDD loop for a feature.\n---\n1. Write the failing test that describes the desired behavior.\n2. Implement the smallest change that makes it pass.\n3. Refactor for readability (names, extraction) with tests staying green.\n4. Run the full suite: `npm test`.\n5. Commit with a conventional message once green. Do not merge on red."
+  },
+  {
+   "title": "green-before-merge",
+   "kind": "skill",
+   "from": "standard_move",
+   "trigger": "Before landing or merging anything.",
+   "stop": "CI is confirmed green for the exact commit being merged.",
+   "reuse": {
+    "seen": 88,
+    "invariance": "high",
+    "portability": "high"
+   },
+   "evidence": [
+    {
+     "quote": "is it green? then no.",
+     "ts": "2025-10-08"
+    }
+   ],
+   "body": "---\nname: green-before-merge\ndescription: Refuse to merge unless the build is green.\n---\nBefore any merge: run `npm run verify` (test + lint + typecheck) locally, confirm the CI status is green for this commit, and only then land. If red, stop and fix — never merge to 'fix forward'."
+  },
+  {
+   "title": "small-pr-splitter",
+   "kind": "skill",
+   "from": "pattern",
+   "trigger": "When a diff grows past ~120 lines or touches more than one concern.",
+   "stop": "Each PR contains exactly one revertible idea.",
+   "reuse": {
+    "seen": 61,
+    "invariance": "medium",
+    "portability": "high"
+   },
+   "evidence": [
+    {
+     "quote": "smaller PR, please — one idea per pull request",
+     "ts": "2025-11-29"
+    }
+   ],
+   "body": "---\nname: small-pr-splitter\ndescription: Split a large change into small, single-purpose PRs.\n---\nWhen a change does more than one thing: identify the independent concerns, stage them as separate branches/commits, and open one PR per concern so each can be reviewed and reverted alone."
+  },
+  {
+   "title": "no-clever-oneliners (CLAUDE.md patch)",
+   "kind": "claude-md-patch",
+   "from": "correction",
+   "trigger": "Whenever the agent is tempted to golf code into a dense one-liner.",
+   "stop": "Code reads top-to-bottom without a puzzle.",
+   "reuse": {
+    "seen": 37,
+    "invariance": "high",
+    "portability": "high"
+   },
+   "evidence": [
+    {
+     "quote": "let's not be clever here, boring code sleeps through the night",
+     "ts": "2026-01-14"
+    }
+   ],
+   "body": "## Style\nPrefer boring, obvious code. No clever one-liners, no nested ternaries, no golfing. Readable beats short every time — optimize for the next reader, not the character count."
+  },
+  {
+   "title": "idempotency-check-for-handlers",
+   "kind": "skill",
+   "from": "hidden_issue",
+   "trigger": "Writing any webhook / job / handler that an external system may retry.",
+   "stop": "Running the handler twice produces the same result as once.",
+   "reuse": {
+    "seen": 24,
+    "invariance": "medium",
+    "portability": "high"
+   },
+   "evidence": [
+    {
+     "quote": "what happens if it runs twice? make it idempotent",
+     "ts": "2026-05-20"
+    }
+   ],
+   "body": "---\nname: idempotency-check-for-handlers\ndescription: Make retryable handlers safe to run twice.\n---\nFor any handler an external system can retry (webhooks, queues, crons): key the operation on a stable id, check-then-act inside a transaction or with an upsert, and add a test that invokes it twice and asserts a single effect."
+  },
+  {
+   "title": "timezone-edge-test",
+   "kind": "skill",
+   "from": "workflow",
+   "trigger": "Touching any date/time logic.",
+   "stop": "Tests cover UTC/local boundary and DST.",
+   "reuse": {
+    "seen": 16,
+    "invariance": "medium",
+    "portability": "high"
+   },
+   "evidence": [
+    {
+     "quote": "add a test for the UTC-vs-local off-by-one",
+     "ts": "2025-09-18"
+    }
+   ],
+   "body": "---\nname: timezone-edge-test\ndescription: Add boundary tests for date/time code.\n---\nFor any date logic, add tests at the risky edges: midnight UTC vs local, month/year rollover, and a DST transition. Assert against fixed timestamps, never `new Date()`."
+  },
+  {
+   "title": "eslint-preset-install",
+   "kind": "skill",
+   "from": "tooling_gap",
+   "trigger": "When the same lint error keeps getting hand-fixed.",
+   "stop": "The editor/CI enforces the rule; no more manual fixes.",
+   "reuse": {
+    "seen": 30,
+    "invariance": "low",
+    "portability": "high"
+   },
+   "evidence": [
+    {
+     "quote": "fix the no-floating-promises error again",
+     "ts": "2026-03-30"
+    }
+   ],
+   "body": "---\nname: eslint-preset-install\ndescription: Stop hand-fixing recurring lint errors.\n---\nInstall the shared eslint config as a devDependency, extend it in `.eslintrc`, wire `eslint` into the pre-commit hook and CI, and enable the editor plugin so the rule is enforced at type-time, not by pasting the error."
+  }
+ ],
+ "report_title": "The Chat Log I Actually Read"
+}</script>
+
+<script>
+"use strict";
+/* ============================================================
+ * §JS 0 · 工具函数
+ *   安全约定：所有数据经 createElement + textContent 进入 DOM，
+ *   本文件不存在含数据的 innerHTML 赋值。
+ * ============================================================ */
+const $ = (s) => document.querySelector(s);
+const SVG_NS = "http://www.w3.org/2000/svg";
+
+/** 创建 HTML 元素：el("div", {class:"x", text:"安全注入"}, child…) */
+function el(tag, attrs, ...children) {
+  const n = document.createElement(tag);
+  for (const k in attrs || {}) {
+    if (k === "text") n.textContent = attrs[k];
+    else n.setAttribute(k, attrs[k]);
+  }
+  for (const c of children) if (c != null) n.append(c);
+  return n;
+}
+/** 创建 SVG 元素 */
+function sv(tag, attrs, ...children) {
+  const n = document.createElementNS(SVG_NS, tag);
+  for (const k in attrs || {}) {
+    if (k === "text") n.textContent = attrs[k];
+    else n.setAttribute(k, attrs[k]);
+  }
+  for (const c of children) if (c != null) n.append(c);
+  return n;
+}
+/** 千分位整数 */
+const fmtInt = (n) => Math.round(n).toLocaleString("en-US");
+/** 单位大数（跟随界面语言 LANG）：zh 9.8 亿 / 41.2 万；en 981M / 412K */
+function fmtCN(n) {
+  if (LANG === "en") {
+    if (n >= 1e9) return { num: trim1(n / 1e9), unit: "B" };
+    if (n >= 1e6) return { num: trim1(n / 1e6), unit: "M" };
+    if (n >= 1e4) return { num: trim1(n / 1e3), unit: "K" };
+    return { num: fmtInt(n), unit: "" };
+  }
+  if (n >= 1e8) return { num: trim1(n / 1e8), unit: "亿" };
+  if (n >= 1e4) return { num: trim1(n / 1e4), unit: "万" };
+  return { num: fmtInt(n), unit: "" };
+}
+const trim1 = (x) => (Math.round(x * 10) / 10).toLocaleString("en-US");
+const pct = (x, d = 0) => (x * 100).toFixed(d) + "%";
+const hasArr = (a) => Array.isArray(a) && a.length > 0;
+
+/** 复制到剪贴板（file:// 下 Clipboard API 可能不可用，带 execCommand 兜底） */
+async function copyText(txt, btn, okLabel) {
+  let ok = false;
+  try { await navigator.clipboard.writeText(txt); ok = true; } catch (e) { /* 走兜底 */ }
+  if (!ok) {
+    const ta = el("textarea", { style: "position:fixed;opacity:0" });
+    ta.value = txt; document.body.append(ta); ta.select();
+    try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+    ta.remove();
+  }
+  if (btn) {
+    const orig = btn.textContent;
+    btn.textContent = ok ? (okLabel || TR.copied) : TR.cpFail;
+    setTimeout(() => { btn.textContent = orig; }, 1600);
+  }
+  return ok;
+}
+
+/* ============================================================
+ * §JS 0b · 调色板 PAL：SVG 图表使用的具体色值。
+ *   默认值与 §CSS 0 的 :root 完全一致；applyTheme()（§JS 14）
+ *   选中主题后会整组替换，图表随主题换色。
+ * ============================================================ */
+let PAL = {
+  bg: "#12100c", bgSoft: "#191510", card: "#1f1a13", card2: "#262017", line: "#362c1f",
+  tx: "#ede5d6", txDim: "#9d9078", txFaint: "#6e6350",
+  green: "#8dff5a", greenDim: "#5dbb3a", greenMid: "#4aa63c",
+  brown: "#b07d4f", brownSoft: "#84603f",
+};
+/** #rgb / #rrggbb → [r,g,b]；解析失败抛错（applyTheme 里有兜底） */
+function hexToRgb(h) {
+  let s = String(h).trim().replace("#", "");
+  if (s.length === 3) s = s.split("").map((c) => c + c).join("");
+  if (!/^[0-9a-fA-F]{6}$/.test(s)) throw new Error("非法颜色值：" + h);
+  const n = parseInt(s, 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+/** 颜色插值：t=0 得 a，t=1 得 b */
+function hexMix(a, b, t) {
+  const A = hexToRgb(a), B = hexToRgb(b);
+  return "#" + A.map((x, i) => Math.round(x + (B[i] - x) * t).toString(16).padStart(2, "0")).join("");
+}
+const hexAlpha = (h, al) => { const [r, g, b] = hexToRgb(h); return `rgba(${r},${g},${b},${al})`; };
+
+/* ============================================================
+ * §JS 1 · 数据装载
+ * ============================================================ */
+let DATA = null;
+try { DATA = JSON.parse($("#agentmole-data").textContent); }
+catch (e) { console.error("agentmole-data JSON 解析失败", e); }
+
+/** 把当前 DATA 序列化写回 #agentmole-data 块（发布对话框改 handle /
+ *  撤下 skill 区后调用），保证捕获的 HTML 与页面显示一致（WYSIWYG），
+ *  榜单侧解析到的也是同一份。"<" 按契约转义，防止提前闭合 script。 */
+function syncDataBlock() {
+  if (!DATA || DATA.placeholder) return;
+  $("#agentmole-data").textContent = JSON.stringify(DATA).replace(/</g, "\\u003c");
+}
+
+/** 每个区块独立渲染；单区块失败只影响自己（保持隐藏），不拖垮整页 */
+function safe(name, fn) {
+  try { fn(); } catch (e) { console.error("渲染失败：" + name, e); }
+}
+function show(secId) { $(secId).hidden = false; }
+
+/** v3.1 · persona 猜测取数（原型卡与 persona 区据此决定形象图归属） */
+function personaGuesses() {
+  const p = DATA && DATA.persona_guess;
+  return (p && Array.isArray(p.guesses) ? p.guesses : []).filter((g) => g && g.guess);
+}
+/** 形象图仅接受 data: URI（信任面：绝不外链），否则 null */
+function portraitURI() {
+  return (typeof DATA.portrait === "string" && DATA.portrait.startsWith("data:image/"))
+    ? DATA.portrait : null;
+}
+
+/* ============================================================
+ * §JS 1c · 界面语言 chrome i18n（契约 v3.2 data.lang：2 位语言码，缺省 zh）
+ *   全部界面文案按 key:[zh, en] 并排收录（en 省略 = 与 zh 同形），展开成
+ *   I18N = {zh, en} 后查 TR 渲染；"{}" 为参数占位（F() 填充）。静态 HTML
+ *   只留骨架，applyChrome() 统一填文案——单一来源、双语零漂移。
+ *   数据内容（narrative/quotes 等）由 agent 按用户语言生成，不在此列。
+ *
+ *   语言解析（v3.2 多语言兜底）：只有 "zh"（或缺省 lang）走中文字典；
+ *   其余任何 2 位码（en/ja/ko/es…）一律回退到 en——en 是全局兜底界面语言，
+ *   保证 ja/ko/… 报告显示英文 chrome + agent 用母语写的正文，且未知码不崩。
+ * ============================================================ */
+const LANG = (DATA && DATA.lang && DATA.lang !== "zh") ? "en" : "zh";
+const I18N_PAIRS = {
+bnCta:["生成你自己的 →","Get yours →"],
+bnDesc:["把这句话发给你的 AI agent：","Send this line to your AI agent:"],
+bnCmd:["请读取 https://agentmole.dev/skill.md 并执行","Read https://agentmole.dev/skill.md and follow it"],
+copy:["复制","Copy"],
+copied:["已复制 ✓","Copied ✓"],
+cpFail:["复制失败","Copy failed"],
+shN:["发布 = 生成一个可分享的公开链接","Publishing gives you a shareable public link"],
+share:["分享","Share"],
+h1:[["我的 AI Agent ","聊天记录","挖掘"],["My AI Agent ","Chat-Log"," Dig"]],
+ph:[["模板尚未注入数据 —— skill 会把真实 JSON 写入 "," 块后交付给你。"],["No data injected yet — the skill writes real JSON into the "," block first."]],
+sec:[{archetype:"协作人格原型",narrative:"他是怎么和 AI Agent 协作的",quotes:"金句与反向吐槽",moments:"年度名场面",creeds:"品味信条",stats:"硬核数字",sources:"阵营对比",wordcloud:"词云与口头禅",curve:"磨合曲线",heatmap:"作息热力图",badges:"成就徽章",diagnosis:"隐性问题诊断",recommendations:"下一步建议",persona:"我猜猜你是谁",skills:"从你的历史蒸馏出的 skill"},{archetype:"Collaboration Archetype",narrative:"How They Work with their AI agent",quotes:"Quotes & Roast",moments:"Moments of the Year",creeds:"Taste Creeds",stats:"Raw Numbers",sources:"Camp Showdown",wordcloud:"Words & Catchphrases",curve:"Taming Curve",heatmap:"Rhythm",badges:"Badges",diagnosis:"Hidden-Issue Diagnosis",recommendations:"What to change next",persona:"Let Me Guess Who You Are",skills:"Skills Distilled from Your History"}],
+dIntro:["像体检报告的异常项：每条都有原话为证，附代价与处方。","Abnormal findings, health-report style: each backed by your own words, with cost and fix."],
+sIntro:["这些草稿由你的真实重复模式蒸馏而来——复制、粘贴给你的 agent，让它们从此固化。","Drafted from your real repeated patterns — copy one, paste it to your agent, make it stick."],
+recEv:["依据","Evidence"],
+recAct:["行动","Action"],
+recImp:["收益","Impact"],
+feedBtn:["📋 一键喂给你的 agent","📋 Copy all for your agent"],
+feedNote:["复制全部建议 + skill 草稿，粘给你的 agent 逐条落实","Copies every recommendation + skill draft — paste to your agent to act on them"],
+feedPre:["以下是从我的 AI Agent 聊天记录里挖出的改进建议和 skill 草稿。请帮我逐条评估并落实：先给我一份计划让我确认，再动手；不确定的地方先问我。","Below are recommendations and skill drafts mined from my AI agent chat logs. Help me evaluate and apply them one by one: give me a plan to confirm first, then act; ask me when unsure."],
+anon:["匿名鼹鼠","Anonymous Mole"],
+fastM:["快速模式 · 仅统计","Fast mode · stats only"],
+docT:["{} 的 AI Agent 聊天记录挖掘 · Agentmole","{}'s AI Agent Chat-Log Dig · Agentmole"],
+ftGen:["Agentmole · 生成于 {} · schema v{}","Agentmole · generated {} · schema v{}"],
+ftMeta:["Agentmole · 你的 AI Agent 协作史，本地挖掘，自愿分享","Agentmole · your AI agent collaboration history, mined locally, shared voluntarily"],
+ftTrust:["本页由你自己的 agent 在本地生成；数据不会离开这台机器——除非你亲手点击「分享」。","Generated locally by your own agent; nothing leaves this machine — unless you click “Share” yourself."],
+dims:[{automation_leverage:"自动化杠杆",correction_density:"纠偏密度",night_shift:"夜行",msg_length:"消息长度",politeness:"礼貌度",taste_signal_density:"品味密度"},{automation_leverage:"Leverage",correction_density:"Correction",night_shift:"Night shift",msg_length:"Verbosity",politeness:"Politeness",taste_signal_density:"Taste"}],
+q:["「{}」","“{}”"],
+klTk:["AI Agent 为你产出的 tokens","tokens your AI agent produced"],
+klTkQ:["全靠自己打字要敲 {} 年","typing it yourself takes {} years"],
+klCost:["等值 API 成本","API-equivalent cost"],
+klCQ:["订阅制替你挡下的账单","the bill your subscription ate"],
+klSt:["最长连跑","longest streak"],
+klD:["{} 天","{} days"],
+klStQ:["中间无一天断联","not a single day off"],
+narrBy:["—— 你的 agent 通读全年记录后写下","— written by your agent after reading the whole year"],
+harshL:["你对 AI Agent 说过最狠的一句 · HARSHEST","HARSHEST THING YOU SAID TO YOUR AI AGENT"],
+roastL:["你的 agent 想对你说 · ROAST","YOUR AGENT WOULD LIKE A WORD · ROAST"],
+heroTk:["这一年 AI Agent 为你产出的 tokens · AGENT OUTPUT","TOKENS YOUR AI AGENT PRODUCED THIS YEAR · AGENT OUTPUT"],
+cv:[["≈ 一个人不吃不睡读 "," 的书；全靠自己打字要敲 ",""],["≈ "," of non-stop reading, or "," of typing it yourself"]],
+cvY:["{} 年","{} years"],
+estB:["估算","EST."],
+estTip:["口径：按已留存会话的日均产出，外推到全部活跃天数（含已被自动清理、未留存的历史会话）估算得出。","Method: daily average output of retained sessions, extrapolated across all active days (incl. auto-pruned history)."],
+estM:["实测（仅已留存会话）：{} tokens","Measured (retained sessions only): {} tokens"],
+totTip:["输出 + 新鲜输入 + cache 重读的总和。ccusage 等工具报的是这个全口径数；上面的大数字只算模型产出（output）。","Output + fresh input + cache re-reads. Tools like ccusage report this all-in number; the big figure counts model output only."],
+totL:["全口径总处理量（含 cache 重读，≈其他统计工具的口径）：{} tokens","All-in processed volume (incl. cache re-reads, ≈ other tools): {} tokens"],
+tkN:["Claude Code 默认只保留 ~30 天全保真记录，更早期数据存在偏差或丢失","Claude Code keeps only ~30 days of full-fidelity logs by default; earlier data may be skewed or lost"],
+cLev:["自动化杠杆比","Automation leverage"],
+hLev:["你每亲手敲 1 个 token，agent 回敬 {} 个","Every token you type, the agent fires back {}"],
+cCache:["上下文缓存命中率","Context cache hit rate"],
+hCache:["口径：cache 读取 ÷（cache 读取 + 新输入）","Method: cache reads ÷ (cache reads + fresh input)"],
+cFresh:["输入 tokens（不含 cache）","Input tokens (no cache)"],
+hFresh:["实打实新读入模型的上下文，不含 cache 命中","Context read fresh into the model, cache hits excluded"],
+cCaR:["cache 读取","Cache reads"],
+hCaR:["重复上下文从缓存重读的量，没花冤枉钱","Repeated context re-read from cache — money well not spent"],
+uDay:[" 天"," days"],
+cDays:["活跃天数","Active days"],
+hDays:["最长连跑 {} 天不间断","Longest streak: {} days unbroken"],
+uSes:[" 场",""],
+cSes:["对话场次","Sessions"],
+hSes:["背后是 {} 次 API 调用","backed by {} API calls"],
+uMsg:[" 条",""],
+cMsg:["你亲手发出的消息","Messages you sent"],
+hMsg:["平均每个活跃日 {} 条","≈ {} per active day"],
+cNight:["夜行指数","Night-owl index"],
+hNight:["凌晨 00:00–06:00 发出的消息占比","Share of messages sent 00:00–06:00"],
+uTur:[" 条/场"," /session"],
+cTur:["平均每场你说几句","Your lines per session"],
+hTur:["话不多，全靠 agent 自己悟","Few words — the agent figures it out"],
+uCnt:[" 个",""],
+cSk:["已安装 skill 数","Skills installed"],
+hSk:["你为 agent 配置的可复用技能","Reusable skills you set up for your agent"],
+uTim:[" 次",""],
+cInt:["亲手掐断 agent","Agent interruptions"],
+hInt:["任务跑一半被你 Esc 叫停的次数，agent 表示已习惯","Times you hit Esc mid-task. The agent is used to it"],
+cPar:["同时驱使项目峰值","Peak parallel projects"],
+hPar:["同一个小时内并行推进的项目数最高纪录","Most projects pushed within one hour"],
+cWkd:["周末浓度","Weekend density"],
+hWkd:["全部消息里发生在周六周日的占比","Share of messages sent on Sat/Sun"],
+cSid:["二级外包率","Subcontract rate"],
+hSid:["你的 agent 又雇了 agent——转包出去的调用占比","Your agent hired agents — share of calls delegated onward"],
+cMult:["效率倍数（按代码行数）","Efficiency multiple (by LOC)"],
+hMult:["等效 {} 行代码 ÷ 活跃天 ÷ 50 行/天（《人月神话》口径 10–100 行/天取中）≈ {} 名前 AI 时代工程师同期在岗；按打字算也有 ×{}（40wpm，Karat et al. 1999 转录均值）","≈ {} lines of code ÷ active days ÷ 50 lines/day (Mythical Man-Month, midpoint of 10–100) ≈ {} pre-AI engineers; by typing it's ×{} (40wpm, Karat et al. 1999)"],
+costL:["如果按 API 牌价计费 · THE BILL THAT NEVER CAME","IF BILLED AT API LIST PRICE · THE BILL THAT NEVER CAME"],
+costN:["按各模型公开 API 牌价对实测用量折算。你付的是订阅价——订阅制救了你一命。","Measured usage at public API rates. You paid a subscription — it took the bullet."],
+fKwh:["⚡ 约 {} 度电","⚡ ~{} kWh"],
+fKwhN:["毛估：0.3Wh / 1k tokens","rough: 0.3Wh / 1k tokens"],
+fKet:["🫖 烧开 {} 壶水","🫖 boils {} kettles"],
+fKetN:["一壶 ≈ 0.15 度电","one ≈ 0.15 kWh"],
+fTre:["🌳 需 {} 棵树吸一年","🌳 {} trees for a year"],
+fTreN:["0.5kg CO₂/度 · 一棵树 20kg/年","0.5kg CO₂/kWh · 20kg/tree/yr"],
+fPho:["🔋 手机充满 {} 次","🔋 {} phone charges"],
+fPhoN:["一次 ≈ 0.015 度电","one ≈ 0.015 kWh"],
+fLat:["☕ ≈ {} 杯拿铁","☕ ≈ {} lattes"],
+fLatN:["$5 一杯","$5 each"],
+fMbp:["💻 ≈ {} 台 MacBook Pro","💻 ≈ {} MacBook Pros"],
+fMbpN:["$2,000 一台","$2,000 each"],
+usgT:["这一年你都让 AI 干了啥","What you made AI do all year"],
+usgN:["口径：按消息关键词启发式分类，仅供一乐。","Method: keyword heuristics. For fun only."],
+usg:[{coding:"写码",design:"设计",research:"调研",management:"管理",other:"其他"},{coding:"Coding",design:"Design",research:"Research",management:"Management",other:"Other"}],
+mdlT:["模型座次 ","Model roster "],
+mdlS:["top{} · 按调用数","top{} · by calls"],
+efT:["Codex effort 档位 ","Codex effort levels "],
+efS:["rollout 计数","rollout count"],
+pctBtn:["和全网鼹鼠比比","How do I rank among moles?"],
+pctB:["比拼中…","Comparing…"],
+pctAg:["再比一次","Compare again"],
+pctN:["点击会把这 5 个统计数字发送到服务器做排名对比，并顺带拉取一份全网原型分布——不上传其他任何内容。","Clicking sends these 5 stats for ranking and fetches the global archetype distribution — nothing else is uploaded."],
+pctND:["本页没有可对比的统计数字。","No comparable stats on this page."],
+pctAF:["暂时比不了——连不上对比服务器，稍后再试。","Can't compare — server unreachable. Try later."],
+pctRF:["暂时比不了","unavailable now"],
+pctBeat:[["打败了 "," 的鼹鼠"],["beat "," of all moles"]],
+pctIns:["样本还不够（当前 {} 份），等鼹鼠多起来再比。","Not enough samples yet ({} so far) — check back when more moles surface."],
+pctSc:["该结果仅限本产品用户中的比较结果","Results are relative to users of this product only"],
+idn:[["你是全网 "," 的『","』"],["You're in the "," of all moles: “","”"]],
+axis:[{out_tokens:"token 总量",leverage:"自动化杠杆",streak:"连续天数",night_owl:"夜猫指数",low_correction:"最低纠偏率"},{out_tokens:"token volume",leverage:"automation leverage",streak:"streak days",night_owl:"night-owl index",low_correction:"lowest correction rate"}],
+sigL:["口头禅榜 · SIGNATURE MOVES","SIGNATURE MOVES"],
+lgCorr:["纠偏率 correction rate","correction rate"],
+lgRules:["累计沉淀规则 rules taught","cumulative rules taught"],
+tipCorr:["纠偏率","correction"],
+tipRules:["累计规则","rules"],
+cvCal:["口径：纠偏率 = 当月命中纠偏语气模式的消息占比（启发式）；累计规则 = 累计出现的品味/流程声明消息数。深挖模式下由 LLM 精修。","Method: correction rate = share of that month's messages matching corrective-tone patterns (heuristic); cumulative rules = taste/process declarations so far. Refined by LLM in deep mode."],
+cvN:["驯化史：纠偏率从 {} 降到 {}（−{}）；同期你给系统立了 {} 条规则。到底是谁驯化了谁？","Taming log: correction rate fell from {} to {} (−{}); meanwhile you laid down {} rules. So who tamed whom?"],
+htYear:["协作热力图 ","Collaboration heatmap "],
+htYS:["contribution graph"],
+htHour:["24 小时分布 ","24-hour distribution "],
+htHS:["hourly · 深色为 00:00–06:00 夜行时段","hourly · dark bars = 00:00–06:00"],
+htWeek:["星期分布 ","Weekday "],
+htWS:["weekday"],
+htL:["少","less"],
+htM:["多","more"],
+htTip:["{} · {} 条消息","{} · {} msgs"],
+monL:[["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]],
+wkN:[["一","二","三","四","五","六","日"],["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]],
+wkTip:["周{} · {} 条","{} · {} msgs"],
+hrTip:["{}:00 – {}:59 · {} 条","{}:00 – {}:59 · {} msgs"],
+srcMsgs:[" 条消息"," msgs"],
+srcSh:["占你全部消息的 {}","{} of all your messages"],
+srcSes:[" 场对话"," sessions"],
+srcTk:[" tokens 产出"," tokens out"],
+srcDays:[" 个活跃日"," active days"],
+srcR:["{} 想对你说","{} WANTS A WORD"],
+dFlag:["异常 {} · FINDING","FINDING {}"],
+dCost:["代价","COST"],
+dFix:["处方","FIX"],
+pKick:["CASE FILE · 鼹鼠结案报告","CASE FILE · THE MOLE'S CLOSING REPORT"],
+conf:[{high:"十拿九稳",medium:"八成是",low:"大胆一猜"},{high:"Dead certain",medium:"Probably",low:"Wild guess"}],
+pWhy:["依据：{}","Evidence: {}"],
+pAlt:["档案照片","case-file photo"],
+skP:["CLAUDE.MD 补丁","CLAUDE.MD PATCH"],
+skS:["SKILL"],
+skW:["何时用：{}","When to use: {}"],
+skSeen:["估算：这套动作全年出现的大致次数（跨时间块合并统计）","Estimate: roughly how many times you did this across the year (merged across time chunks)"],
+cpSed:["复制沉淀指令","Copy install prompt"],
+sedP:["请把下面这个 skill 草稿沉淀到我的 agent 配置里（Claude Code 放 ~/.claude/skills/<合适的名字>/SKILL.md 或追加到 CLAUDE.md，其他 harness 放对应位置），先展示给我确认再写入：\n\n","Please persist this skill draft into my agent setup (Claude Code: ~/.claude/skills/<name>/SKILL.md or append to CLAUDE.md; other harnesses: the equivalent). Show me first, then write:\n\n"],
+pubT:["发布这份报告","Publish this report"],
+pubHL:["展示名（可选，实时改在页面上）","Display name (optional, updates live)"],
+pubSM:["随页发布 skill 蒸馏区 ","Include the distilled-skills section "],
+pubSS:["取消勾选会立即从页面上撤下该区块——撤下的内容不会被上传。","Unchecking removes it from the page at once — removed content is never uploaded."],
+pubWy:["发布 = 原样上传当前页面，生成一个可分享的公开链接。你眼前是什么，公开页就是什么（所见即所传）。","Publishing = uploading this page exactly as-is and getting a shareable public link. What you see is what goes public."],
+pubEdit:["想改页面上任何内容？关掉这个框、直接对你的 agent 说就行。","Want to change anything on this page? Close this and just tell your agent."],
+pubGo:["确认发布","Publish"],
+cancel:["取消","Cancel"],
+pubB:["正在发布…","Publishing…"],
+pubBN:["上传的就是你眼前这一页，所见即所传（WYSIWYG）。","What's uploaded is exactly the page in front of you (WYSIWYG)."],
+pubOk:["已发布 🎉","Published 🎉"],
+cpLink:["复制链接","Copy link"],
+twBtn:["发到 X","Post to X"],
+close:["关闭","Close"],
+pubFT:["发布失败？","Publish failed?"],
+pubFail:[["对你的 agent 说","「发布这份报告」","即可——它会用同一个端点帮你完成。"],["Tell your agent ","“publish this report”"," — it will finish via the same endpoint."]],
+pubFD:["技术细节：{}","Details: {}"],
+retry:["重试","Retry"],
+myst:["神秘鼹鼠","Mystery Mole"],
+tweet:[(name,tokens,url)=>"鼹鼠从我的 AI Agent 聊天记录里挖出了「"+name+"」"+(tokens?"，一年被产出 "+tokens:"")+" 🕳️ "+url+" ｜派你自己的 agent 去挖 → agentmole.dev",(name,tokens,url)=>"A mole dug “"+name+"” out of my AI agent chat logs"+(tokens?", "+tokens+" produced for me":"")+" 🕳️ "+url+" | Send your own agent down → agentmole.dev"],
+};
+const I18N = { zh: {}, en: {} };
+for (const k in I18N_PAIRS) {
+  const v = I18N_PAIRS[k];
+  I18N.zh[k] = v[0]; I18N.en[k] = v.length > 1 ? v[1] : v[0];
+}
+const TR = I18N[LANG];
+/** "{}" 占位填充：F("打败了 {}%", 82) */
+const F = (s, ...a) => { let i = 0; return String(s).replace(/\{\}/g, () => a[i++]); };
+/** 大数简写跟随语言：zh "41.2 万" / en "412K" */
+const bigStr = (n) => { const f = fmtCN(n); return f.unit ? (LANG === "en" ? f.num + f.unit : f.num + " " + f.unit) : f.num; };
+
+/** 静态 chrome 全部由字典填充（HTML 骨架不带文案；zh/en 同一条渲染路径） */
+function applyChrome() {
+  document.documentElement.lang = LANG === "en" ? "en" : "zh-CN";
+  document.documentElement.setAttribute("data-lang", LANG);
+  [[".viral-cta","bnCta"],[".viral-desc","bnDesc"],["#install-cmd","bnCmd"],["#btn-copy-cmd","copy"],
+   [".share-note","shN"],["#btn-share","share"],
+   ["#sec-diagnosis p","dIntro"],["#sec-skills p","sIntro"],["#sec-curve .card > .faint","cvCal"],
+   ["#btn-percentile","pctBtn"],[".pct-note","pctN"],["#footer-meta","ftMeta"],["footer .trust","ftTrust"],
+   ["#pub-confirm h3","pubT"],['label[for="pub-handle"]',"pubHL"],[".pub-wysiwyg","pubWy"],[".pub-edit-note","pubEdit"],
+   ["#btn-confirm-pub","pubGo"],["#btn-cancel-pub","cancel"],["#pub-busy p","pubBN"],
+   ["#pub-ok h3","pubOk"],["#btn-copy-url","cpLink"],["#btn-tweet","twBtn"],["#btn-close-ok","close"],
+   ["#pub-fail h3","pubFT"],["#btn-retry","retry"],["#btn-close-fail","close"],
+  ].forEach(([sel, k]) => { const n = $(sel); if (n) n.textContent = TR[k]; });
+  renderTitle();
+  $("#placeholder-note").replaceChildren(TR.ph[0], el("code", { text: "#agentmole-data" }), TR.ph[1]);
+  for (const k in TR.sec) { const n = $("#sec-" + k + " .sec-head h2"); if (n) n.textContent = TR.sec[k]; }
+  const lg = document.querySelectorAll("#sec-curve .legend span");
+  if (lg[0]) lg[0].replaceChildren(lg[0].firstElementChild, TR.lgCorr);
+  if (lg[1]) lg[1].replaceChildren(lg[1].firstElementChild, TR.lgRules);
+  const ht = document.querySelectorAll("#sec-heatmap .chart-title");
+  [[TR.htYear, TR.htYS], [TR.htHour, TR.htHS], [TR.htWeek, TR.htWS]].forEach((s, i) =>
+    ht[i] && ht[i].replaceChildren(s[0], el("span", { class: "faint", text: s[1] })));
+  $("#pub-handle").placeholder = TR.anon;
+  $("#pub-skill-row > span").replaceChildren(TR.pubSM, el("span", { class: "sub", text: TR.pubSS }));
+  $("#pub-busy h3").replaceChildren(el("span", { class: "spin" }), "\u00a0 " + TR.pubB);
+  $("#pub-fail p").replaceChildren(TR.pubFail[0], el("b", { text: TR.pubFail[1] }), TR.pubFail[2]);
+}
+
+/* ============================================================
+ * §JS 2 · 页头 meta
+ * ============================================================ */
+const SOURCE_LABEL = { claude_code: "Claude Code", codex: "Codex" };
+
+// 报告大标题：优先用 agent 生成的 data.report_title（每人一句，用户语言）；
+// 重点词落在「聊天记录 / chat log」上——命中就高亮，命中不了整句普通渲染；
+// agent 没给标题时回退到固定默认（同样把重点放在 chat log 上）。
+function renderTitle() {
+  const h1 = $(".hero-txt h1");
+  const t = (DATA && typeof DATA.report_title === "string") ? DATA.report_title.trim() : "";
+  if (t) {
+    const m = t.match(/聊天记录|chat[\s-]?logs?/i);
+    if (m) {
+      h1.replaceChildren(document.createTextNode(t.slice(0, m.index)),
+        el("em", { text: m[0] }), document.createTextNode(t.slice(m.index + m[0].length)));
+    } else {
+      h1.replaceChildren(document.createTextNode(t));
+    }
+  } else {
+    h1.replaceChildren(TR.h1[0], el("em", { text: TR.h1[1] }), TR.h1[2]);
+  }
+}
+
+function renderHero() {
+  const meta = $("#hero-meta");
+  const handle = DATA.handle || TR.anon;
+  meta.replaceChildren(...[ // 注意：replaceChildren 会把 null 渲染成 "null" 文本，必须先过滤
+    el("span", { text: "@" + handle, style: "color:var(--tx);font-weight:700" }),
+    DATA.period ? el("span", { text: DATA.period.from + " → " + DATA.period.to, style: "font-family:var(--mono);font-size:12.5px" }) : null,
+    hasArr(DATA.sources) ? el("span", { class: "chip", text: DATA.sources.map((s) => SOURCE_LABEL[s] || s).join(" + ") }) : null,
+    // 阵营/派系标签已按 owner 决策移除——标签不重要，不再展示
+    DATA.mode === "fast" ? el("span", { class: "chip", text: TR.fastM }) : null,
+  ].filter(Boolean));
+  document.title = F(TR.docT, handle);
+  if (DATA.generated_at) {
+    $("#footer-meta").textContent = F(TR.ftGen, DATA.generated_at, DATA.schema_version || 1);
+  }
+}
+
+/* ============================================================
+ * §JS 3 · 人格原型（大卡片 + 六维雷达，PRD §4.1）
+ * ============================================================ */
+const DIM_META = [ // 固定顺序：与 skill 计算维度一一对应；展示名查 TR.dims
+  ["automation_leverage", "leverage"],
+  ["correction_density", "correction"],
+  ["night_shift", "night"],
+  ["msg_length", "verbosity"],
+  ["politeness", "politeness"],
+  ["taste_signal_density", "taste"],
+];
+
+function renderArchetype() {
+  const a = DATA.archetype;
+  if (!a || !a.name) return;
+  $("#arch-text").replaceChildren(
+    el("div", { class: "arch-kicker", text: "YOUR ARCHETYPE" }),
+    el("div", { class: "arch-name", text: a.name }),
+    a.name_en ? el("div", { class: "arch-en", text: a.name_en }) : null,
+    a.tagline ? el("div", { class: "arch-tagline", text: a.tagline }) : null
+  );
+  // 形象图（data: URI only——信任面审查点）：有 persona_guess 时移驻 §JS 10c，无则回落本卡
+  const uri = portraitURI();
+  if (uri && !personaGuesses().length) {
+    const img = el("img", { class: "arch-portrait", alt: a.name });
+    img.src = uri;
+    $("#arch-text").prepend(img);
+  }
+  if (a.dimensions) $("#arch-radar").replaceChildren(radarChart(a.dimensions));
+  show("#sec-archetype");
+}
+
+/** 手写六维雷达图（0–1） */
+function radarChart(dims) {
+  const W = 340, H = 300, cx = W / 2, cy = H / 2 + 4, R = 96;
+  const svg = sv("svg", { class: "chart", viewBox: `0 0 ${W} ${H}` });
+  const pt = (i, r) => {
+    const ang = -Math.PI / 2 + (i * 2 * Math.PI) / DIM_META.length;
+    return [cx + r * Math.cos(ang), cy + r * Math.sin(ang)];
+  };
+  // 网格（4 圈）+ 轴线
+  for (let g = 1; g <= 4; g++) {
+    const pts = DIM_META.map((_, i) => pt(i, (R * g) / 4).join(",")).join(" ");
+    svg.append(sv("polygon", { points: pts, fill: "none", stroke: PAL.line, "stroke-width": 1 }));
+  }
+  DIM_META.forEach((_, i) => {
+    const [x, y] = pt(i, R);
+    svg.append(sv("line", { x1: cx, y1: cy, x2: x, y2: y, stroke: PAL.line, "stroke-width": 1 }));
+  });
+  // 数值多边形
+  const vals = DIM_META.map(([k]) => Math.max(0, Math.min(1, +dims[k] || 0)));
+  const valPts = vals.map((v, i) => pt(i, v * R));
+  svg.append(sv("polygon", {
+    points: valPts.map((p) => p.join(",")).join(" "),
+    fill: hexAlpha(PAL.green, .18), stroke: PAL.green, "stroke-width": 2, "stroke-linejoin": "round",
+  }));
+  valPts.forEach((p) => svg.append(sv("circle", { cx: p[0], cy: p[1], r: 3.2, fill: PAL.green })));
+  // 标签：主名（查 TR.dims）+ 小号副行（zh 附英文名；en 只留数值，避免重复）
+  DIM_META.forEach(([k, en], i) => {
+    const [x, y] = pt(i, R + 24);
+    const anchor = x > cx + 8 ? "start" : x < cx - 8 ? "end" : "middle";
+    svg.append(sv("text", { x, y: y - 2, "text-anchor": anchor, "font-size": 11.5, fill: PAL.tx }, TR.dims[k] || en));
+    const sub = LANG === "en" ? vals[i].toFixed(2) : en.toUpperCase() + " " + vals[i].toFixed(2);
+    svg.append(sv("text", { x, y: y + 11, "text-anchor": anchor, "font-size": 8, fill: PAL.txFaint, "letter-spacing": 1 }, sub));
+  });
+  return svg;
+}
+
+/* ============================================================
+ * §JS 3c · 关键数字带（v3.1 stats_highlights）：agent 亲选 3–5 枚；缺失兜底 3 枚
+ * ============================================================ */
+function renderKeyline() {
+  const s = DATA.stats || {};
+  let items = (Array.isArray(DATA.stats_highlights) ? DATA.stats_highlights : [])
+    .filter((x) => x && x.value != null && String(x.value).trim() && x.label)
+    .slice(0, 5);
+  if (!items.length) { // 兜底三枚
+    const t = +s.agent_out_tokens_estimated > 0 ? +s.agent_out_tokens_estimated : +s.agent_out_tokens || 0;
+    items = [
+      t > 0 && { value: bigStr(t), label: TR.klTk,
+        quip: F(TR.klTkQ, fmtInt(t * .75 / 40 / 60 / 8 / 250)) },
+      +s.api_cost_estimated_usd > 0 && { value: "$" + fmtInt(+s.api_cost_estimated_usd),
+        label: TR.klCost, quip: TR.klCQ },
+      +s.longest_streak_days > 0 && { value: F(TR.klD, fmtInt(s.longest_streak_days)),
+        label: TR.klSt, quip: TR.klStQ },
+    ].filter(Boolean);
+  }
+  if (!items.length) return;
+  $("#sec-keyline").replaceChildren(...items.map((x) => el("div", { class: "keyline-pill" },
+    el("div", { class: "kl-value" + (String(x.value).length > 6 ? " long" : ""), text: String(x.value) }),
+    el("div", { class: "kl-label", text: String(x.label) }),
+    x.quip ? el("div", { class: "kl-quip", text: String(x.quip) }) : null
+  )));
+  show("#sec-keyline");
+}
+
+/* ============================================================
+ * §JS 3b · 协作解读（契约 v3 data.narrative）——灵魂段落；v1/v2 无此字段整块隐藏
+ * ============================================================ */
+function renderNarrative() {
+  const n = DATA.narrative;
+  const paras = (n && Array.isArray(n.paragraphs) ? n.paragraphs : [])
+    .filter((p) => typeof p === "string" && p.trim());
+  if (!paras.length) return;
+  const body = $("#narrative-body");
+  body.replaceChildren(...paras.map((p, i) =>
+    el("p", i === 0 ? { class: "lead", text: p } : { text: p })));
+  body.append(el("div", { class: "narrative-by" }, moleMini(20),
+    el("span", { text: TR.narrBy })));
+  show("#sec-narrative");
+}
+
+/* ============================================================
+ * §JS 4 · 金句 + Roast（PRD §4.2）
+ * ============================================================ */
+function renderQuotes() {
+  const q = DATA.quotes;
+  if (!q || (!q.harshest && !q.roast)) return;
+  const grid = $("#quotes-grid");
+  grid.replaceChildren();
+  if (q.harshest && q.harshest.text) {
+    grid.append(el("div", { class: "card" },
+      el("div", { class: "quote-label", text: TR.harshL }),
+      el("div", { class: "quote-text", text: q.harshest.text }),
+      el("div", { class: "quote-meta", text: (q.harshest.context ? q.harshest.context + " · " : "") + (q.harshest.ts || "") })
+    ));
+  }
+  if (q.roast) {
+    const ava = el("span");
+    ava.append(moleMini(26));
+    grid.append(el("div", { class: "card roast-card" },
+      el("div", { class: "roast-head" }, ava,
+        el("span", { class: "quote-label", style: "margin:0", text: TR.roastL })),
+      el("div", { class: "roast-body", text: q.roast })
+    ));
+  }
+  show("#sec-quotes");
+}
+const AGENTMOLE_LOGO = "data:image/png;base64,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";
+/** 复用的 mini 鼹鼠头像 */
+function moleMini(size) {
+  return el("img", { width: size, height: size, src: AGENTMOLE_LOGO, alt: "", style: "display:inline-block;vertical-align:middle" });
+}
+
+/* ============================================================
+ * §JS 4b · 年度名场面（契约 v3 data.moments）——竖向时间线
+ * ============================================================ */
+function renderMoments() {
+  const list = DATA.moments;
+  if (!hasArr(list)) return;
+  $("#moment-list").replaceChildren(...list.map((m) => el("div", { class: "moment" },
+    m.ts ? el("div", { class: "moment-ts", text: m.ts }) : null,
+    el("div", { class: "moment-title", text: m.title || "" }),
+    m.text ? el("div", { class: "moment-text", text: m.text }) : null,
+    m.quote ? el("blockquote", { class: "moment-quote", text: F(TR.q, m.quote) }) : null
+  )));
+  show("#sec-moments");
+}
+
+/* ============================================================
+ * §JS 5 · 硬核数字直觉化（PRD §4.3）
+ *
+ * token → 可感知量的换算口径（全部写死在此，供审查与复算）：
+ *   · 1 token ≈ 0.75 个英文单词          （业界通用近似）
+ *   · 一本书 ≈ 100,000 英文单词           （一本 300+ 页的非虚构书）
+ *   · 认真读者一年读 24 本书              （两周一本）
+ *     ⇒ 读书年数 = tokens × 0.75 ÷ 100,000 ÷ 24
+ *   · 熟练打字员 40 词/分钟 × 8 小时/天 × 250 工作日/年
+ *     ⇒ 亲手打字年数 = tokens × 0.75 ÷ 40 ÷ 60 ÷ 8 ÷ 250
+ * ============================================================ */
+function renderStats() {
+  const s = DATA.stats;
+  if (!s) return;
+
+  // —— 主角数字：AI 总产出 tokens + 两条换算 ——
+  //    v2 若给出 agent_out_tokens_estimated（外推估算总量），主显估算值
+  //    并挂「估算」角标 + 口径 tooltip，实测值降为小字并列；否则维持实测。
+  const hero = $("#stat-hero");
+  hero.replaceChildren();
+  const est = +s.agent_out_tokens_estimated > 0 ? +s.agent_out_tokens_estimated : 0;
+  const primaryTokens = est || (+s.agent_out_tokens > 0 ? +s.agent_out_tokens : 0);
+  if (primaryTokens > 0) {
+    const t = primaryTokens;
+    const words = t * 0.75;                       // 折合英文单词
+    const readYears = words / 100000 / 24;        // 读书年数（口径见上）
+    const typeYears = words / 40 / 60 / 8 / 250;  // 亲手打字年数（口径见上）
+    const big = fmtCN(t);
+    const n = el("div", { class: "n" }, big.num, el("small", { text: " " + big.unit + " tokens" }));
+    if (est) {
+      n.append(el("span", {
+        class: "est-badge tip",
+        // 口径 tooltip：优先用 skill 写入的 estimation_note（契约 v2），否则用内置说明
+        "data-tip": (typeof s.estimation_note === "string" && s.estimation_note) || TR.estTip,
+        text: TR.estB,
+      }));
+    }
+    hero.append(
+      n,
+      el("div", { class: "label", text: TR.heroTk }),
+      el("div", { class: "convert" },
+        TR.cv[0], el("b", { text: F(TR.cvY, fmtInt(readYears)) }), TR.cv[1],
+        el("b", { text: F(TR.cvY, fmtInt(typeYears)) }), TR.cv[2]
+      )
+    );
+    if (est && s.agent_out_tokens > 0) {
+      hero.append(el("div", { class: "est-measured", text: F(TR.estM, bigStr(s.agent_out_tokens)) }));
+    }
+    // 全口径总处理量（= 输出 + 新鲜输入 + cache 重读）：与 ccusage 等统计工具口径对齐，
+    // 避免用户拿别的工具对比时以为这里算少了——两个口径并排、各自标注
+    if (+s.total_processed_tokens > 0) {
+      hero.append(el("div", { class: "est-measured tip",
+        "data-tip": TR.totTip,
+        text: F(TR.totL, bigStr(s.total_processed_tokens)) }));
+    }
+  }
+  // 契约 v3：token 区常驻口径小字（无论是否显示估算值都在）
+  hero.append(el("div", { class: "token-note", text: TR.tkN }));
+
+  // —— 次级数字网格 ——
+  const cells = [];
+  const cell = (nParts, cn, en, hint) => {
+    const nDiv = el("div", { class: "n" });
+    nDiv.append(...nParts);
+    cells.push(el("div", { class: "card stat-cell" }, nDiv,
+      el("div", { class: "cn", text: cn }), el("div", { class: "en", text: en }),
+      hint ? el("div", { class: "hint", text: hint }) : null));
+  };
+  if (s.leverage_ratio > 0)
+    cell([el("em", { text: "1 : " }), fmtInt(s.leverage_ratio)], TR.cLev, "leverage",
+      F(TR.hLev, fmtInt(s.leverage_ratio)));
+  if (s.cache_hit_rate != null)
+    cell([pct(s.cache_hit_rate)], TR.cCache, "cache hit", TR.hCache);
+  // —— 契约 v3 要求独立展示的输入侧两卡（字段 v1 起就有，一直渲染） ——
+  if (s.fresh_in_tokens > 0) {
+    const f = fmtCN(s.fresh_in_tokens);
+    cell([f.num, el("em", { text: " " + f.unit + " tokens" })], TR.cFresh, "fresh input", TR.hFresh);
+  }
+  if (s.cache_read_tokens > 0) {
+    const f = fmtCN(s.cache_read_tokens);
+    cell([f.num, el("em", { text: " " + f.unit + " tokens" })], TR.cCaR, "cache read", TR.hCaR);
+  }
+  if (s.active_days > 0)
+    cell([fmtInt(s.active_days), el("em", { text: TR.uDay })], TR.cDays, "active days",
+      s.longest_streak_days > 0 ? F(TR.hDays, s.longest_streak_days) : null);
+  if (s.sessions > 0)
+    cell([fmtInt(s.sessions), el("em", { text: TR.uSes })], TR.cSes, "sessions",
+      s.api_calls > 0 ? F(TR.hSes, bigStr(s.api_calls)) : null);
+  if (s.human_msgs > 0)
+    cell([fmtInt(s.human_msgs), el("em", { text: TR.uMsg })], TR.cMsg, "human msgs",
+      s.active_days > 0 ? F(TR.hMsg, Math.round(s.human_msgs / s.active_days)) : null);
+  if (s.night_owl_index != null)
+    cell([pct(s.night_owl_index)], TR.cNight, "night owl", TR.hNight);
+  // —— v2 可选字段：缺失就不显示（优雅降级） ——
+  if (s.session_turns_avg > 0)
+    cell([trim1(s.session_turns_avg), el("em", { text: TR.uTur })], TR.cTur, "turns per session",
+      s.session_turns_avg < 3 ? TR.hTur : null);
+  if (s.skills_installed > 0)
+    cell([fmtInt(s.skills_installed), el("em", { text: TR.uCnt })], TR.cSk, "skills installed",
+      TR.hSk);
+  // —— v3 新维度小卡：字段缺失就不显示（v1/v2 数据优雅降级） ——
+  if (s.interruptions > 0)
+    cell([fmtInt(s.interruptions), el("em", { text: TR.uTim })], TR.cInt, "interruptions",
+      TR.hInt);
+  if (s.parallel_peak_projects_hour > 1)
+    cell([fmtInt(s.parallel_peak_projects_hour), el("em", { text: TR.uCnt })], TR.cPar, "parallel projects",
+      TR.hPar);
+  if (s.weekend_share != null)
+    cell([pct(s.weekend_share)], TR.cWkd, "weekend share", TR.hWkd);
+  if (s.sidechain_share != null)
+    cell([pct(s.sidechain_share)], TR.cSid, "sidechain", TR.hSid);
+  /* —— v3.1.1 效率倍数（机算，戏谑但有出处）——主口径按前 AI 时代工程师的**代码行数**折算：
+   *   等效代码行 = 产出 tokens × 写码占比(usage_split.coding，缺失按 1) ÷ 8 tokens/行
+   *     （一行代码平均 ~55 字符、代码类文本 ~7 字符/token → ≈8 tokens/行，毛估）
+   *   日产出基线 = 50 行/天：Brooks《人月神话》报告大型系统项目 ~10 行/天/人，
+   *     业界流传区间 10–100 行/天，取中位 50
+   *   倍数 = 等效代码行 ÷ 活跃天数 ÷ 50
+   *   副口径（打字速度）：40wpm 依据 Karat et al. (1999) 转录打字实测均值 ~33–38wpm、
+   *     熟练者 50–80wpm——取 40 为普通职业水平；×60×8h×活跃天。 */
+  if (primaryTokens > 0 && s.active_days > 0) {
+    const codeShare = (s.usage_split && +s.usage_split.coding > 0) ? +s.usage_split.coding : 1;
+    const loc = primaryTokens * codeShare / 8;
+    const locMult = Math.round(loc / s.active_days / 50);
+    const typeMult = Math.round(primaryTokens * .75 / (40 * 60 * 8 * s.active_days));
+    if (locMult >= 2) {
+      cell(["×" + fmtInt(locMult)], TR.cMult, "engineer multiplier",
+        F(TR.hMult, bigStr(loc), fmtInt(locMult), fmtInt(typeMult)));
+    }
+  }
+  $("#stat-grid").replaceChildren(...cells);
+
+  // —— v3 等值 API 成本大卡（api_cost_estimated_usd，整数美元；缺失隐藏） ——
+  const cost = +s.api_cost_estimated_usd > 0 ? Math.round(+s.api_cost_estimated_usd) : 0;
+  if (cost) {
+    const box = $("#cost-hero");
+    box.hidden = false;
+    box.replaceChildren(
+      el("div", { class: "n" }, el("small", { text: "$" }), fmtInt(cost)),
+      el("div", { class: "label", text: TR.costL }),
+      el("div", { class: "cost-note", text: s.api_cost_note || TR.costN })
+    );
+  }
+
+  /* —— v3 戏谑换算带：全部为毛估口径，仅供一乐（口径集中声明如下） ——
+   *   · 能耗：输出 tokens × 0.3 Wh / 1k tokens（GPU 推理能耗毛估）→ 度电
+   *   · 烧水：烧开一壶水 ≈ 0.15 kWh
+   *   · 碳排：电网平均 0.5 kg CO₂ / 度；一棵树一年吸收 ≈ 20 kg CO₂
+   *   · 手机：充满一次 ≈ 0.015 kWh
+   *   · 拿铁：$5 一杯；MacBook Pro：$2,000 一台
+   */
+  const chips = [];
+  const chip = (main, note) => chips.push(el("span", { class: "fun-chip" },
+    el("b", { text: main }), el("small", { text: note })));
+  if (primaryTokens > 0) {
+    const kwh = primaryTokens * 0.3 / 1000 / 1000; // tokens → Wh → kWh
+    chip(F(TR.fKwh, fmtInt(kwh)), TR.fKwhN);
+    chip(F(TR.fKet, fmtInt(kwh / 0.15)), TR.fKetN);
+    chip(F(TR.fTre, fmtInt(Math.max(1, kwh * 0.5 / 20))), TR.fTreN);
+    chip(F(TR.fPho, fmtInt(kwh / 0.015)), TR.fPhoN);
+  }
+  if (cost) {
+    chip(F(TR.fLat, fmtInt(cost / 5)), TR.fLatN);
+    chip(F(TR.fMbp, trim1(cost / 2000)), TR.fMbpN);
+  }
+  if (chips.length) {
+    const strip = $("#fun-strip");
+    strip.hidden = false;
+    strip.replaceChildren(...chips);
+  }
+
+  // —— v3 用途分布条（usage_split，关键词启发式；缺失隐藏） ——
+  const US_META = [ // [key, 取色]（标签查 TR.usg；写码吃主题强调色；设计固定用品牌鼻粉，深浅主题都立得住）
+    ["coding", () => PAL.green],
+    ["design", () => "#ef9db0"],
+    ["research", () => PAL.brown],
+    ["management", () => PAL.txDim],
+    ["other", () => PAL.txFaint],
+  ];
+  const us = s.usage_split;
+  if (us && typeof us === "object") {
+    const parts = US_META
+      .map(([k, color]) => ({ label: TR.usg[k] || k, color: color(), v: +us[k] || 0 }))
+      .filter((x) => x.v > 0);
+    const total = parts.reduce((a, x) => a + x.v, 0);
+    if (total > 0) {
+      const bar = el("div", { class: "usage-bar" }, ...parts.map((x) =>
+        el("i", { style: "width:" + pct(x.v / total, 2) + ";background:" + x.color, title: x.label + " " + pct(x.v / total) })));
+      const legend = el("div", { class: "usage-legend" }, ...parts.map((x) =>
+        el("span", null, el("i", { style: "background:" + x.color }), x.label + " " + pct(x.v / total))));
+      const card = $("#usage-card");
+      card.hidden = false;
+      card.replaceChildren(
+        el("div", { class: "chart-title", text: TR.usgT }), bar, legend,
+        el("div", { class: "faint", style: "font-size:11.5px;margin-top:8px", text: TR.usgN })
+      );
+    }
+  }
+
+  // —— v3.1 模型座次 + effort 档位（都缺则整卡隐藏） ——
+  const mcParts = [];
+  if (s.models && typeof s.models === "object") {
+    const top = Object.entries(s.models).filter(([, v]) => +v > 0)
+      .sort((a, b) => b[1] - a[1]).slice(0, 5);
+    if (top.length) {
+      const mmax = top[0][1];
+      mcParts.push(el("div", { class: "chart-title", text: TR.mdlT },
+        el("span", { class: "faint", text: F(TR.mdlS, top.length) })),
+        ...top.map(([name, v], i) => el("div", { class: "sig-row model-row" },
+          el("span", { class: "sig-rank", text: String(i + 1).padStart(2, "0") }),
+          // 短化模型名：去尾部日期后缀（20250514 / 2025-05-14 两种写法）
+          el("span", { class: "sig-text", text: String(name).replace(/[-_]?20\d{2}-?\d{2}-?\d{2}$/, "") }),
+          el("span", { class: "sig-bar-wrap" }, el("span", { class: "sig-bar", style: "width:" + pct(v / mmax) })),
+          el("span", { class: "sig-count", text: fmtCN(v).num + " " + fmtCN(v).unit })
+        )));
+    }
+  }
+  if (s.effort_split && typeof s.effort_split === "object") {
+    const ORD = ["xhigh", "high", "medium", "low", "minimal"]; // 档位习惯序
+    const es = Object.entries(s.effort_split).filter(([, v]) => +v > 0)
+      .sort((a, b) => (ORD.indexOf(a[0]) >>> 0) - (ORD.indexOf(b[0]) >>> 0));
+    const etotal = es.reduce((a, [, v]) => a + +v, 0);
+    if (etotal > 0) {
+      const emax = Math.max(...es.map(([, v]) => +v));
+      mcParts.push(el("div", { class: "chart-title", text: TR.efT },
+        el("span", { class: "faint", text: TR.efS })),
+        el("div", { class: "effort-strip" }, ...es.map(([k, v]) =>
+          el("span", { class: "chip effort-badge" + (+v === emax ? " top" : "") },
+            el("b", { text: k.toUpperCase() }), " ×" + fmtInt(v) + " · " + pct(v / etotal)))));
+    }
+  }
+  if (mcParts.length) {
+    const mc = $("#model-card");
+    mc.hidden = false;
+    mc.replaceChildren(...mcParts);
+  }
+  show("#sec-stats");
+}
+
+/* ============================================================
+ * §JS 5b · 全网百分位对比（PRD §5.1「打败了 XX%」+ v3.2 原型身份行）
+ * 信任面硬规则：只在用户点击「和全网鼹鼠比比」后运行，点击前零请求。
+ * 同一次点击授权内：每轴一次 PERCENTILE GET（query 仅 axis+value，即
+ * 下表 5 个数字；样本不足返回 {insufficient,total}）；排名正常返回后
+ * 追加一次 ARCHETYPE_STATS GET（无参数，只读全网原型分布）。
+ * 端点常量与发布端点同在 <head> 注释块声明（全文件仅三个出网点）。
+ * ============================================================ */
+const PCT_AXES = [ // [榜单轴 id, 取值函数]（轴 id 与 site Worker 对齐；标签查 TR.axis）
+  ["out_tokens", (s) => s.agent_out_tokens],
+  ["leverage", (s) => s.leverage_ratio],
+  ["streak", (s) => s.longest_streak_days],
+  ["night_owl", (s) => s.night_owl_index],
+  ["low_correction", (s) => s.correction_rate],
+];
+
+async function fetchPercentile(axis, value) {
+  const res = await fetch(AGENTMOLE_PERCENTILE_ENDPOINT +
+    "?axis=" + encodeURIComponent(axis) + "&value=" + encodeURIComponent(value));
+  if (!res.ok) throw new Error("HTTP " + res.status);
+  const out = await res.json();
+  // 契约（docs/data-contract.md）：样本不足 → {insufficient: true, total}
+  if (out && out.insufficient) return { insufficient: true, total: +out.total || 0 };
+  // 正常：{total, beaten, pct}；宽容兼容 beat/percentile 拼写
+  let p = (out && typeof out.pct === "number") ? out.pct
+        : (out && typeof out.beat === "number") ? out.beat
+        : (out && typeof out.percentile === "number") ? out.percentile : NaN;
+  if (!isFinite(p)) throw new Error("响应缺少 pct 数字");
+  if (p <= 1) p *= 100; // 兼容 0–1 比例与 0–100 百分数两种返回
+  return { pct: Math.max(0, Math.min(100, p)) };
+}
+
+/** 追加请求全网原型分布（与排名对比同一次点击授权；失败静默省略）。
+ *  返回 MBTI 式身份行元素或 null：「你是全网 X% 的『原型名』」。 */
+async function fetchArchetypeIdentity() {
+  const a = DATA && DATA.archetype;
+  if (!a || !a.id) return null;
+  const res = await fetch(AGENTMOLE_ARCHETYPE_STATS_ENDPOINT);
+  if (!res.ok) return null;
+  const out = await res.json();
+  if (!out || out.insufficient || !Array.isArray(out.dist)) return null;
+  // 契约：dist 条目为 {archetype_id, archetype_name, n, pct}（pct 0–100 一位小数）；宽容兼容 id 拼写
+  const hit = out.dist.find((d) => d && (d.archetype_id === a.id || d.id === a.id) &&
+    typeof d.pct === "number" && isFinite(d.pct));
+  if (!hit) return null; // dist 里找不到本页原型：不显示
+  let p = hit.pct;
+  const sum = out.dist.reduce((acc, d) => acc + (typeof d.pct === "number" ? d.pct : 0), 0);
+  if (sum <= 1.5) p *= 100; // 宽容兼容 0–1 比例返回
+  p = Math.max(0, Math.min(100, p));
+  const pStr = (p >= 10 ? String(Math.round(p)) : trim1(p)) + "%";
+  return el("div", { class: "pct-identity" },
+    TR.idn[0], el("b", { text: pStr }), TR.idn[1],
+    el("span", { class: "arch", text: a.name || a.id }), TR.idn[2]);
+}
+
+async function comparePercentiles() {
+  const btn = $("#btn-percentile");
+  const out = $("#pct-result");
+  const scope = () => el("div", { class: "pct-scope", text: TR.pctSc }); // 常驻口径小字
+  const s = (DATA && DATA.stats) || {};
+  const entries = PCT_AXES
+    .map(([axis, get]) => ({ axis, label: TR.axis[axis] || axis, value: get(s) }))
+    .filter((x) => typeof x.value === "number" && isFinite(x.value));
+  if (!entries.length) {
+    out.hidden = false;
+    out.replaceChildren(el("div", { class: "pct-fail", text: TR.pctND }));
+    return;
+  }
+  btn.disabled = true;
+  const orig = btn.textContent;
+  btn.textContent = TR.pctB;
+  const results = await Promise.allSettled(entries.map((x) => fetchPercentile(x.axis, x.value)));
+  btn.disabled = false;
+  btn.textContent = orig === TR.pctBtn ? TR.pctAg : orig;
+  out.hidden = false;
+  if (results.every((r) => r.status === "rejected")) { // 全挂：一句话降级
+    out.replaceChildren(el("div", { class: "pct-fail", text: TR.pctAF }), scope());
+    return;
+  }
+  const insuff = results.find((r) => r.status === "fulfilled" && r.value.insufficient);
+  if (insuff) { // 样本不足：整块一句话，不逐轴罗列
+    out.replaceChildren(el("div", { class: "pct-fail", text: F(TR.pctIns, fmtInt(insuff.value.total)) }), scope());
+    return;
+  }
+  out.replaceChildren(...entries.map((x, i) => {
+    const r = results[i];
+    if (r.status === "fulfilled") {
+      return el("div", { class: "pct-row" },
+        el("span", { class: "axis", text: x.label }), TR.pctBeat[0],
+        el("b", { text: r.value.pct.toFixed(0) + "%" }), TR.pctBeat[1]);
+    }
+    return el("div", { class: "pct-row pct-fail" },
+      el("span", { class: "axis", text: x.label }), TR.pctRF);
+  }), scope());
+  // 正常响应后追加：全网原型分布 → 结果区顶部的身份行（失败静默）
+  try {
+    const idRow = await fetchArchetypeIdentity();
+    if (idRow) out.prepend(idRow);
+  } catch (e) { /* 身份行拿不到就不显示，不影响排名结果 */ }
+}
+
+/* ============================================================
+ * §JS 6 · 词云 + 口头禅榜（PRD §4.4）
+ *   词云 = 字号按 √weight 加权的 flex 布局；大词从中间向两侧交错铺开。
+ * ============================================================ */
+function renderWords() {
+  const words = DATA.wordcloud && DATA.wordcloud.words;
+  const sigs = DATA.quotes && DATA.quotes.signature;
+  if (!hasArr(words) && !hasArr(sigs)) return;
+
+  if (hasArr(words)) {
+    const sorted = [...words].slice(0, 80).sort((a, b) => b.weight - a.weight);
+    const wMax = sorted[0].weight, wMin = sorted[sorted.length - 1].weight;
+    const colors = [PAL.green, PAL.tx, PAL.brown, PAL.txDim, PAL.greenDim];
+    // 交错排列：最大的词落在容器中部，视觉近似词云
+    const order = [];
+    sorted.forEach((w, i) => (i % 2 ? order.push(w) : order.unshift(w)));
+    const cloud = $("#cloud");
+    cloud.replaceChildren(...order.map((w) => {
+      const t = wMax === wMin ? 1 : Math.sqrt((w.weight - wMin) / (wMax - wMin));
+      const rank = sorted.indexOf(w);
+      return el("span", {
+        text: w.text, title: "×" + fmtInt(w.weight),
+        style: `font-size:${Math.round(13 + t * 33)}px;` +
+               `font-weight:${t > 0.55 ? 800 : 500};` +
+               `color:${colors[rank % colors.length]};` +
+               `opacity:${0.6 + t * 0.4}`,
+      });
+    }));
+  } else { $("#cloud").parentElement.hidden = true; }
+
+  if (hasArr(sigs)) {
+    const max = Math.max(...sigs.map((x) => x.count));
+    $("#sig-list").replaceChildren(
+      el("div", { class: "quote-label", text: TR.sigL }),
+      ...sigs.slice(0, 10).map((x, i) => el("div", { class: "sig-row" },
+        el("span", { class: "sig-rank", text: String(i + 1).padStart(2, "0") }),
+        el("span", { class: "sig-text", text: F(TR.q, x.text) }),
+        el("span", { class: "sig-bar-wrap" }, el("span", { class: "sig-bar", style: "width:" + pct(x.count / max) })),
+        el("span", { class: "sig-count", text: "×" + fmtInt(x.count) })
+      ))
+    );
+  } else { $("#sig-list").hidden = true; }
+  show("#sec-wordcloud");
+}
+
+/* ============================================================
+ * §JS 7 · 磨合曲线（PRD §4.5）：纠偏率折线 + 累计规则副轴
+ * ============================================================ */
+function renderCurve() {
+  const c = DATA.taming_curve;
+  if (!hasArr(c) || c.length < 2) return;
+  const W = 680, H = 240, L = 46, Rm = 46, T = 14, B = 30;
+  const iw = W - L - Rm, ih = H - T - B;
+  const svg = sv("svg", { class: "chart", viewBox: `0 0 ${W} ${H}` });
+
+  const rateMaxPct = Math.max(1, Math.ceil(Math.max(...c.map((d) => d.correction_rate)) * 100)); // 左轴：%
+  const rulesMax = Math.max(1, Math.ceil(Math.max(...c.map((d) => d.rules_cumulative || 0)) / 20) * 20); // 右轴
+  const X = (i) => L + (i / (c.length - 1)) * iw;
+  const Yr = (v) => T + ih - (v * 100 / rateMaxPct) * ih;   // correction_rate
+  const Yn = (v) => T + ih - (v / rulesMax) * ih;           // rules_cumulative
+
+  // 横向网格 + 双轴刻度
+  for (let g = 0; g <= 3; g++) {
+    const y = T + (ih * g) / 3;
+    svg.append(sv("line", { x1: L, y1: y, x2: W - Rm, y2: y, stroke: PAL.line }));
+    svg.append(sv("text", { x: L - 7, y: y + 4, "text-anchor": "end", "font-size": 10, fill: PAL.txFaint },
+      (rateMaxPct * (1 - g / 3)).toFixed(1) + "%"));
+    svg.append(sv("text", { x: W - Rm + 7, y: y + 4, "text-anchor": "start", "font-size": 10, fill: PAL.txFaint },
+      String(Math.round(rulesMax * (1 - g / 3)))));
+  }
+  // 月份刻度（自适应间隔）
+  const step = Math.ceil(c.length / 8);
+  c.forEach((d, i) => {
+    if (i % step && i !== c.length - 1) return;
+    svg.append(sv("text", { x: X(i), y: H - 8, "text-anchor": "middle", "font-size": 9.5, fill: PAL.txFaint },
+      String(d.month).slice(2)));
+  });
+  // 两条折线
+  const line = (pts, color, dash) => sv("polyline", {
+    points: pts.join(" "), fill: "none", stroke: color, "stroke-width": 2.4,
+    "stroke-linejoin": "round", "stroke-linecap": "round", ...(dash ? { "stroke-dasharray": "6 5" } : {}),
+  });
+  svg.append(line(c.map((d, i) => X(i) + "," + Yn(d.rules_cumulative || 0)), PAL.brown, true));
+  svg.append(line(c.map((d, i) => X(i) + "," + Yr(d.correction_rate)), PAL.green));
+  c.forEach((d, i) => {
+    const dot = sv("circle", { cx: X(i), cy: Yr(d.correction_rate), r: 3.4, fill: PAL.green });
+    dot.append(sv("title", null, d.month + " · " + TR.tipCorr + " " + pct(d.correction_rate, 1) + " · " + TR.tipRules + " " + (d.rules_cumulative || 0)));
+    svg.append(dot);
+  });
+  $("#curve-chart").replaceChildren(svg);
+
+  const first = c[0], last = c[c.length - 1];
+  const drop = first.correction_rate > 0 ? (1 - last.correction_rate / first.correction_rate) : 0;
+  $("#curve-note").textContent = F(TR.cvN,
+    pct(first.correction_rate, 1), pct(last.correction_rate, 1), pct(drop), last.rules_cumulative || 0);
+  show("#sec-curve");
+}
+
+/* ============================================================
+ * §JS 8 · 作息（PRD §4.6）：GitHub 风热力图 + 24h 柱状 + 星期分布
+ * ============================================================ */
+/** 热力 5 档色阶：从卡片底色到主题强调色（主题切换后自动跟随 PAL）。
+ *  注意从 card 而非 bg 起混：图表都画在卡片上，深色主题两者几乎相同，
+ *  浅色主题（如 brutalist 白卡黄底）从 card 起混才能得到干净的浅→深色阶。 */
+function heatColors() {
+  return [PAL.card2, hexMix(PAL.card, PAL.green, .24), hexMix(PAL.card, PAL.green, .45),
+          hexMix(PAL.card, PAL.green, .7), PAL.green];
+}
+
+function renderRhythm() {
+  const s = DATA.stats || {};
+  const hasHeat = s.daily_activity && Object.keys(s.daily_activity).length > 0;
+  const hasHour = hasArr(s.hour_histogram);
+  const hasWeek = hasArr(s.weekday_histogram);
+  if (!hasHeat && !hasHour && !hasWeek) return;
+
+  if (hasHeat) renderHeatmap(s.daily_activity);
+  else { $("#heatmap").hidden = true; $("#heat-legend").hidden = true; $("#heatmap").previousElementSibling.hidden = true; }
+  if (hasHour) renderHourChart(s.hour_histogram);
+  else { $("#hour-chart").hidden = true; $("#hour-chart").previousElementSibling.hidden = true; }
+  if (hasWeek) renderWeekdayChart(s.weekday_histogram);
+  else { $("#weekday-chart").hidden = true; $("#weekday-chart").previousElementSibling.hidden = true; }
+  show("#sec-heatmap");
+}
+
+/** 贡献图：列 = 周（周一起），行 = 星期；颜色分 5 档（0 + 四分位） */
+function renderHeatmap(daily) {
+  const dates = Object.keys(daily).sort();
+  const parse = (str) => { const [y, m, d] = str.split("-").map(Number); return new Date(y, m - 1, d); };
+  const fmtD = (d) => d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  const start = parse(dates[0]);
+  start.setDate(start.getDate() - ((start.getDay() + 6) % 7)); // 回退到周一
+  const end = parse(dates[dates.length - 1]);
+  const max = Math.max(...dates.map((k) => daily[k]));
+  const level = (v) => !v ? 0 : v <= max * .25 ? 1 : v <= max * .5 ? 2 : v <= max * .75 ? 3 : 4;
+
+  const CELL = 12, GAP = 3, PAD_L = 26, PAD_T = 16;
+  const days = []; // {date, col, row, v}
+  for (let d = new Date(start), i = 0; d <= end; d.setDate(d.getDate() + 1), i++) {
+    days.push({ key: fmtD(d), col: Math.floor(i / 7), row: i % 7, m: d.getMonth(), day: d.getDate() });
+  }
+  const cols = days[days.length - 1].col + 1;
+  const W = PAD_L + cols * (CELL + GAP), H = PAD_T + 7 * (CELL + GAP) + 2;
+  const svg = sv("svg", { width: W, height: H, viewBox: `0 0 ${W} ${H}`, style: "display:block" });
+  const RAMP = heatColors();
+
+  // 月份标签（该列里出现每月 1 号时标注）
+  days.filter((d) => d.day === 1).forEach((d) => {
+    svg.append(sv("text", { x: PAD_L + d.col * (CELL + GAP), y: 10, "font-size": 9, fill: PAL.txFaint },
+      TR.monL[d.m]));
+  });
+  // 星期标签
+  [0, 2, 4, 6].forEach((w, i) => {
+    svg.append(sv("text", { x: 2, y: PAD_T + (i * 2) * (CELL + GAP) + CELL - 2, "font-size": 9, fill: PAL.txFaint }, TR.wkN[w]));
+  });
+  // 格子：日期与数值挂在 data-* 上，tooltip 由下方事件委托统一驱动
+  for (const d of days) {
+    const v = daily[d.key] || 0;
+    svg.append(sv("rect", {
+      x: PAD_L + d.col * (CELL + GAP), y: PAD_T + d.row * (CELL + GAP),
+      width: CELL, height: CELL, rx: 2.5, fill: RAMP[level(v)],
+      class: "heat-cell", "data-date": d.key, "data-count": v,
+    }));
+  }
+  const box = $("#heatmap");
+  box.replaceChildren(svg);
+
+  // —— GitHub 化 tooltip：单个复用的浮层，纯 JS 定位，零依赖 ——
+  const tip = el("div", { class: "heat-tip", hidden: "" });
+  box.append(tip);
+  svg.addEventListener("mouseover", (ev) => {
+    const cell = ev.target;
+    if (!(cell instanceof Element) || !cell.classList.contains("heat-cell")) return;
+    tip.textContent = F(TR.htTip, cell.getAttribute("data-date"), fmtInt(+cell.getAttribute("data-count")));
+    tip.hidden = false;
+    const bb = box.getBoundingClientRect(), rb = cell.getBoundingClientRect();
+    const cxp = rb.left - bb.left + box.scrollLeft + rb.width / 2;
+    // 顶部两行的格子朝下弹，其余朝上弹，避免被容器裁掉
+    const above = rb.top - bb.top > 44;
+    tip.style.left = Math.round(Math.min(Math.max(cxp - tip.offsetWidth / 2, box.scrollLeft),
+      box.scrollLeft + box.clientWidth - tip.offsetWidth)) + "px";
+    tip.style.top = Math.round(above
+      ? rb.top - bb.top + box.scrollTop - tip.offsetHeight - 7
+      : rb.bottom - bb.top + box.scrollTop + 7) + "px";
+  });
+  svg.addEventListener("mouseout", (ev) => {
+    if (ev.target instanceof Element && ev.target.classList.contains("heat-cell")) tip.hidden = true;
+  });
+
+  const lg = $("#heat-legend");
+  lg.replaceChildren(el("span", { text: TR.htL }),
+    ...RAMP.map((c) => el("i", { style: "background:" + c })), el("span", { text: TR.htM }));
+}
+
+/** 24 小时柱状图；00–06 夜行时段用棕色区分 */
+function renderHourChart(hist) {
+  const W = 680, H = 170, L = 34, B = 24, T = 10;
+  const iw = W - L - 10, ih = H - T - B, bw = iw / 24;
+  const max = Math.max(...hist, 1);
+  const svg = sv("svg", { class: "chart", viewBox: `0 0 ${W} ${H}` });
+  hist.slice(0, 24).forEach((v, h) => {
+    const bh = (v / max) * ih;
+    const night = h < 6;
+    const bar = sv("rect", {
+      x: L + h * bw + 2, y: T + ih - bh, width: bw - 4, height: Math.max(bh, v > 0 ? 2 : 0), rx: 3,
+      fill: night ? PAL.brown : (v === max ? PAL.green : PAL.greenMid),
+      opacity: night ? .95 : .9,
+    });
+    bar.append(sv("title", null, F(TR.hrTip, String(h).padStart(2, "0"), String(h).padStart(2, "0"), fmtInt(v))));
+    svg.append(bar);
+    if (h % 3 === 0) svg.append(sv("text", { x: L + h * bw + bw / 2, y: H - 7, "text-anchor": "middle", "font-size": 9.5, fill: PAL.txFaint }, String(h)));
+  });
+  svg.append(sv("text", { x: L - 6, y: T + 8, "text-anchor": "end", "font-size": 9.5, fill: PAL.txFaint }, fmtCN(max).num + fmtCN(max).unit));
+  $("#hour-chart").replaceChildren(svg);
+}
+
+/** 星期分布（周一起） */
+function renderWeekdayChart(hist) {
+  const NAMES = TR.wkN;
+  const W = 680, H = 120, L = 34, B = 22, T = 8;
+  const iw = W - L - 10, ih = H - T - B, bw = iw / 7;
+  const max = Math.max(...hist, 1);
+  const svg = sv("svg", { class: "chart", viewBox: `0 0 ${W} ${H}` });
+  hist.slice(0, 7).forEach((v, i) => {
+    const bh = (v / max) * ih;
+    const bar = sv("rect", {
+      x: L + i * bw + bw * .18, y: T + ih - bh, width: bw * .64, height: Math.max(bh, v > 0 ? 2 : 0), rx: 4,
+      fill: v === max ? PAL.green : PAL.greenMid, opacity: .9,
+    });
+    bar.append(sv("title", null, F(TR.wkTip, NAMES[i], fmtInt(v))));
+    svg.append(bar);
+    svg.append(sv("text", { x: L + i * bw + bw / 2, y: H - 6, "text-anchor": "middle", "font-size": 10, fill: PAL.txFaint }, NAMES[i]));
+  });
+  $("#weekday-chart").replaceChildren(svg);
+}
+
+/* ============================================================
+ * §JS 8b · per-source 对比区（数据契约 v2 data.per_source）
+ *   左右对比卡：Claude 橙 vs Codex 青（阵营配色写死，不吃主题）。
+ *   只有一个 source、或 v1 数据没有 per_source 时整块保持隐藏。
+ * ============================================================ */
+const SRC_META = {
+  claude_code: { label: "Claude Code", color: "#e07b4f" }, // Claude 橙
+  codex: { label: "Codex", color: "#2ec7c7" },             // Codex 青
+};
+
+function renderSources() {
+  const ps = DATA.per_source;
+  if (!ps || typeof ps !== "object") return;
+  const keys = Object.keys(SRC_META).filter((k) => ps[k] && +ps[k].human_msgs > 0);
+  if (keys.length < 2) return; // 单阵营没有对比意义：优雅隐藏
+  $("#src-grid").replaceChildren(...keys.map((k) => {
+    const d = ps[k], meta = SRC_META[k];
+    const card = el("div", { class: "card src-card", style: "--src-color:" + meta.color });
+    card.append(
+      el("div", { class: "src-name" }, el("i"), meta.label),
+      el("div", { class: "src-big" }, fmtInt(d.human_msgs), el("em", { text: TR.srcMsgs }))
+    );
+    if (d.share >= 0 && d.share <= 1) { // 消息占比条
+      card.append(
+        el("div", { class: "src-share-track" },
+          el("div", { class: "src-share-bar", style: "width:" + pct(d.share, 1) })),
+        el("div", { class: "src-share-label", text: F(TR.srcSh, pct(d.share)) })
+      );
+    }
+    const facts = [];
+    if (d.sessions > 0) facts.push(el("span", null, el("b", { text: fmtInt(d.sessions) }), TR.srcSes));
+    if (d.out_tokens > 0) facts.push(el("span", null, el("b", { text: bigStr(d.out_tokens) }), TR.srcTk));
+    if (d.active_days > 0) facts.push(el("span", null, el("b", { text: fmtInt(d.active_days) }), TR.srcDays));
+    if (facts.length) card.append(el("div", { class: "src-facts" }, ...facts));
+    if (d.roast) { // 该 agent 对你的一句吐槽（可能为 null）
+      card.append(el("div", { class: "src-roast" },
+        el("span", { class: "who", text: F(TR.srcR, meta.label.toUpperCase()) }), d.roast));
+    }
+    return card;
+  }));
+  show("#sec-sources");
+}
+
+/* ============================================================
+ * §JS 9 · 成就徽章（PRD §4.7）
+ * ============================================================ */
+/** 极简线条图标集（24×24 路径），按徽章 id 匹配，未知 id 按 hash 轮换 */
+const BADGE_ICONS = {
+  repeat: "M17 2l4 4-4 4M3 11v-1a4 4 0 014-4h14M7 22l-4-4 4-4M21 13v1a4 4 0 01-4 4H3",
+  scroll: "M8 3h10a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V7M8 3a2 2 0 00-2 2v2H4M9 9h8M9 13h8M9 17h5",
+  scale: "M12 3v18M5 7l7-4 7 4M5 7l-3 7a3.5 3.5 0 007 0L6 7M19 7l-3 7a3.5 3.5 0 007 0l-3-7M8 21h8",
+  flame: "M12 2s5 4.5 5 9a5 5 0 01-10 0c0-1.5.5-3 1.5-4.5C9 8 12 6 12 2zM12 22a3 3 0 003-3c0-2-3-4-3-4s-3 2-3 4a3 3 0 003 3z",
+  moon: "M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z",
+  zap: "M13 2L3 14h7l-1 8 10-12h-7l1-8z",
+  check: "M22 11.1V12a10 10 0 11-5.9-9.1M22 4L12 14l-3-3",
+  gavel: "M14 4l6 6M10 8l6 6M13 5l-4 4M19 11l-4 4M8 10l-6 6 4 4 6-6M14 20h8",
+};
+const BADGE_ICON_BY_ID = {
+  "same-msg-x6": "repeat", "msg-10000": "scroll", "cross-model-arbiter": "scale",
+  "streak-41": "flame", "night-watch": "moon", "cache-friend": "zap",
+  "zero-correction-run": "check", "lawgiver": "gavel",
+};
+function badgeIcon(id) {
+  const keys = Object.keys(BADGE_ICONS);
+  let name = BADGE_ICON_BY_ID[id];
+  if (!name) { // 未知 id：稳定 hash 选一个
+    let h = 0; for (const ch of String(id)) h = (h * 31 + ch.charCodeAt(0)) | 0;
+    name = keys[Math.abs(h) % keys.length];
+  }
+  const s = sv("svg", { width: 24, height: 24, viewBox: "0 0 24 24", "aria-hidden": "true" });
+  s.append(sv("path", { d: BADGE_ICONS[name], fill: "none", stroke: "currentColor", "stroke-width": 1.8, "stroke-linecap": "round", "stroke-linejoin": "round" }));
+  return s;
+}
+function renderBadges() {
+  const b = DATA.badges;
+  if (!hasArr(b)) return;
+  $("#badge-grid").replaceChildren(...b.map((x) => el("div", { class: "card badge" },
+    el("div", { class: "badge-ico" }, badgeIcon(x.id)),
+    el("div", null,
+      el("div", { class: "badge-name", text: x.name }),
+      el("div", { class: "badge-desc", text: x.desc }),
+      x.evidence ? el("div", { class: "badge-ev", text: x.evidence }) : null)
+  )));
+  show("#sec-badges");
+}
+
+/* ============================================================
+ * §JS 10 · 品味信条（PRD §4.8）：每条配原文证据
+ * ============================================================ */
+function renderCreeds() {
+  const c = DATA.creeds;
+  if (!hasArr(c)) return;
+  $("#creed-list").replaceChildren(...c.map((x, i) => el("div", { class: "creed" },
+    el("div", { class: "creed-no", text: String(i + 1).padStart(2, "0") }),
+    el("div", null,
+      el("div", { class: "creed-text", text: x.creed }),
+      x.evidence && x.evidence.text ? el("div", { class: "creed-ev" },
+        F(TR.q, x.evidence.text),
+        x.evidence.ts ? el("span", { class: "ts", text: x.evidence.ts }) : null) : null)
+  )));
+  show("#sec-creeds");
+}
+
+/* ============================================================
+ * §JS 10b · 隐性问题诊断（契约 v3 data.diagnosis）——体检报告异常项
+ * ============================================================ */
+function renderDiagnosis() {
+  const list = DATA.diagnosis;
+  if (!hasArr(list)) return;
+  const row = (cls, k, v) => el("div", { class: "diag-row" + (cls ? " " + cls : "") },
+    el("span", { class: "k", text: k }), el("span", { class: "v", text: v }));
+  $("#diag-list").replaceChildren(...list.map((d, i) => el("div", { class: "card diag-item" },
+    el("div", { class: "diag-flag", text: F(TR.dFlag, String(i + 1).padStart(2, "0")) }),
+    el("div", { class: "diag-issue", text: d.issue || "" }),
+    d.evidence ? el("blockquote", { class: "diag-ev", text: F(TR.q, d.evidence) }) : null,
+    d.cost ? row("", TR.dCost, d.cost) : null,
+    d.fix_hint ? row("fix", TR.dFix, d.fix_hint) : null
+  )));
+  show("#sec-diagnosis");
+}
+
+/* ============================================================
+ * §JS 10b-2 · 下一步建议（契约 v3.2 data.recommendations）——顾问式优先级行动清单
+ *   每条：序号(01/02…) + 标题 + 收益 chip · 依据(rationale) · 证据引用(evidence,逐字)
+ *   · 行动块(action)。action 是每张卡的主角（accent 高亮）。缺失整块隐藏（v1/v2/v3.x 兼容）。
+ * ============================================================ */
+function renderRecommendations() {
+  const list = DATA.recommendations;
+  if (!hasArr(list)) return;
+  $("#rec-list").replaceChildren(...list.map((r, i) => el("div", { class: "card rec-item" },
+    el("div", { class: "rec-rank", text: String(i + 1).padStart(2, "0") }),
+    el("div", { class: "rec-main" },
+      el("div", { class: "rec-head" },
+        el("div", { class: "rec-title", text: r.title || "" }),
+        r.impact ? el("span", { class: "rec-impact" },
+          el("span", { class: "k", text: TR.recImp }), r.impact) : null),
+      r.rationale ? el("p", { class: "rec-rationale", text: r.rationale }) : null,
+      r.evidence ? el("blockquote", { class: "rec-ev" },
+        el("span", { class: "k", text: TR.recEv }), F(TR.q, r.evidence)) : null,
+      r.action ? el("div", { class: "rec-action" },
+        el("span", { class: "k", text: TR.recAct }),
+        el("div", { class: "rec-action-text", text: r.action })) : null)
+  )));
+  // 一键把「全部建议 + 全部 skill 草稿」打包成一段指令，喂给用户自己的 agent 逐条落实
+  const fb = el("button", { class: "btn btn-primary", type: "button", text: TR.feedBtn });
+  fb.addEventListener("click", () => copyText(buildAgentPayload(), fb));
+  $("#rec-feed").replaceChildren(fb, el("span", { class: "rec-feed-note", text: TR.feedNote }));
+  show("#sec-recommendations");
+}
+
+// 把建议 + skill 草稿拼成一段可直接粘给 agent 的 markdown（含开场指令）
+function buildAgentPayload() {
+  const recs = hasArr(DATA.recommendations) ? DATA.recommendations : [];
+  const skills = hasArr(DATA.distilled_skills) ? DATA.distilled_skills
+    : (typeof SKILLS_STASH !== "undefined" && SKILLS_STASH ? SKILLS_STASH : []);
+  let out = TR.feedPre + "\n\n";
+  if (recs.length) {
+    out += "## " + TR.sec.recommendations + "\n\n";
+    recs.forEach((r, i) => {
+      out += (i + 1) + ". " + (r.title || "") + "\n";
+      if (r.rationale) out += "   - " + r.rationale + "\n";
+      if (r.action) out += "   - " + TR.recAct + ": " + r.action + "\n";
+      if (r.impact) out += "   - " + TR.recImp + ": " + r.impact + "\n";
+      out += "\n";
+    });
+  }
+  if (skills.length) {
+    out += "## " + TR.sec.skills + "\n\n";
+    skills.forEach((x) => {
+      out += "### " + (x.title || "") + (x.kind === "claude-md-patch" ? " (" + TR.skP + ")" : "") +
+        "\n\n" + (x.body || "") + "\n\n";
+    });
+  }
+  return out.trim();
+}
+
+/* ============================================================
+ * §JS 10c ·「我猜猜你是谁」（v3.1 persona_guess）——侦探结案报告；portrait 并入作档案照片
+ * ============================================================ */
+/** 置信度三档归一；未知返回 null（原样展示，不上色）；展示名查 TR.conf */
+function confKey(c) {
+  c = String(c || "").toLowerCase().trim();
+  return { high: "high", "高": "high", medium: "medium", mid: "medium", "中": "medium", low: "low", "低": "low" }[c] || null;
+}
+function renderPersona() {
+  const gs = personaGuesses();
+  if (!gs.length) return;
+  const kids = [el("div", { class: "pg-kicker", text: TR.pKick })];
+  if (portraitURI()) {
+    const img = el("img", { alt: TR.pAlt });
+    img.src = portraitURI();
+    kids.push(el("figure", { class: "persona-figure" }, img));
+  }
+  gs.slice(0, 6).forEach((g, i) => {
+    const key = confKey(g.confidence);
+    kids.push(el("div", { class: "pg" },
+      el("div", { class: "pg-head" },
+        el("span", { class: "pg-no", text: String(i + 1).padStart(2, "0") }),
+        el("span", { class: "pg-text", text: g.guess }),
+        g.confidence ? el("span", { class: "pg-conf" + (key ? " " + key : ""),
+          text: key ? TR.conf[key] : String(g.confidence) }) : null),
+      g.why ? el("div", { class: "pg-why", text: F(TR.pWhy, g.why) }) : null));
+  });
+  const note = DATA.persona_guess.note;
+  if (note) kids.push(el("div", { class: "persona-note", text: note }));
+  $("#persona-card").replaceChildren(...kids);
+  show("#sec-persona");
+}
+
+/* ============================================================
+ * §JS 11 · skill 蒸馏区（PRD §4.9）：一键复制完整 markdown
+ * ============================================================ */
+function renderSkills() {
+  const raw = DATA.distilled_skills;
+  if (!hasArr(raw)) return;
+  // 按复用性排序（seen 估算次数降序）；无 reuse 字段的旧数据保持原序（稳定排序）
+  const list = raw.slice().sort((a, b) => ((b.reuse && b.reuse.seen) || 0) - ((a.reuse && a.reuse.seen) || 0));
+  $("#skill-list").replaceChildren(...list.map((x) => {
+    const isPatch = x.kind === "claude-md-patch";
+    const seen = x.reuse && x.reuse.seen;
+    const btn = el("button", { class: "btn btn-primary btn-copy", type: "button", text: TR.copy });
+    btn.addEventListener("click", () => copyText(x.body || "", btn)); // 复制完整 markdown body
+    // 第二按钮：复制「让 agent 自己沉淀」的完整指令（前缀 TR.sedP + 完整 body）
+    const btnSediment = el("button", { class: "btn btn-copy", type: "button", text: TR.cpSed });
+    btnSediment.addEventListener("click", () => copyText(TR.sedP + (x.body || ""), btnSediment));
+    return el("div", { class: "card skill-card" },
+      el("div", { class: "skill-head" },
+        el("span", { class: "skill-kind" + (isPatch ? " patch" : ""), text: isPatch ? TR.skP : TR.skS }),
+        el("span", { class: "skill-title", text: x.title }),
+        // 复用频次徽标：≈N×，title 注明估算（seen 为跨块合并的近似次数）
+        (seen ? el("span", { class: "skill-seen", text: "≈" + fmtInt(seen) + "×", title: TR.skSeen }) : null),
+        btnSediment, btn),
+      x.trigger ? el("div", { class: "skill-trigger", text: F(TR.skW, x.trigger) }) : null,
+      el("pre", { class: "skill-body", text: x.body || "" }));
+  }));
+  show("#sec-skills");
+}
+
+/* ============================================================
+ * §JS 12 · 发布（PRD §2⑤ / §3.1 WYSIWYG consent）
+ *   点击「分享」→ 先弹发布对话框（展示名 + skill 区开关 + 明示
+ *   「发布 = 原样上传当前页面」）→ 用户点「确认发布」后才捕获
+ *   outerHTML 并 POST 到 AGENTMOLE_PUBLISH_ENDPOINT（端点声明在 <head>）。
+ *   对话框里的每个改动都先落到 DOM / #agentmole-data 再捕获——
+ *   页面上是什么，上传的就是什么。
+ * ============================================================ */
+let publishing = false;
+let SKILLS_STASH = null; // 「随页发布 skill 蒸馏区」取消勾选时暂存被撤下的内容
+
+/** 捕获页面自身 HTML。捕获前把弹窗复位，避免把"发布中"状态固化进公开页。 */
+function captureSelfHTML() {
+  const mask = $("#pub-mask");
+  const wasHidden = mask.hidden;
+  mask.hidden = true;
+  const html = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+  mask.hidden = wasHidden;
+  return html;
+}
+function pubState(state) { // "confirm" | "busy" | "ok" | "fail" | null
+  $("#pub-mask").hidden = state === null;
+  $("#pub-confirm").hidden = state !== "confirm";
+  $("#pub-busy").hidden = state !== "busy";
+  $("#pub-ok").hidden = state !== "ok";
+  $("#pub-fail").hidden = state !== "fail";
+}
+
+/** 点「分享」：打开发布前确认对话框（不发任何请求） */
+function openPublishDialog() {
+  const input = $("#pub-handle");
+  input.value = (DATA && !DATA.placeholder && DATA.handle) || "";
+  // 只有页面上确实有 skill 蒸馏区（或刚被撤下）时才展示开关
+  const hasSkills = (DATA && hasArr(DATA.distilled_skills)) || SKILLS_STASH;
+  $("#pub-skill-row").hidden = !hasSkills;
+  $("#pub-skill-chk").checked = !SKILLS_STASH; // 已撤下 → 保持未勾选
+  pubState("confirm");
+}
+
+/** 展示名输入：先改 DOM（标题 + 头部）与 #agentmole-data，再谈捕获（WYSIWYG） */
+function onHandleInput(ev) {
+  if (!DATA || DATA.placeholder) return;
+  const v = ev.target.value.trim();
+  DATA.handle = v || null; // 空 = 匿名鼹鼠（契约允许 null）
+  safe("hero", renderHero); // 头部与 <title> 立即跟随
+  syncDataBlock();
+}
+
+/** skill 蒸馏区随页发布开关：
+ *  取消勾选 → 立即从页面撤下 sec-skills（隐藏 + 清空已渲染内容），
+ *  并从 #agentmole-data 移除 distilled_skills——所见即所传，
+ *  撤下的内容不会出现在捕获的 HTML 里。重新勾选 → 原样恢复。 */
+function toggleSkillsForPublish(include) {
+  if (!DATA || DATA.placeholder) return;
+  if (!include && hasArr(DATA.distilled_skills)) {
+    SKILLS_STASH = DATA.distilled_skills;
+    delete DATA.distilled_skills;
+    $("#skill-list").replaceChildren(); // 清掉 DOM，捕获的 HTML 里不残留正文
+    $("#sec-skills").hidden = true;
+    syncDataBlock();
+  } else if (include && SKILLS_STASH) {
+    DATA.distilled_skills = SKILLS_STASH;
+    SKILLS_STASH = null;
+    syncDataBlock();
+    safe("skills", renderSkills); // 重新渲染并显示
+  }
+}
+async function publishReport() {
+  if (publishing) return;
+  publishing = true;
+  const html = captureSelfHTML(); // 先捕获，保证弹窗不入镜
+  pubState("busy");
+  try {
+    // ↓↓↓ 全文件唯一的发布请求（另一个出网点是 §JS 5b 的排名对比 GET）↓↓↓
+    const res = await fetch(AGENTMOLE_PUBLISH_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "text/html" },
+      body: html,
+    });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const out = await res.json();
+    if (!out || !out.url) throw new Error("响应缺少 url 字段");
+    showPublished(out.url);
+  } catch (e) {
+    $("#pub-fail-detail").textContent = F(TR.pubFD, e && e.message ? e.message : String(e));
+    pubState("fail");
+  } finally {
+    publishing = false;
+  }
+}
+function showPublished(url) {
+  $("#pub-url-text").textContent = url;
+  // 发推文案：原型 + 大数字 + 链接（文案查 TR.tweet）
+  const a = DATA.archetype, s = DATA.stats;
+  const tokens = s && s.agent_out_tokens ? bigStr(s.agent_out_tokens) + " tokens" : "";
+  const text = TR.tweet(a && a.name ? a.name : TR.myst, tokens, url);
+  $("#btn-tweet").href = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(text);
+  pubState("ok");
+}
+
+/* ============================================================
+ * §JS 14 · 主题机制
+ *   选择顺序：data.theme → archetype_map[data.archetype.id] → default。
+ *   主题 = 把 8 个键（--bg/--card/--ink/--dim/--acc/--font/--radius/--border）
+ *   映射 + 派生成 §CSS 0 的整组变量后套用到 :root，同时替换 PAL
+ *   让 SVG 图表跟随换色。品牌 lockup / 吉祥物 / 阵营色写死，不随主题走。
+ *   AGENTMOLE_THEMES 常量由构建时把 docs/themes.json 内容原样内联而来。
+ * ============================================================ */
+/*AGENTMOLE:THEMES-START（构建时以 docs/themes.json 内容整体替换本常量的值）*/
+const AGENTMOLE_THEMES = {"$comment": "Agentmole 报告页主题 v2.0。单一主题 = Neo-brutalism（撞色 + 3px 黑框 + 硬投影 + 半调网点），既是报告页也是官网的统一视觉身份。每个主题含 8 键 CSS vars（模板机械套用）+ prompt（完整英文样式指导，全部内联、自足，agent 不需要也不应该访问任何外部风格网站）。logo/吉祥物固定不变。风格出处与致谢见仓库 docs/ATTRIBUTION.md（不随站点分发）。", "default": "brutalist", "themes": {"brutalist": {"name": "新粗野主义", "vibe": "高饱和撞色加三像素黑框，说话从不拐弯，修不好根因就别想收工", "vars": {"--bg": "#f5efe3", "--card": "#ffffff", "--ink": "#111111", "--dim": "#4a4a4a", "--acc": "#3d24ff", "--font": "Arial,'Helvetica Neue','PingFang SC',sans-serif", "--radius": "0px", "--border": "3px solid #111111"}}}};
+/*AGENTMOLE:THEMES-END*/
+
+function pickTheme() {
+  if (!DATA || DATA.placeholder) return null;
+  const T = AGENTMOLE_THEMES;
+  if (!T || !T.themes) return null;
+  let id = DATA.theme
+    || (T.archetype_map && DATA.archetype && T.archetype_map[DATA.archetype.id])
+    || T.default;
+  if (!T.themes[id]) id = T.default; // 未知主题名：兜底 default
+  const theme = T.themes[id] || null;
+  if (theme) theme.id = id; // 记下主题 key，供 applyTheme 写 data-theme（§CSS 11 主题骨相按此生效）
+  return theme;
+}
+
+function applyTheme() {
+  const theme = pickTheme();
+  if (!theme || !theme.vars) return; // 无主题可用：保持 :root 内置默认，视觉不变
+  const v = theme.vars;
+  const bg = v["--bg"], card = v["--card"], ink = v["--ink"], dim = v["--dim"], acc = v["--acc"];
+  if (!(bg && card && ink && dim && acc)) return; // 颜色键不齐：不套用（优雅降级）
+  // 主题骨相：变量套用成功才写 data-theme，CSS 侧（§CSS 11）按它叠加各风格的结构性规则
+  if (theme.id) document.documentElement.setAttribute("data-theme", theme.id);
+  // 从 --border 声明里拎出边框颜色（如 "3px solid #111111"）；拎不出就从 dim/bg 派生
+  const m = String(v["--border"] || "").match(/#[0-9a-fA-F]{3,8}/);
+  const lineColor = m ? m[0] : hexMix(dim, bg, .6);
+  // 5 个颜色键 → 完整调色板（hexMix 对非法色值会抛错，由外层 safe() 兜住）
+  PAL = {
+    bg, card, tx: ink, txDim: dim, green: acc,
+    bgSoft: hexMix(bg, card, .5),
+    card2: hexMix(card, ink, .08),
+    line: lineColor,
+    txFaint: hexMix(dim, bg, .4),
+    greenDim: hexMix(acc, bg, .35),
+    greenMid: hexMix(acc, card, .45), // 只做图表柱条填充：柱条画在卡片上，向 card 混才不发闷（浅色主题尤甚）
+    brown: hexMix(dim, acc, .3),
+    brownSoft: hexMix(hexMix(dim, acc, .3), bg, .35),
+  };
+  // —— 整组 CSS 变量套用到 :root（主题只换变量，不动 DOM 结构） ——
+  const setv = (k, val) => document.documentElement.style.setProperty(k, val);
+  setv("--bg", PAL.bg); setv("--bg-soft", PAL.bgSoft);
+  setv("--card", PAL.card); setv("--card-2", PAL.card2);
+  setv("--line", PAL.line);
+  setv("--tx", PAL.tx); setv("--tx-dim", PAL.txDim); setv("--tx-faint", PAL.txFaint);
+  setv("--green", PAL.green); setv("--green-dim", PAL.greenDim);
+  setv("--green-soft", hexAlpha(PAL.green, .14));
+  setv("--brown", PAL.brown); setv("--brown-soft", PAL.brownSoft);
+  if (v["--font"]) setv("--font", v["--font"]);
+  if (v["--radius"] != null) setv("--radius", v["--radius"]);
+  if (v["--border"]) setv("--card-border", v["--border"]);
+  setv("--topbar-bg", hexAlpha(PAL.bg, .88));
+  setv("--banner-a", hexMix(PAL.bg, PAL.brown, .12));
+  setv("--banner-b", hexMix(PAL.bg, PAL.green, .08));
+  setv("--arch-a", hexMix(PAL.bg, PAL.brown, .14));
+  setv("--arch-b", hexMix(PAL.bg, PAL.green, .07));
+  setv("--arch-line", hexAlpha(PAL.green, .22));
+  setv("--green-line", hexAlpha(PAL.green, .3));
+  setv("--brown-line", hexAlpha(PAL.brown, .5));
+  setv("--btn-hover", hexMix(PAL.card2, PAL.tx, .07));
+}
+
+/* ============================================================
+ * §JS 13 · 启动：装载数据 → 套主题 → 逐区块渲染 → 绑事件
+ * ============================================================ */
+(function main() {
+  // 事件绑定（与数据无关，始终生效）
+  $("#btn-share").addEventListener("click", openPublishDialog); // 先确认，后发布
+  $("#btn-confirm-pub").addEventListener("click", publishReport);
+  $("#btn-cancel-pub").addEventListener("click", () => pubState(null));
+  $("#pub-handle").addEventListener("input", onHandleInput);
+  $("#pub-skill-chk").addEventListener("change", (e) => toggleSkillsForPublish(e.currentTarget.checked));
+  $("#btn-retry").addEventListener("click", publishReport);
+  $("#btn-close-ok").addEventListener("click", () => pubState(null));
+  $("#btn-close-fail").addEventListener("click", () => pubState(null));
+  $("#btn-copy-url").addEventListener("click", (e) => copyText($("#pub-url-text").textContent, e.currentTarget));
+  $("#btn-copy-cmd").addEventListener("click", (e) => copyText($("#install-cmd").textContent, e.currentTarget));
+  $("#btn-percentile").addEventListener("click", comparePercentiles); // 点击前零请求
+  // 排行榜入口 v1 暂不露出（owner 决策）——不给隐藏的链接赋值
+
+  safe("chrome", applyChrome); // 界面语言（data.lang）：静态 chrome 全部按 I18N 字典重刷
+  if (!DATA || DATA.placeholder) { // 模板裸开 / 数据坏：不渲染，仅提示
+    $("#placeholder-note").hidden = false;
+    return;
+  }
+  safe("theme", applyTheme); // 先套主题：后续 SVG 图表渲染读取 PAL
+  safe("hero", renderHero);
+  // 契约 v3.2 顺序（16 区块）：原型 → 关键数字带 → 协作解读 → 金句 → 名场面 → 信条
+  // → 数字 → 阵营 → 词云 → 曲线 → 作息 → 徽章 → 诊断 → 下一步建议 → 我猜猜你是谁 → skill
+  safe("archetype", renderArchetype);
+  safe("keyline", renderKeyline);
+  safe("narrative", renderNarrative);
+  safe("quotes", renderQuotes);
+  safe("moments", renderMoments);
+  safe("creeds", renderCreeds);
+  safe("stats", renderStats);
+  safe("sources", renderSources);
+  safe("words", renderWords);
+  safe("curve", renderCurve);
+  safe("rhythm", renderRhythm);
+  safe("badges", renderBadges);
+  safe("diagnosis", renderDiagnosis);
+  safe("recommendations", renderRecommendations);
+  safe("persona", renderPersona);
+  safe("skills", renderSkills);
+})();
+</script>
+</body>
+</html>
